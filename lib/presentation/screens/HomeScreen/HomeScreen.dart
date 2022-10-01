@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:movies_application/Models/AppConfig.dart';
+import 'package:movies_application/config/app_config.dart';
 
 class HomeScreen extends StatefulWidget {
 
