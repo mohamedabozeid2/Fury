@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+import 'package:movies_application/core/utils/Colors.dart';
+import 'package:movies_application/core/utils/border_radius.dart';
+class DefaultTextField extends StatelessWidget {
+  final BuildContext? context;
+  final TextEditingController controller;
+  final TextInputType type;
+  final String label;
+  bool isPassword;
+  String validation;
+  Color? iconColor;
+  TextStyle? style;
+  Widget? prefixIcon;
+  Widget? prefixWidget;
+  Color borderColor;
+  double? paddingInside;
+  IconData? suffixIcon;
+  void Function()? fun;
+  double borderRadius;
+
+  DefaultTextField({
+    required this.context,
+    required this.controller,
+    required this.type,
+    required this.label,
+    this.isPassword = false,
+    this.validation = "",
+    this.iconColor,
+    this.fun,
+    this.prefixWidget,
+    this.borderColor = Colors.white,
+    this.borderRadius = AppRadius.low1,
+    this.paddingInside,
+    this.prefixIcon,
+    this.style,
+    this.suffixIcon,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: type,
+      obscureText: isPassword,
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return validation;
+        }
+      },
+      style: TextStyle(color: AppColors.mainColor),
+      onChanged: (value) {},
+      decoration: InputDecoration(
+          fillColor: Colors.transparent,
+          filled: true,
+          hintText: label,
+          hintStyle: style,
+          prefix: prefixWidget,
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: prefixIcon ?? prefixIcon,
+          ),
+          suffixIcon: IconButton(
+            onPressed: fun,
+            icon: Icon(
+                suffixIcon == null ? suffixIcon = null : suffixIcon = suffixIcon,
+                color: AppColors.mainColor),
+          ),
+          contentPadding: paddingInside != null
+              ? EdgeInsets.symmetric(vertical: paddingInside!)
+              : null,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: borderColor),
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(
+              color: borderColor,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+              borderSide: BorderSide(color: borderColor))),
+    );
+  }
+}
+

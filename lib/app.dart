@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_application/core/utils/strings.dart';
 
-import 'presentation/screens/HomeScreen/HomeScreen.dart';
+import 'features/fury/presentation/screens/HomeScreen/HomeScreen.dart';
+
 
 class MoviesApp extends StatelessWidget {
   @override
@@ -16,4 +17,5 @@ class MoviesApp extends StatelessWidget {
       home: HomeScreen(),
     );
   }
+
 }
