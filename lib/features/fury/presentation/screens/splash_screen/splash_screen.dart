@@ -19,9 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    // timer = Timer(const Duration(milliseconds: 2500), () {
-    //   Components.navigateAndFinish(context: context, widget: HomeScreen());
-    // });
+    timer = Timer(const Duration(milliseconds: 2500), () {
+      Components.navigateAndFinish(context: context, widget: HomeScreen());
+    });
     super.initState();
   }
 
