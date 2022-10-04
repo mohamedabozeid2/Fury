@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 
@@ -18,9 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    timer = Timer(const Duration(milliseconds: 2500), () {
-      Components.navigateAndFinish(context: context, widget: HomeScreen());
-    });
+    // timer = Timer(const Duration(milliseconds: 2500), () {
+    //   Components.navigateAndFinish(context: context, widget: HomeScreen());
+    // });
     super.initState();
   }
 
@@ -31,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
         statusBarColor: Colors.transparent,
       ),
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.splashColor,
         body: Center(
             child: Image(
                 image: AssetImage(ImageAssets.splashScreen),
