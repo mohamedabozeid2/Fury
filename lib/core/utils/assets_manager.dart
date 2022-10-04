@@ -1,5 +1,5 @@
 const String imagePath = 'assets/images';
 
 class ImageAssets{
- static String fury = '$imagePath/fury.png';
+ static String splashScreen = '$imagePath/logo.png';
 }

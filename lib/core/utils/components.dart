@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -16,6 +18,10 @@ class Components {
         backgroundColor: color,
         textColor: textColor,
         fontSize: fontSize);
+  }
+
+  static String getOS(){
+    return Platform.operatingSystem;
   }
 
   static navigateAndFinish({required context, required widget}) {
