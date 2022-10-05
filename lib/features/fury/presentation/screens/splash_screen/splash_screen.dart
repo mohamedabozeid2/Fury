@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
         statusBarColor: Colors.transparent,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.splashColor,
+        backgroundColor: AppColors.mainColor,
         body: Center(
             child: Image(
                 image: AssetImage(ImageAssets.splashScreen),

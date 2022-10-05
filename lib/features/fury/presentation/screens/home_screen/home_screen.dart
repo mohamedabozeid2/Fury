@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +6,9 @@ import 'package:get_it/get_it.dart';
 import 'package:movies_application/config/app_config.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/background_widget.dart';
-import 'package:movies_application/logic/cubit/cubit.dart';
-import 'package:movies_application/logic/cubit/states.dart';
+import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/foreground_widget.dart';
+import '../../cubit/cubit.dart';
+import '../../cubit/states.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    MoviesCubit.get(context).getData();
+    MoviesCubit.get(context).getPopularMovies();
     // setup(context).then((value){
     //
     // });
@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.center,
               children: [
                 BackgroundWidget(),
+                ForegroundWidget(),
               ],
             ),
           )

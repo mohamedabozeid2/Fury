@@ -29,7 +29,7 @@ class BackgroundWidget extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 10.0,sigmaY: 10.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.2)
+                color: Colors.black.withOpacity(0.4)
               ),
             ),
           ),

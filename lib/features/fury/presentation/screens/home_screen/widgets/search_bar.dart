@@ -1,10 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/core/utils/Colors.dart';
+import 'package:movies_application/core/utils/border_radius.dart';
+import 'package:movies_application/core/utils/components.dart';
+import 'package:movies_application/core/utils/helper.dart';
+import 'package:movies_application/core/widgets/text_field.dart';
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key}) : super(key: key);
+  var searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      height: Helper.getScreenHeight(context: context) * 0.08,
+      decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(AppRadius.large1)),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: SizedBox(
+              // width: Helper.getScreenWidth(context: context)*0.5,
+              // height: Helper.getScreenHeight(context: context)*0.05,
+              child: DefaultTextField(
+                context: context,
+                borderColor: Colors.transparent,
+                controller: searchController,
+                cursorColor: Colors.white,
+                hintStyle: Theme.of(context).textTheme.subtitle2,
+                contentStyle: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(color: Colors.white),
+                prefixIcon: Icon(Icons.search, color: AppColors.greyColor),
+                type: TextInputType.text,
+                label: 'Search...',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:movies_application/config/themes/light_theme/light_theme.dart';
 import 'package:movies_application/core/utils/strings.dart';
-import 'package:movies_application/features/fury/presentation/screens/splash_screen/splash_screen.dart';
-import 'package:movies_application/logic/cubit/cubit.dart';
+import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
+
+import 'features/fury/presentation/cubit/cubit.dart';
 
 
 
@@ -17,10 +19,9 @@ class MoviesApp extends StatelessWidget {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: SplashScreen(),
+        theme: lightTheme,
+        themeMode: ThemeMode.light,
+        home: HomeScreen(),
       ),
     );
   }

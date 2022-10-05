@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
+
 class DefaultTextField extends StatelessWidget {
   final BuildContext? context;
   final TextEditingController controller;
@@ -9,13 +10,17 @@ class DefaultTextField extends StatelessWidget {
   bool isPassword;
   String validation;
   Color? iconColor;
-  TextStyle? style;
+  Color? cursorColor;
+  TextStyle? hintStyle;
+  TextStyle? contentStyle;
   Widget? prefixIcon;
   Widget? prefixWidget;
   Color borderColor;
   double? paddingInside;
   IconData? suffixIcon;
-  void Function()? fun;
+  void Function()? sufIconFun;
+  void Function(String)? onSubmitFunction;
+  void Function(String)? onChangeFunction;
   double borderRadius;
 
   DefaultTextField({
@@ -26,42 +31,52 @@ class DefaultTextField extends StatelessWidget {
     this.isPassword = false,
     this.validation = "",
     this.iconColor,
-    this.fun,
+    this.cursorColor,
+    this.sufIconFun,
+    this.onSubmitFunction,
+    this.onChangeFunction,
     this.prefixWidget,
     this.borderColor = Colors.white,
     this.borderRadius = AppRadius.low1,
     this.paddingInside,
     this.prefixIcon,
-    this.style,
+    this.hintStyle,
+    this.contentStyle,
     this.suffixIcon,
   });
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       keyboardType: type,
+      // maxLines: 1,
+      cursorColor: cursorColor,
       obscureText: isPassword,
       validator: (String? value) {
         if (value!.isEmpty) {
           return validation;
         }
       },
-      style: TextStyle(color: AppColors.mainColor),
-      onChanged: (value) {},
+      style: contentStyle,
+      onChanged: onChangeFunction,
+      onFieldSubmitted: onSubmitFunction,
       decoration: InputDecoration(
           fillColor: Colors.transparent,
           filled: true,
           hintText: label,
-          hintStyle: style,
+          hintStyle: hintStyle,
           prefix: prefixWidget,
           prefixIcon: Padding(
             padding: const EdgeInsets.all(8.0),
             child: prefixIcon ?? prefixIcon,
           ),
           suffixIcon: IconButton(
-            onPressed: fun,
+            onPressed: sufIconFun,
             icon: Icon(
-                suffixIcon == null ? suffixIcon = null : suffixIcon = suffixIcon,
+                suffixIcon == null
+                    ? suffixIcon = null
+                    : suffixIcon = suffixIcon,
                 color: AppColors.mainColor),
           ),
           contentPadding: paddingInside != null
@@ -89,4 +104,3 @@ class DefaultTextField extends StatelessWidget {
     );
   }
 }
-

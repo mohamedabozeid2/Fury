@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:movies_application/core/utils/app_fonts.dart';
 
 ThemeData lightTheme = ThemeData(
-  textTheme: const TextTheme(
+  textTheme: TextTheme(
+    headline6: TextStyle(
+      // fontSize: AppFontSize.s60,
+      color: Colors.white,
+      fontWeight: FontWeightManager.bold,
+    ),
     bodyText1: TextStyle(
-      fontSize: 30.0,
-      fontWeight: FontWeight.bold,
+      // fontSize: AppFontSize.s24,
+      fontWeight: FontWeightManager.semiBold,
       color: Colors.black,
     ),
     bodyText2: TextStyle(
-        fontSize: 20.0, fontWeight: FontWeight.w600, color: Colors.black),
+        // fontSize: AppFontSize.s20,
+        fontWeight: FontWeightManager.semiBold,
+        color: Colors.black),
     subtitle2: TextStyle(
-      fontSize: 14.0,
-      fontWeight: FontWeight.w600,
+      // fontSize: AppFontSize.s14,
+      fontWeight: FontWeightManager.regular,
       color: Colors.black,
     ),
   ),
@@ -36,8 +43,7 @@ ThemeData lightTheme = ThemeData(
     systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark
-    ),
+        statusBarBrightness: Brightness.dark),
   ),
   // bottomNavigationBarTheme: BottomNavigationBarThemeData(
   //     type: BottomNavigationBarType.fixed,
@@ -45,5 +51,3 @@ ThemeData lightTheme = ThemeData(
   //     selectedItemColor: defaultColor,
   //     elevation: 20.0),
 );
-
-

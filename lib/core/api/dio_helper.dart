@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 class DioHelper{
   static Dio? dio;
   static String apiKey = 'a33a26fbf615c3f68bcd6ebc1fb6e018';
+  static String baseImageURL = 'https://image.tmdb.org/t/p/original';
   static init(){
     dio=Dio(
         BaseOptions(
