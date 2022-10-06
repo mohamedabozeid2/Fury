@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
@@ -26,18 +27,17 @@ class BackgroundWidget extends StatelessWidget {
             ),
           ),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0,sigmaY: 10.0),
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.4)
-              ),
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
             ),
           ),
         ),
-        placeholder: (context, url) => Center(child: AdaptiveIndicator(os: Components.getOS())),
+        placeholder: (context, url) => Center(
+          child: Container()
+        ),
         errorWidget: (context, url, error) => Icon(Icons.error),
       ),
-
     );
   }
 }

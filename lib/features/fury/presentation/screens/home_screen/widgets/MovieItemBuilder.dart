@@ -36,9 +36,8 @@ class MovieItemBuilder extends StatelessWidget {
         children: [
           Container(
             clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0)
-            ),
+            decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
             child: CachedImage(
               image: '$baseImageURL${movieModel.posterPath}',
               height: height,
@@ -58,18 +57,20 @@ class MovieItemBuilder extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        maxLines: 1,
-                        movieModel.name!,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline6
-                      ),
+                          maxLines: 1,
+                          movieModel.name!,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(color: Colors.white)),
                     ),
                     Text(
                       '${movieModel.rate}',
                       style: Theme.of(context)
                           .textTheme
-                          .headline6!
-                          .copyWith(color: Colors.white60),
+                          .bodyText1!
+                          .copyWith(color: Colors.white),
                     ),
                     const Icon(
                       Icons.star,
@@ -79,11 +80,23 @@ class MovieItemBuilder extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    Expanded(
+                      child: Text(
+                        '${movieModel.language} | Adult: ${movieModel.isAdult == false ? 'no' : 'yes'}',
+                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                              color: AppColors.textWhiteColor,
+                            ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
                     Text(
-                      '${movieModel.language} | Adult: ${movieModel.isAdult} | ${movieModel.releaseDate}',
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            color: Colors.white54,
-                          ),
+                      '${movieModel.releaseDate}',
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        color: AppColors.textWhiteColor
+                      ),
                     )
                   ],
                 ),
@@ -94,10 +107,11 @@ class MovieItemBuilder extends StatelessWidget {
                         child: Text(
                           '${movieModel.description}',
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                            color: Colors.white54
-                          ),
-                          maxLines: 5,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(color: AppColors.textWhiteColor),
+                          maxLines: 3,
                         ),
                       )
                     ],

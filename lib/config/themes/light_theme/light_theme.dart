@@ -5,21 +5,25 @@ import 'package:movies_application/core/utils/app_fonts.dart';
 ThemeData lightTheme = ThemeData(
   textTheme: TextTheme(
     headline6: TextStyle(
-      // fontSize: AppFontSize.s60,
+      fontSize: AppFontSize.s26,
       color: Colors.white,
       fontWeight: FontWeightManager.bold,
     ),
     bodyText1: TextStyle(
-      // fontSize: AppFontSize.s24,
+      fontSize: AppFontSize.s24,
       fontWeight: FontWeightManager.semiBold,
       color: Colors.black,
     ),
     bodyText2: TextStyle(
-        // fontSize: AppFontSize.s20,
+        fontSize: AppFontSize.s20,
         fontWeight: FontWeightManager.semiBold,
         color: Colors.black),
+    subtitle1: TextStyle(
+        fontSize: AppFontSize.s18,
+        fontWeight: FontWeightManager.regular,
+        color: Colors.black),
     subtitle2: TextStyle(
-      // fontSize: AppFontSize.s14,
+      fontSize: AppFontSize.s14,
       fontWeight: FontWeightManager.regular,
       color: Colors.black,
     ),

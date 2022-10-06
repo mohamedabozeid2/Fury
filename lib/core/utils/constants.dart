@@ -1,3 +1,1 @@
-class constants{
-
-}
+bool internetConnection = false;

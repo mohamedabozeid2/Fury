@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/api/dio_helper.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
@@ -36,16 +37,19 @@ class _ForegroundWidgetState extends State<ForegroundWidget> {
           width: Helper.getScreenWidth(context: context),
           height: Helper.getScreenHeight(context: context),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SearchBar(),
               state is MoviesGetPopularMoviesLoadingState
-                  ? Center(
+                  ? Expanded(
+                    child: Center(
                       child: AdaptiveIndicator(
+                        color: AppColors.mainColor,
                       os: Components.getOS(),
-                    ))
+                      ),
+                    ),
+                  )
                   : Expanded(
                       child: ListView.separated(
                         padding: EdgeInsets.only(

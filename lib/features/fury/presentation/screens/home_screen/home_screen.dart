@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:movies_application/config/app_config.dart';
+import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/background_widget.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/foreground_widget.dart';
+import 'package:movies_application/features/fury/presentation/screens/internet_connection/internet_connection.dart';
 import '../../cubit/cubit.dart';
 import '../../cubit/states.dart';
 
@@ -32,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       listener: (context, state){},
       builder: (context, state){
         return Scaffold(
-          body: Container(
+          body: internetConnection == true ? Container(
             height: Helper.getScreenHeight(context: context),
             width: Helper.getScreenWidth(context: context),
             child: Stack(
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ForegroundWidget(),
               ],
             ),
-          )
+          ) : InternetConnection()
         );
       },
     );
