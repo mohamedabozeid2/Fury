@@ -24,22 +24,25 @@ class DefaultButton extends StatelessWidget {
 });
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
-        color: backgroundColor,
-      ),
-      child: MaterialButton(
-        onPressed: fun,
-        child: Text(
-          isUpperCase ? text.toUpperCase() : text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: fontSize,
+    return GestureDetector(
+      onTap: fun,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius),
+          color: backgroundColor,
+        ),
+        child: Center(
+          child: Text(
+            isUpperCase ? text.toUpperCase() : text,
+            style: TextStyle(
+              color: textColor,
+              fontSize: fontSize,
+            ),
           ),
         ),
+
       ),
     );
   }

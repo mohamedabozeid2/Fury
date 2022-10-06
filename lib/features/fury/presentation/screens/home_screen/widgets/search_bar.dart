@@ -29,7 +29,9 @@ class SearchBar extends StatelessWidget {
                 borderColor: Colors.transparent,
                 controller: searchController,
                 cursorColor: Colors.white,
-                hintStyle: Theme.of(context).textTheme.subtitle2,
+                hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(
+                  color: AppColors.textWhiteColor
+                ),
                 contentStyle: Theme.of(context)
                     .textTheme
                     .subtitle2!

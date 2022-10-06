@@ -8,8 +8,8 @@ import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/MovieItemBuilder.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/search_bar.dart';
-import '../../../cubit/cubit.dart';
-import '../../../cubit/states.dart';
+import '../../../../../../logic/home_layout/home_cubit.dart';
+import '../../../../../../logic/home_layout/home_states.dart';
 
 class ForegroundWidget extends StatefulWidget {
   @override
@@ -41,7 +41,7 @@ class _ForegroundWidgetState extends State<ForegroundWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SearchBar(),
-              state is MoviesGetPopularMoviesLoadingState
+              state is FuryGetPopularMoviesLoadingState
                   ? Expanded(
                     child: Center(
                       child: AdaptiveIndicator(

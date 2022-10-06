@@ -18,8 +18,8 @@ class DefaultTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: fun,
+    return GestureDetector(
+        onTap: fun,
         child: Text(
           text,
           style: TextStyle(

@@ -11,6 +11,7 @@ class DefaultTextField extends StatelessWidget {
   String validation;
   Color? iconColor;
   Color? cursorColor;
+  Color fillColor;
   TextStyle? hintStyle;
   TextStyle? contentStyle;
   Widget? prefixIcon;
@@ -30,6 +31,7 @@ class DefaultTextField extends StatelessWidget {
     required this.label,
     this.isPassword = false,
     this.validation = "",
+    this.fillColor = Colors.transparent,
     this.iconColor,
     this.cursorColor,
     this.sufIconFun,
@@ -62,7 +64,7 @@ class DefaultTextField extends StatelessWidget {
       onChanged: onChangeFunction,
       onFieldSubmitted: onSubmitFunction,
       decoration: InputDecoration(
-          fillColor: Colors.transparent,
+          fillColor: fillColor,
           filled: true,
           hintText: label,
           hintStyle: hintStyle,

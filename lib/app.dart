@@ -7,9 +7,12 @@ import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/internet_connection.dart';
+import 'package:movies_application/features/fury/presentation/screens/splash_screen/splash_screen.dart';
+import 'package:movies_application/logic/login_cubit/login_cubit.dart';
 
-import 'features/fury/presentation/cubit/cubit.dart';
-
+import 'features/fury/presentation/screens/login_screen/login_screen.dart';
+import 'logic/home_layout/home_cubit.dart';
+import 'logic/register_cubit/register_cubit.dart';
 
 class MoviesApp extends StatelessWidget {
   @override
@@ -21,18 +24,19 @@ class MoviesApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (BuildContext context) => MoviesCubit())
+            BlocProvider(create: (BuildContext context) => MoviesCubit()),
+            BlocProvider(create: (BuildContext context) => LoginCubit()),
+            BlocProvider(create: (BuildContext context) => RegisterCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: AppStrings.appName,
             theme: lightTheme,
             themeMode: ThemeMode.light,
-            home: HomeScreen(),
+            home: LoginScreen(),
           ),
         );
       },
     );
   }
-
 }

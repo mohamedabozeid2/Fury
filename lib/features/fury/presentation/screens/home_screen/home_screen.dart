@@ -9,8 +9,8 @@ import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/background_widget.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/foreground_widget.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/internet_connection.dart';
-import '../../cubit/cubit.dart';
-import '../../cubit/states.dart';
+import '../../../../../logic/home_layout/home_cubit.dart';
+import '../../../../../logic/home_layout/home_states.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     MoviesCubit.get(context).getPopularMovies();
+    MoviesCubit.get(context).getUserData(userID: uId);
     // setup(context).then((value){
     //
     // });
