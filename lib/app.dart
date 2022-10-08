@@ -15,6 +15,9 @@ import 'logic/home_layout/home_cubit.dart';
 import 'logic/register_cubit/register_cubit.dart';
 
 class MoviesApp extends StatelessWidget {
+
+  Widget startWidget;
+  MoviesApp({required this.startWidget});
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

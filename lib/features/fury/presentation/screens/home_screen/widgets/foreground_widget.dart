@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/core/api/dio_helper.dart';
 import 'package:movies_application/core/utils/Colors.dart';
-import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/MovieItemBuilder.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/search_bar.dart';
+
+import '../../../../../../core/api/dio_helper.dart';
+import '../../../../../../core/utils/constants.dart';
 import '../../../../../../logic/home_layout/home_cubit.dart';
 import '../../../../../../logic/home_layout/home_states.dart';
+import 'MovieItemBuilder.dart';
 
 class ForegroundWidget extends StatefulWidget {
   @override
@@ -19,6 +20,8 @@ class ForegroundWidget extends StatefulWidget {
 class _ForegroundWidgetState extends State<ForegroundWidget> {
   @override
   void initState() {
+    MoviesCubit.get(context).getPopularMovies();
+    MoviesCubit.get(context).getUserData(userID: uId,fromHomeScreen: true);
     super.initState();
   }
 

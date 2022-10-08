@@ -18,16 +18,21 @@ class MoviesCubit extends Cubit<MoviesStates>{
 
   void getUserData({
     required String userID,
-    bool isMainUser = true,
+    bool fromHomeScreen = false,
   }) {
-    emit(FuryGetUserDataLoadingState());
+    if(!fromHomeScreen){
+      emit(FuryGetUserDataLoadingState());
+    }
     FirebaseFirestore.instance
         .collection("users")
         .doc(userID)
         .get()
         .then((value) {
       userModel = FuryUserModel.fromJson(value.data()!);
-      emit(FuryGetUserDataSuccessState());
+      if(!fromHomeScreen){
+        emit(FuryGetUserDataSuccessState());
+      }
+      print('done');
     }).catchError((error) {
       print("Error ===> ${error.toString()}");
       emit(FuryGetUserDataErrorState());

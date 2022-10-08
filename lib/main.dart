@@ -7,6 +7,7 @@ import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
+import 'package:movies_application/features/fury/presentation/screens/login_screen/login_screen.dart';
 
 import 'core/api/dio_helper.dart';
 import 'core/shared_preference/cache_helper.dart';
@@ -14,12 +15,21 @@ import 'features/fury/presentation/cubit/BlocObserver/BlocObserver.dart';
 import 'firebase_options.dart';
 
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await CacheHelper.init();
+
+  Widget startWidget;
+  uId = CacheHelper.getData(key: 'uId');
+
+  if (uId != null) {
+    startWidget = HomeScreen();
+  } else {
+    startWidget = LoginScreen();
+  }
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // st
@@ -28,7 +38,7 @@ void main() async{
       statusBarIconBrightness: Brightness.dark // tus bar color
   ));
 
-  await CheckConnection.checkConnection().then((value){
+  await CheckConnection.checkConnection().then((value) {
     internetConnection = value;
   });
 
@@ -37,7 +47,7 @@ void main() async{
 
   BlocOverrides.runZoned(
         () {
-      runApp(MoviesApp());
+      runApp(MoviesApp(startWidget:startWidget,));
       // Use blocs...
     },
     blocObserver: MyBlocObserver(),

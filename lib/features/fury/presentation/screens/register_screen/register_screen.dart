@@ -7,6 +7,7 @@ import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/button.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
+import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 import 'package:movies_application/logic/register_cubit/register_cubit.dart';
 import 'package:movies_application/logic/register_cubit/register_states.dart';
 import '../../../../../core/shared_preference/cache_helper.dart';
@@ -38,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               colorText: Colors.white, backgroundColor: Colors.greenAccent);
           CacheHelper.saveData(key: 'uId', value: state.uId);
           uId = state.uId;
+          Components.navigateAndFinish(context: context, widget: HomeScreen());
         }
       },
       builder: (context, state) {

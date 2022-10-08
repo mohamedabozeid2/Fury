@@ -67,7 +67,6 @@ class RegisterCubit extends Cubit<RegisterStates> {
         .set(model.toJson())
         .then((value) {
       FirebaseAuth.instance.currentUser!.sendEmailVerification();
-      MoviesCubit.get(context).getUserData(userID: uId);
       emit(FuryRegisterSuccessState(uId: uId));
     }).catchError((error) {
       print('Error in adding user to database ===> ${error.toString()}');

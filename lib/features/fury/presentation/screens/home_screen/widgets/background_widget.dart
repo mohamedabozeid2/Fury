@@ -2,10 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movies_application/core/utils/Colors.dart';
-import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
-import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 
 class BackgroundWidget extends StatelessWidget {
   const BackgroundWidget({Key? key}) : super(key: key);

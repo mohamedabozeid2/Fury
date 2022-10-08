@@ -10,9 +10,13 @@ import 'package:movies_application/core/widgets/button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/core/widgets/text_button.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
+import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 import 'package:movies_application/features/fury/presentation/screens/register_screen/register_screen.dart';
 import 'package:movies_application/logic/login_cubit/login_cubit.dart';
 import 'package:movies_application/logic/login_cubit/login_states.dart';
+
+import '../../../../../core/shared_preference/cache_helper.dart';
+import '../../../../../core/utils/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,7 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is FuryLoginSuccessState) {
+          Components.navigateAndFinish(context: context, widget: HomeScreen());
+          CacheHelper.saveData(key: 'uId', value: state.uId);
+          uId = CacheHelper.getData(key: 'uId');
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           extendBodyBehindAppBar: true,
@@ -130,7 +140,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fun: () {
                                   if (emailController.text.isNotEmpty &&
                                       passwordController.text.isNotEmpty) {
-                                    print('text');
+                                    LoginCubit.get(context).userLogin(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      context: context,
+                                    );
                                   }
                                 },
                                 text: AppStrings.login,
@@ -161,7 +175,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   DefaultTextButton(
                                     text: AppStrings.signUp,
                                     fun: () {
-                                      Components.navigateTo(context, RegisterScreen());
+                                      Components.navigateTo(
+                                          context, RegisterScreen());
                                     },
                                     fontSize: AppFontSize.s14,
                                     fontWeight: FontWeightManager.semiBold,
