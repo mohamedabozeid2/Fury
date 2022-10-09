@@ -12,26 +12,26 @@ ThemeData lightTheme = ThemeData(
     bodyText1: TextStyle(
       fontSize: AppFontSize.s24,
       fontWeight: FontWeightManager.semiBold,
-      color: Colors.black,
+      color: Colors.white,
     ),
     bodyText2: TextStyle(
         fontSize: AppFontSize.s20,
         fontWeight: FontWeightManager.semiBold,
-        color: Colors.black),
+        color: Colors.white),
     subtitle1: TextStyle(
         fontSize: AppFontSize.s18,
         fontWeight: FontWeightManager.regular,
-        color: Colors.black),
+        color: Colors.white),
     subtitle2: TextStyle(
       fontSize: AppFontSize.s14,
       fontWeight: FontWeightManager.regular,
-      color: Colors.black,
+      color: Colors.white,
     ),
   ),
   // primarySwatch: Colors.blue,
   // floatingActionButtonTheme:
   // FloatingActionButtonThemeData(backgroundColor: defaultColor),
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Colors.black,
 
   appBarTheme: const AppBarTheme(
     iconTheme: IconThemeData(color: Colors.white),

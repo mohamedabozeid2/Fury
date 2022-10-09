@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is FuryLoginSuccessState) {
           Components.navigateAndFinish(context: context, widget: HomeScreen());
           CacheHelper.saveData(key: 'uId', value: state.uId);
-          uId = CacheHelper.getData(key: 'uId');
+          uId = state.uId;
         }
       },
       builder: (context, state) {

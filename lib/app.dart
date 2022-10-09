@@ -36,7 +36,7 @@ class MoviesApp extends StatelessWidget {
             title: AppStrings.appName,
             theme: lightTheme,
             themeMode: ThemeMode.light,
-            home: LoginScreen(),
+            home: startWidget,
           ),
         );
       },

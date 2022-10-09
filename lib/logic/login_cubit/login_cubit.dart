@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/core/utils/Colors.dart';
-import 'package:movies_application/logic/home_layout/home_cubit.dart';
 import 'package:movies_application/logic/login_cubit/login_states.dart';
 
-import '../../core/shared_preference/cache_helper.dart';
 
 class LoginCubit extends Cubit<LoginStates>{
   LoginCubit() : super(LoginInitialState());

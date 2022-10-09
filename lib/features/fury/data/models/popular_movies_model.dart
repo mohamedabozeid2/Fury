@@ -20,4 +20,10 @@ class PopularMoviesModel {
     totalResult = json['total_results'];
     totalPages = json['total_pages'];
   }
+
+  void loadMoreMovies({required List<MovieModel> movies}){
+    print(movies.length);
+    moviesList.addAll(movies);
+    print('TEST =====> ${moviesList.length}');
+  }
 }

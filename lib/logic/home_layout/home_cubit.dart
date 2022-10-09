@@ -3,24 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/api/dio_helper.dart';
 import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/network/network.dart';
+import 'package:movies_application/features/fury/data/models/movie_model.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
 import '../../core/utils/constants.dart';
 import '../../features/fury/data/models/popular_movies_model.dart';
 import '../../features/fury/data/models/user_model.dart';
 
-class MoviesCubit extends Cubit<MoviesStates>{
+class MoviesCubit extends Cubit<MoviesStates> {
   MoviesCubit() : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
-
-
-  List<PopularMoviesModel> popularMovies = [];
 
   void getUserData({
     required String userID,
     bool fromHomeScreen = false,
   }) {
-    if(!fromHomeScreen){
+    if (!fromHomeScreen) {
       emit(FuryGetUserDataLoadingState());
     }
     FirebaseFirestore.instance
@@ -29,7 +27,7 @@ class MoviesCubit extends Cubit<MoviesStates>{
         .get()
         .then((value) {
       userModel = FuryUserModel.fromJson(value.data()!);
-      if(!fromHomeScreen){
+      if (!fromHomeScreen) {
         emit(FuryGetUserDataSuccessState());
       }
       print('done');
@@ -39,26 +37,68 @@ class MoviesCubit extends Cubit<MoviesStates>{
     });
   }
 
+  int currentPopularPage = 1;
+  bool isFirstLoadRunning = false;
 
-  void getPopularMovies(){
+  void getPopularMovies() {
     emit(FuryGetPopularMoviesLoadingState());
-    CheckConnection.checkConnection().then((value){
+    isFirstLoadRunning = true;
+    CheckConnection.checkConnection().then((value) {
       internetConnection = value;
-
-      if(value == true){
-        DioHelper.getData(url: EndPoints.popular,query: {
-          'api_key' : DioHelper.apiKey
-        }).then((value){
-          popularMovies.add(PopularMoviesModel.fromJson(value.data));
+      if (value == true) {
+        DioHelper.getData(url: EndPoints.popular, query: {
+          'api_key': DioHelper.apiKey,
+          'page': currentPopularPage
+        }).then((value) {
+          popularMovies = PopularMoviesModel.fromJson(value.data);
+          isFirstLoadRunning = false;
           emit(FuryGetPopularMoviesSuccessState());
-        }).catchError((error){
+        }).catchError((error) {
           print('Error in get data ===> ${error.toString()}');
           emit(FuryGetPopularMoviesErrorState());
         });
       }
     });
-
-    }
   }
 
+  bool hasNextPage = true;
+  bool isLoadingMoreRunning = false;
+  List<MovieModel> moreMovies = [];
+  void loadMorePopularMovies() {
+    emit(FuryLoadMorePopularMoviesLoadingState());
+    print('first');
+    print(hasNextPage);
+    print(isLoadingMoreRunning);
+    print(isFirstLoadRunning);
+    if (hasNextPage && !isLoadingMoreRunning && !isFirstLoadRunning) {
+      isLoadingMoreRunning = true;
+      moreMovies = [];
+      currentPopularPage++;
+      print(popularMovies);
+      print('start');
+      DioHelper.getData(
+              url: EndPoints.popular,
+              query: {'api_key': DioHelper.apiKey, 'page': currentPopularPage})
+          .then((value) {
+        morePopularMovies = PopularMoviesModel.fromJson(value.data);
+        if(morePopularMovies!.moviesList.isNotEmpty){
+          moreMovies.addAll(morePopularMovies!.moviesList);
+          print('More Is Found');
+          popularMovies!.loadMoreMovies(movies: moreMovies);
+          // popularMovies.addAll(morePopularMovies);
+          print(popularMovies);
+          print('More is loaded');
+        }else{
+          print('done');
 
+          hasNextPage = false;
+        }
+        emit(FuryLoadMorePopularMoviesSuccessState());
+      }).catchError((error) {
+        print('Error from load more popular movies ===> ${error.toString()}');
+        emit(FuryLoadMorePopularMoviesErrorState());
+      });
+      isLoadingMoreRunning = false;
+    }
+  }
+}

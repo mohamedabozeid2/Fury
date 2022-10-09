@@ -11,14 +11,14 @@ import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/button.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 
-class InternetConnection extends StatefulWidget {
-  const InternetConnection({Key? key}) : super(key: key);
+class NoInternetScreen extends StatefulWidget {
+  const NoInternetScreen({Key? key}) : super(key: key);
 
   @override
-  State<InternetConnection> createState() => _InternetConnectionState();
+  State<NoInternetScreen> createState() => _NoInternetScreenState();
 }
 
-class _InternetConnectionState extends State<InternetConnection> {
+class _NoInternetScreenState extends State<NoInternetScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -24,7 +24,6 @@ void main() async {
 
   Widget startWidget;
   uId = CacheHelper.getData(key: 'uId');
-
   if (uId != null) {
     startWidget = HomeScreen();
   } else {
