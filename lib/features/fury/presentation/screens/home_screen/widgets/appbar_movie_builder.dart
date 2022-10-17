@@ -31,7 +31,10 @@ class AppBarMovieBuilder extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.symmetric(vertical: Helper.getScreenHeight(context: context)*0.012),
-            color: Colors.black.withOpacity(0.4),
+            decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.4),
+                borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0))
+            ),
             // padding: EdgeInsets.symmetric(
             //     horizontal: Helper.getScreenWidth(context: context) * 0.06,
             //     vertical: 10),

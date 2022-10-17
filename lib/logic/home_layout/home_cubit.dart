@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/api/dio_helper.dart';
 import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/network/network.dart';
-import 'package:movies_application/features/fury/data/models/movie_model.dart';
+import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
 import '../../core/utils/constants.dart';
-import '../../features/fury/data/models/popular_movies_model.dart';
+import '../../features/fury/data/models/movies_model.dart';
 import '../../features/fury/data/models/user_model.dart';
 
 class MoviesCubit extends Cubit<MoviesStates> {
@@ -39,11 +39,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
     });
   }
 
-  int currentPopularPage = 1;
-  int currentTrendingPage = 1;
-  bool isFirstPopularLoadRunning = false;
-  bool isFirstTrendingLoadRunning = false;
-
   void getAllMovies() {
     emit(FuryGetAllMoviesLoadingState());
     CheckConnection.checkConnection().then((value) {
@@ -55,17 +50,26 @@ class MoviesCubit extends Cubit<MoviesStates> {
           popularMovies = MoviesModel.fromJson(value.data);
           isFirstPopularLoadRunning = false;
 
-          // Trending movies
+          // Trending Movies
           getTrendingMovies().then((value) {
             trendingMovies = MoviesModel.fromJson(value.data);
             isFirstTrendingLoadRunning = false;
-            emit(FuryGetAllMoviesSuccessState());
+
+            // Top Rated Movies
+            getTopRatedMovies().then((value) {
+              topRatedMovies = MoviesModel.fromJson(value.data);
+              isFirstTopRatedLoadRunning = false;
+              emit(FuryGetAllMoviesSuccessState());
+            }).catchError((error) {
+              debugPrint('Error in get top rated movies ${error.toString()}');
+              emit(FuryGetTopRatedMoviesErrorState());
+            });
           }).catchError((error) {
-            debugPrint('Error in get trending movies');
+            debugPrint('Error in get trending movies ${error.toString()}');
             emit(FuryGetTrendingMoviesErrorState());
           });
         }).catchError((error) {
-          debugPrint('Error in get popular movies');
+          debugPrint('Error in get popular movies ${error.toString()}');
           emit(FuryGetPopularMoviesErrorState());
         });
       } else {
@@ -74,128 +78,113 @@ class MoviesCubit extends Cubit<MoviesStates> {
     });
   }
 
+  /////// Popular Movies //////
+
+  int currentPopularPage = 1;
+  bool isFirstPopularLoadRunning = false;
+
   Future<Response> getPopularMovies() {
-    // emit(FuryGetPopularMoviesLoadingState());
     isFirstPopularLoadRunning = true;
     /////
-    return DioHelper.getData(url: EndPoints.popular, query: {
-      'api_key': DioHelper.apiKey,
-      'page': currentPopularPage
-    }); /*.then((value) {
-      popularMovies = MoviesModel.fromJson(value.data);
-      isFirstPopularLoadRunning = false;
-      emit(FuryGetPopularMoviesSuccessState());
-    }).catchError((error) {
-      print('Error in get data ===> ${error.toString()}');
-      emit(FuryGetPopularMoviesErrorState());
-    });*/
-    /////
-    // CheckConnection.checkConnection().then((value) {
-    //   internetConnection = value;
-    //   if (value == true) {
-    //     DioHelper.getData(url: EndPoints.popular, query: {
-    //       'api_key': DioHelper.apiKey,
-    //       'page': currentPopularPage
-    //     }).then((value) {
-    //       popularMovies = MoviesModel.fromJson(value.data);
-    //       isFirstPopularLoadRunning = false;
-    //       emit(FuryGetPopularMoviesSuccessState());
-    //     }).catchError((error) {
-    //       print('Error in get data ===> ${error.toString()}');
-    //       emit(FuryGetPopularMoviesErrorState());
-    //     });
-    //   }
-    // });
+    return DioHelper.getData(
+        url: EndPoints.popular,
+        query: {'api_key': DioHelper.apiKey, 'page': currentPopularPage});
   }
 
+/////
+//   bool hasNextPagePopular = true;
+//   bool isLoadingMoreRunningPopular = false;
+//   List<SingleMovieModel> morePopular = [];
+//
+//   bool hasNextPageTopRated = true;
+//   bool isLoadingMoreRunningTopRated = false;
+//   List<SingleMovieModel> moreTopRated = [];
+//
+//   bool hasNextPageTrending = true;
+//   bool isLoadingMoreRunningTrending = false;
+//   List<SingleMovieModel> moreTrending = [];
+//
+  //////
+  int currentTopRatedPage = 1;
+  bool isFirstTopRatedLoadRunning = false;
+
+  Future<Response> getTopRatedMovies() {
+    isFirstTopRatedLoadRunning = true;
+    /////
+    return DioHelper.getData(
+        url: EndPoints.topRated,
+        query: {'api_key': DioHelper.apiKey, 'page': currentTrendingPage});
+  }
+
+  int currentTrendingPage = 1;
+  bool isFirstTrendingLoadRunning = false;
+
   Future<Response> getTrendingMovies() {
-    // emit(FuryGetTrendingMoviesLoadingState());
     isFirstTrendingLoadRunning = true;
     return DioHelper.getData(
         url: EndPoints.trending,
         query: {'api_key': DioHelper.apiKey, 'page': currentTrendingPage});
-    // CheckConnection.checkConnection().then((value) {
-    //   internetConnection = value;
-    //   if (value == true) {
-    //     DioHelper.getData(url: EndPoints.trending, query: {
-    //       'api_key': DioHelper.apiKey,
-    //       'page': currentTrendingPage
-    //     }).then((value) {
-    //       trendingMovies = MoviesModel.fromJson(value.data);
-    //       isFirstTrendingLoadRunning = false;
-    //       emit(FuryGetTrendingMoviesSuccessState());
-    //     }).catchError((error) {
-    //       print('Error in get trending data ===> ${error.toString()}');
-    //       emit(FuryGetTrendingMoviesErrorState());
-    //     });
-    //   }else{
-    //     print('no internet');
-    //   }
-    // });
   }
 
-  bool hasNextPagePopular = true;
-  bool isLoadingMoreRunningPopular = false;
-  List<MovieModel> morePopular = [];
+  void loadMoreMovies(
+      {required int page,
+      required String moviesCategory,
+      required bool hasMorePages,
+      required bool isLoadingMore}) {
+    emit(FuryLoadMoreMoviesLoadingState());
+    bool hasNextPage = hasMorePages;
+    bool isLoadingMoreRunning = isLoadingMore;
+    late String endPoint;
+    List<SingleMovieModel> more = [];
 
-  void loadMorePopularMovies() {
-    emit(FuryLoadMorePopularMoviesLoadingState());
-    if (hasNextPagePopular &&
-        !isLoadingMoreRunningPopular &&
-        !isFirstPopularLoadRunning) {
-      isLoadingMoreRunningPopular = true;
-      morePopular = [];
-      currentPopularPage++;
+    if (hasNextPage && !isLoadingMoreRunning /*&& !isFirstLoadRunning*/) {
+      isLoadingMoreRunning = true;
+      more = [];
+      if (moviesCategory == 'popular') {
+        currentPopularPage++;
+        endPoint = EndPoints.popular;
+      } else if (moviesCategory == 'trending') {
+        currentTrendingPage++;
+        endPoint = EndPoints.trending;
+      } else if (moviesCategory == 'topRated') {
+        currentTopRatedPage++;
+        endPoint = EndPoints.topRated;
+      }
+
       DioHelper.getData(
-              url: EndPoints.popular,
-              query: {'api_key': DioHelper.apiKey, 'page': currentPopularPage})
-          .then((value) {
-        morePopularMovies = MoviesModel.fromJson(value.data);
-        if (morePopularMovies!.moviesList.isNotEmpty) {
-          morePopular.addAll(morePopularMovies!.moviesList);
-          popularMovies!.loadMoreMovies(movies: morePopular);
-          // popularMovies.addAll(morePopularMovies);
-        } else {
-          hasNextPagePopular = false;
+          url: endPoint,
+          query: {'api_key': DioHelper.apiKey, 'page': page + 1}).then((value) {
+        if (moviesCategory == 'popular') {
+          morePopularMovies = MoviesModel.fromJson(value.data);
+          if (morePopularMovies!.moviesList.isNotEmpty) {
+            more.addAll(morePopularMovies!.moviesList);
+            popularMovies!.loadMoreMovies(movies: more);
+          } else {
+            hasNextPage = false;
+          }
+        } else if (moviesCategory == 'trending') {
+          moreTrendingMovies = MoviesModel.fromJson(value.data);
+          if (moreTrendingMovies!.moviesList.isNotEmpty) {
+            more.addAll(moreTrendingMovies!.moviesList);
+            trendingMovies!.loadMoreMovies(movies: more);
+          } else {
+            hasNextPage = false;
+          }
+        } else if (moviesCategory == 'topRated') {
+          moreTopRatedMovies = MoviesModel.fromJson(value.data);
+          if (moreTopRatedMovies!.moviesList.isNotEmpty) {
+            more.addAll(moreTopRatedMovies!.moviesList);
+            topRatedMovies!.loadMoreMovies(movies: more);
+          } else {
+            hasNextPage = false;
+          }
         }
-        emit(FuryLoadMorePopularMoviesSuccessState());
+        emit(FuryLoadMoreMoviesSuccessState());
       }).catchError((error) {
-        print('Error from load more popular movies ===> ${error.toString()}');
-        emit(FuryLoadMorePopularMoviesErrorState());
+        print('Error from load more movies ===> ${error.toString()}');
+        emit(FuryLoadMoreMoviesErrorState());
       });
-      isLoadingMoreRunningPopular = false;
-    }
-  }
-
-  bool hasNextPageTrending = true;
-  bool isLoadingMoreRunningTrending = false;
-  List<MovieModel> moreTrending = [];
-
-  void loadMoreTrendingMovies() {
-    emit(FuryLoadMoreTrendingMoviesLoadingState());
-    if (hasNextPageTrending &&
-        !isLoadingMoreRunningTrending &&
-        !isFirstPopularLoadRunning) {
-      isLoadingMoreRunningTrending = true;
-      moreTrending = [];
-      currentPopularPage++;
-      DioHelper.getData(
-              url: EndPoints.popular,
-              query: {'api_key': DioHelper.apiKey, 'page': currentPopularPage})
-          .then((value) {
-        moreTrendingMovies = MoviesModel.fromJson(value.data);
-        if (moreTrendingMovies!.moviesList.isNotEmpty) {
-          moreTrending.addAll(moreTrendingMovies!.moviesList);
-          trendingMovies!.loadMoreMovies(movies: moreTrending);
-        } else {
-          hasNextPageTrending = false;
-        }
-        emit(FuryLoadMoreTrendingMoviesSuccessState());
-      }).catchError((error) {
-        print('Error from load more popular movies ===> ${error.toString()}');
-        emit(FuryLoadMoreTrendingMoviesErrorState());
-      });
-      isLoadingMoreRunningTrending = false;
+      isLoadingMoreRunning = false;
     }
   }
 }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
-import 'package:movies_application/features/fury/data/models/movie_model.dart';
+import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
 
 import '../../../../../../core/utils/Colors.dart';
 
 class MovieItemBuilder extends StatelessWidget {
-  MovieModel movieModel;
+  SingleMovieModel movieModel;
   String baseImageURL;
   double height;
   double width;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'movie_model.dart';
+import 'single_movie_model.dart';
 
 class MoviesModel {
   num? page;
-  List<MovieModel> moviesList = [];
+  List<SingleMovieModel> moviesList = [];
   num? totalPages;
   num? totalResult;
 
@@ -17,13 +17,13 @@ class MoviesModel {
   MoviesModel.fromJson(Map<String, dynamic> json){
     page = json['page'];
     json['results'].forEach((element){
-      moviesList.add(MovieModel.fromJson(element));
+      moviesList.add(SingleMovieModel.fromJson(element));
     });
     totalResult = json['total_results'];
     totalPages = json['total_pages'];
   }
 
-  void loadMoreMovies({required List<MovieModel> movies}){
+  void loadMoreMovies({required List<SingleMovieModel> movies}){
     debugPrint('${movies.length}');
     moviesList.addAll(movies);
     debugPrint('TEST =====> ${moviesList.length}');

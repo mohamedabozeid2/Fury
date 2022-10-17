@@ -1,6 +1,6 @@
 import 'package:movies_application/core/api/dio_helper.dart';
 
-class MovieModel{
+class SingleMovieModel{
   String? name;
   int? id;
   String? language;
@@ -11,7 +11,7 @@ class MovieModel{
   num? rate;
   String? backDropPath;
 
-  MovieModel({
+  SingleMovieModel({
     required this.name,
     required this.id,
     required this.description,
@@ -23,7 +23,7 @@ class MovieModel{
     required this.releaseDate
 });
 
-  MovieModel.fromJson(Map<String, dynamic> json){
+  SingleMovieModel.fromJson(Map<String, dynamic> json){
       name = json['original_title'];
       id = json['id'];
       language = json['original_language'];
