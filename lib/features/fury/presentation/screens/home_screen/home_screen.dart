@@ -21,10 +21,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController popularMoviesScrollController = ScrollController();
+  ScrollController trendingMoviesScrollController = ScrollController();
 
   @override
   void initState() {
-    MoviesCubit.get(context).getPopularMovies();
+    MoviesCubit.get(context).getAllMovies();
+    // MoviesCubit.get(context).getTrendingMovies();
     MoviesCubit.get(context).getUserData(userID: uId, fromHomeScreen: true);
     super.initState();
   }
@@ -35,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          body: state is FuryGetPopularMoviesLoadingState
+          body: state is FuryGetAllMoviesLoadingState
               ? Center(
                   child: AdaptiveIndicator(
                   os: Components.getOS(),
@@ -69,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: AppColors.mainColor,
                                   borderRadius:
                                       BorderRadius.circular(AppRadius.large1)),
-                              child: Icon(Icons.search),
+                              child: const Icon(Icons.search),
                             ),
                           )
                         ],
@@ -100,69 +102,152 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style:
                                         Theme.of(context).textTheme.bodyText2,
                                   ),
-                                  Container(
-                                    height: Helper.getScreenHeight(
-                                            context: context) *
-                                        0.2,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: NotificationListener<
-                                              ScrollEndNotification>(
-                                            onNotification: (value) {
-                                              if (popularMoviesScrollController
-                                                  .position.atEdge) {
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: Helper.getScreenHeight(
+                                                context: context) *
+                                            0.01),
+                                    child: Container(
+                                      height: Helper.getScreenHeight(
+                                              context: context) *
+                                          0.2,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: NotificationListener<
+                                                ScrollEndNotification>(
+                                              onNotification: (value) {
                                                 if (popularMoviesScrollController
-                                                        .position.pixels !=
-                                                    0) {
-                                                  print('true');
-                                                  if (state
-                                                      is FuryLoadMorePopularMoviesLoadingState) {
-                                                    print('loading');
-                                                  } else {
-                                                    MoviesCubit.get(context)
-                                                        .loadMorePopularMovies();
+                                                    .position.atEdge) {
+                                                  if (popularMoviesScrollController
+                                                          .position.pixels !=
+                                                      0) {
+                                                    print('true');
+                                                    if (state
+                                                        is FuryLoadMorePopularMoviesLoadingState) {
+                                                      print('loading');
+                                                    } else {
+                                                      MoviesCubit.get(context)
+                                                          .loadMorePopularMovies();
+                                                    }
                                                   }
+                                                  return true;
+                                                } else {
+                                                  return false;
                                                 }
-                                                return true;
-                                              } else {
-                                                return false;
-                                              }
-                                            },
-                                            child: ListView.separated(
-                                                controller:
-                                                    popularMoviesScrollController,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemBuilder: (context, index) {
-                                                  return MovieItemBuilder(
-                                                    movieModel: popularMovies!
-                                                        .moviesList[index],
-                                                    baseImageURL:
-                                                        DioHelper.baseImageURL,
-                                                    height:
-                                                        Helper.getScreenHeight(
-                                                                context:
-                                                                    context) *
-                                                            0.2,
-                                                    width:
-                                                        Helper.getScreenWidth(
-                                                                context:
-                                                                    context) *
-                                                            0.3,
-                                                  );
-                                                },
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return const SizedBox(
-                                                    width: 7.0,
-                                                  );
-                                                },
-                                                itemCount: popularMovies!
-                                                    .moviesList.length),
+                                              },
+                                              child: ListView.separated(
+                                                  controller:
+                                                      popularMoviesScrollController,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return MovieItemBuilder(
+                                                      movieModel: popularMovies!
+                                                          .moviesList[index],
+                                                      baseImageURL: DioHelper
+                                                          .baseImageURL,
+                                                      height: Helper
+                                                              .getScreenHeight(
+                                                                  context:
+                                                                      context) *
+                                                          0.2,
+                                                      width:
+                                                          Helper.getScreenWidth(
+                                                                  context:
+                                                                      context) *
+                                                              0.3,
+                                                    );
+                                                  },
+                                                  separatorBuilder:
+                                                      (context, index) {
+                                                    return const SizedBox(
+                                                      width: 7.0,
+                                                    );
+                                                  },
+                                                  itemCount: popularMovies!
+                                                      .moviesList.length),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    'Trending Movies',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: Helper.getScreenHeight(
+                                                context: context) *
+                                            0.01),
+                                    child: Container(
+                                      height: Helper.getScreenHeight(
+                                              context: context) *
+                                          0.2,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: NotificationListener<
+                                                ScrollEndNotification>(
+                                              onNotification: (value) {
+                                                if (trendingMoviesScrollController
+                                                    .position.atEdge) {
+                                                  if (trendingMoviesScrollController
+                                                          .position.pixels !=
+                                                      0) {
+                                                    debugPrint('true');
+                                                    if (state is FuryLoadMoreTrendingMoviesLoadingState) {
+                                                      debugPrint('loading');
+                                                    } else {
+                                                      MoviesCubit.get(context)
+                                                          .loadMoreTrendingMovies();
+                                                    }
+                                                  }
+                                                  return true;
+                                                } else {
+                                                  return false;
+                                                }
+                                              },
+                                              child: ListView.separated(
+                                                  controller:
+                                                      trendingMoviesScrollController,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return MovieItemBuilder(
+                                                      movieModel: trendingMovies!
+                                                          .moviesList[index],
+                                                      baseImageURL: DioHelper
+                                                          .baseImageURL,
+                                                      height: Helper
+                                                              .getScreenHeight(
+                                                                  context:
+                                                                      context) *
+                                                          0.2,
+                                                      width:
+                                                          Helper.getScreenWidth(
+                                                                  context:
+                                                                      context) *
+                                                              0.3,
+                                                    );
+                                                  },
+                                                  separatorBuilder:
+                                                      (context, index) {
+                                                    return const SizedBox(
+                                                      width: 7.0,
+                                                    );
+                                                  },
+                                                  itemCount: trendingMovies!
+                                                      .moviesList.length),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
