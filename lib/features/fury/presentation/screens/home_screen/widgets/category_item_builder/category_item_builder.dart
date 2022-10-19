@@ -13,7 +13,7 @@ class CategoryItemBuilder extends StatefulWidget {
   String? title;
   String category;
   List<SingleMovieModel> movies;
-
+  bool fromSimilarMovies;
 
   //// For similar movies part ////
   int? movieID;
@@ -25,6 +25,7 @@ class CategoryItemBuilder extends StatefulWidget {
     this.title,
     required this.category,
     required this.movies,
+    this.fromSimilarMovies = false,
     this.movieID,
     // required this.loadMoreFun,
   });
@@ -49,6 +50,8 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
       page = MoviesCubit.get(context).currentTopRatedPage;
     } else if (widget.category == CategoryKeys.upComing) {
       page = MoviesCubit.get(context).currentUpComingPage;
+    } else if(widget.category == CategoryKeys.similarMovies){
+      page = MoviesCubit.get(context).currentSimilarMoviesPage;
     }
     bool hasNextPage = true;
     bool isLoadingMoreRunning = false;
@@ -86,7 +89,9 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                                       // isFirstLoad: false,
                                       isLoadingMore: isLoadingMoreRunning,
                                       page: page,
-                                      moviesCategory: widget.category);
+                                      moviesCategory: widget.category,
+                                      movieID: widget.fromSimilarMovies ? widget.movieID : 0
+                                  );
                                 }
                               }
                               return true;
@@ -95,6 +100,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                             }
                           },
                           child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
                               controller: scrollController,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {

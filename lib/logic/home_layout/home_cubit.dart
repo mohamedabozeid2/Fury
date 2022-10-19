@@ -9,6 +9,7 @@ import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/data/models/GenresModel.dart';
 import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
+import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/category_item_builder/category_keys.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/no_internet_screen.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
 import '../../core/utils/constants.dart';
@@ -37,14 +38,13 @@ class MoviesCubit extends Cubit<MoviesStates> {
       if (!fromHomeScreen) {
         emit(FuryGetUserDataSuccessState());
       }
-      print('done');
     }).catchError((error) {
       print("Error ===> ${error.toString()}");
       emit(FuryGetUserDataErrorState());
     });
   }
 
-  void getAllMovies ({required BuildContext context}) {
+  void getAllMovies({required BuildContext context}) {
     emit(FuryGetAllMoviesLoadingState());
     CheckConnection.checkConnection().then((value) {
       internetConnection = value;
@@ -73,27 +73,32 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 // throw Exception('Error');
                 emit(FuryGetAllMoviesSuccessState());
               }).catchError((error) {
-                Components.navigateAndFinish(context: context, widget: NoInternetScreen());
+                Components.navigateAndFinish(
+                    context: context, widget: NoInternetScreen());
                 debugPrint('Error in get upcoming movies ${error.toString()}');
               });
             }).catchError((error) {
-              Components.navigateAndFinish(context: context, widget: NoInternetScreen());
+              Components.navigateAndFinish(
+                  context: context, widget: NoInternetScreen());
               debugPrint('Error in get top rated movies ${error.toString()}');
               emit(FuryGetTopRatedMoviesErrorState());
             });
           }).catchError((error) {
-            Components.navigateAndFinish(context: context, widget: NoInternetScreen());
+            Components.navigateAndFinish(
+                context: context, widget: NoInternetScreen());
             debugPrint('Error in get trending movies ${error.toString()}');
             emit(FuryGetTrendingMoviesErrorState());
           });
         }).catchError((error) {
-          Components.navigateAndFinish(context: context, widget: NoInternetScreen());
+          Components.navigateAndFinish(
+              context: context, widget: NoInternetScreen());
           debugPrint('Error in get popular movies ${error.toString()}');
           emit(FuryGetPopularMoviesErrorState());
         });
       } else {
         debugPrint('No Internet');
-        Components.navigateAndFinish(context: context, widget: NoInternetScreen());
+        Components.navigateAndFinish(
+            context: context, widget: NoInternetScreen());
         Components.showSnackBar(
             title: AppStrings.appName,
             message: AppStrings.noInternet,
@@ -155,11 +160,13 @@ class MoviesCubit extends Cubit<MoviesStates> {
         query: {'api_key': DioHelper.apiKey, 'language': 'en-US'});
   }
 
-  void loadMoreMovies(
-      {required int page,
-      required String moviesCategory,
-      required bool hasMorePages,
-      required bool isLoadingMore}) {
+  void loadMoreMovies({
+    required int page,
+    required String moviesCategory,
+    required bool hasMorePages,
+    required bool isLoadingMore,
+    int? movieID,
+  }) {
     emit(FuryLoadMoreMoviesLoadingState());
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
@@ -169,24 +176,27 @@ class MoviesCubit extends Cubit<MoviesStates> {
     if (hasNextPage && !isLoadingMoreRunning /*&& !isFirstLoadRunning*/) {
       isLoadingMoreRunning = true;
       more = [];
-      if (moviesCategory == 'popular') {
+      if (moviesCategory == CategoryKeys.popular) {
         currentPopularPage++;
         endPoint = EndPoints.popular;
-      } else if (moviesCategory == 'trending') {
+      } else if (moviesCategory == CategoryKeys.trending) {
         currentTrendingPage++;
         endPoint = EndPoints.trending;
-      } else if (moviesCategory == 'topRated') {
+      } else if (moviesCategory == CategoryKeys.topRated) {
         currentTopRatedPage++;
         endPoint = EndPoints.topRated;
-      } else if (moviesCategory == 'upComing') {
+      } else if (moviesCategory == CategoryKeys.upComing) {
         currentUpComingPage++;
         endPoint = EndPoints.upComing;
+      } else if (moviesCategory == CategoryKeys.similarMovies) {
+        currentSimilarMoviesPage++;
+        endPoint = '/movie/$movieID/recommendations';
       }
 
       DioHelper.getData(
           url: endPoint,
           query: {'api_key': DioHelper.apiKey, 'page': page + 1}).then((value) {
-        if (moviesCategory == 'popular') {
+        if (moviesCategory == CategoryKeys.popular) {
           morePopularMovies = MoviesModel.fromJson(value.data);
           if (morePopularMovies!.moviesList.isNotEmpty) {
             more.addAll(morePopularMovies!.moviesList);
@@ -194,7 +204,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
           } else {
             hasNextPage = false;
           }
-        } else if (moviesCategory == 'trending') {
+        } else if (moviesCategory == CategoryKeys.trending) {
           moreTrendingMovies = MoviesModel.fromJson(value.data);
           if (moreTrendingMovies!.moviesList.isNotEmpty) {
             more.addAll(moreTrendingMovies!.moviesList);
@@ -202,7 +212,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
           } else {
             hasNextPage = false;
           }
-        } else if (moviesCategory == 'topRated') {
+        } else if (moviesCategory == CategoryKeys.topRated) {
           moreTopRatedMovies = MoviesModel.fromJson(value.data);
           if (moreTopRatedMovies!.moviesList.isNotEmpty) {
             more.addAll(moreTopRatedMovies!.moviesList);
@@ -210,11 +220,19 @@ class MoviesCubit extends Cubit<MoviesStates> {
           } else {
             hasNextPage = false;
           }
-        } else if (moviesCategory == 'upComing') {
+        } else if (moviesCategory == CategoryKeys.upComing) {
           moreUpComingMovies = MoviesModel.fromJson(value.data);
           if (moreUpComingMovies!.moviesList.isNotEmpty) {
             more.addAll(moreUpComingMovies!.moviesList);
             upComingMovies!.loadMoreMovies(movies: more);
+          } else {
+            hasNextPage = false;
+          }
+        } else if (moviesCategory == CategoryKeys.similarMovies) {
+          moreSimilarMovies = MoviesModel.fromJson(value.data);
+          if (moreSimilarMovies!.moviesList.isNotEmpty) {
+            more.addAll(moreSimilarMovies!.moviesList);
+            similarMovies!.loadMoreMovies(movies: more);
           } else {
             hasNextPage = false;
           }
@@ -228,61 +246,60 @@ class MoviesCubit extends Cubit<MoviesStates> {
     }
   }
 
-
   MovieKeywordsModel? keywords;
+
   Future<void> getMovieKeyword({required SingleMovieModel movie}) async {
-    await DioHelper.getData(url: '/movie/${movie.id}/keywords',query: {
-      'api_key' : DioHelper.apiKey
-    }).then((value){
+    await DioHelper.getData(
+        url: '/movie/${movie.id}/keywords',
+        query: {'api_key': DioHelper.apiKey}).then((value) {
       keywords = MovieKeywordsModel.fromJson(value.data);
-      print('once');
-    }).catchError((error){
+    }).catchError((error) {
       emit(FuryGetMovieDetailsErrorState());
     });
   }
 
   GenresModel? genresModel;
-  void getMovieGenres(){
+
+  void getMovieGenres() {
     // emit(FuryGetMovieGenresLoadingState());
     DioHelper.getData(url: EndPoints.genres, query: {
-      'api_key' : DioHelper.apiKey,
-      'language' : 'en-US',
-    }).then((value){
+      'api_key': DioHelper.apiKey,
+      'language': 'en-US',
+    }).then((value) {
       genresModel = GenresModel.fromJson(value.data);
       // emit(FuryGetMovieGenresSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       debugPrint('Error in get genres ${error.toString()}');
       emit(FuryGetMovieDetailsErrorState());
     });
   }
+
   List<String> genresList = [];
 
-  Future<void> fillGenresList({required List<int> movieGenresId})async{
+  Future<void> fillGenresList({required List<int> movieGenresId}) async {
     genresList = [];
-     for(int i=0 ; i<genresModel!.genres.length ; i++){
-      if(movieGenresId.contains(genresModel!.genres[i].id)){
+    for (int i = 0; i < genresModel!.genres.length; i++) {
+      if (movieGenresId.contains(genresModel!.genres[i].id)) {
         genresList.add(genresModel!.genres[i].name!);
       }
-
     }
-    print('here we go again');
   }
 
   int currentSimilarMoviesPage = 1;
   MoviesModel? similarMovies;
-  Future<void> getSimilarMovies({required SingleMovieModel movie})async{
+
+  Future<void> getSimilarMovies({required SingleMovieModel movie}) async {
     emit(FuryGetMovieDetailsLoadingState());
-    print('Movie ID =====> ${movie.id}');
-    await DioHelper.getData(url:'/movie/${movie.id}/recommendations', query: {
-      'api_key' : DioHelper.apiKey,
-      'language' : 'en-US',
-      'page' : currentSimilarMoviesPage,
-    }).then((value){
+    await DioHelper.getData(url: '/movie/${movie.id}/recommendations', query: {
+      'api_key': DioHelper.apiKey,
+      'language': 'en-US',
+      'page': currentSimilarMoviesPage,
+    }).then((value) {
       similarMovies = MoviesModel.fromJson(value.data);
       getMovieKeyword(movie: movie);
       fillGenresList(movieGenresId: movie.genresIds);
       emit(FuryGetMovieDetailsSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       debugPrint('Error in Get Similar Movies ${error.toString()}');
       emit(FuryGetMovieDetailsErrorState());
     });

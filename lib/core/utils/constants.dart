@@ -7,11 +7,13 @@ MoviesModel? popularMovies;
 MoviesModel? trendingMovies;
 MoviesModel? topRatedMovies;
 MoviesModel? upComingMovies;
+MoviesModel? similarMovies;
 MoviesModel? latestMovie;
 MoviesModel? moreUpComingMovies;
 MoviesModel? morePopularMovies;
 MoviesModel? moreTopRatedMovies;
 MoviesModel? moreTrendingMovies;
+MoviesModel? moreSimilarMovies;
 dynamic uId = "";
 
 

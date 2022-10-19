@@ -177,7 +177,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 color: AppColors.mainColor,
                                 paddingHorizontal: 0.0,
                               ),
-                              SimilarMovies(),
+                              SimilarMovies(movieId: widget.movie.id!),
                             ],
                           ),
                         ),

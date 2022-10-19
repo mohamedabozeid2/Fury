@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/category_item_builder/category_item_builder.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/category_item_builder/category_keys.dart';
 import 'package:movies_application/logic/home_layout/home_cubit.dart';
-
 import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/helper.dart';
 
 class SimilarMovies extends StatelessWidget {
-  const SimilarMovies({Key? key}) : super(key: key);
+  int movieId;
+
+  SimilarMovies({
+    required this.movieId
+});
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +36,14 @@ class SimilarMovies extends StatelessWidget {
         if (MoviesCubit.get(context).similarMovies!.moviesList.isNotEmpty)
           CategoryItemBuilder(
               category: CategoryKeys.similarMovies,
+              fromSimilarMovies: true,
+              movieID: movieId,
               movies: MoviesCubit.get(context).similarMovies!.moviesList)
         else
-          Text('Sorry, There is no similar movies for this movie', style:  Theme.of(context).textTheme.subtitle2,)
+          Text(
+            'Sorry, There is no similar movies for this movie',
+            style: Theme.of(context).textTheme.subtitle2,
+          )
       ],
     );
   }
