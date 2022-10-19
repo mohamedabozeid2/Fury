@@ -37,6 +37,7 @@ class FuryLoadMoreTopRatedMoviesErrorState extends MoviesStates{}
 
 //////
 
-class FuryGetMovieKeywordLoadingState extends MoviesStates{}
-class FuryGetMovieKeywordSuccessState extends MoviesStates{}
-class FuryGetMovieKeywordErrorState extends MoviesStates{}
+////// Get movie details//////
+class FuryGetMovieDetailsLoadingState extends MoviesStates{}
+class FuryGetMovieDetailsSuccessState extends MoviesStates{}
+class FuryGetMovieDetailsErrorState extends MoviesStates{}

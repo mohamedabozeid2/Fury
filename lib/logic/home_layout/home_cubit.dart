@@ -7,6 +7,7 @@ import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/strings.dart';
+import 'package:movies_application/features/fury/data/models/GenresModel.dart';
 import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/no_internet_screen.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
@@ -68,6 +69,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
               getUpComingMovies().then((value) {
                 upComingMovies = MoviesModel.fromJson(value.data);
                 isFirstUpComingLoadRunning = false;
+                getMovieGenres();
                 // throw Exception('Error');
                 emit(FuryGetAllMoviesSuccessState());
               }).catchError((error) {
@@ -228,15 +230,61 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
 
   MovieKeywordsModel? keywords;
-  void getMovieKeyword({required int movieId}){
-    emit(FuryGetMovieKeywordLoadingState());
-    DioHelper.getData(url: '/movie/$movieId/keywords',query: {
+  Future<void> getMovieKeyword({required SingleMovieModel movie}) async {
+    await DioHelper.getData(url: '/movie/${movie.id}/keywords',query: {
       'api_key' : DioHelper.apiKey
     }).then((value){
       keywords = MovieKeywordsModel.fromJson(value.data);
-      emit(FuryGetMovieKeywordSuccessState());
+      print('once');
     }).catchError((error){
-      emit(FuryGetMovieKeywordErrorState());
+      emit(FuryGetMovieDetailsErrorState());
+    });
+  }
+
+  GenresModel? genresModel;
+  void getMovieGenres(){
+    // emit(FuryGetMovieGenresLoadingState());
+    DioHelper.getData(url: EndPoints.genres, query: {
+      'api_key' : DioHelper.apiKey,
+      'language' : 'en-US',
+    }).then((value){
+      genresModel = GenresModel.fromJson(value.data);
+      // emit(FuryGetMovieGenresSuccessState());
+    }).catchError((error){
+      debugPrint('Error in get genres ${error.toString()}');
+      emit(FuryGetMovieDetailsErrorState());
+    });
+  }
+  List<String> genresList = [];
+
+  Future<void> fillGenresList({required List<int> movieGenresId})async{
+    genresList = [];
+     for(int i=0 ; i<genresModel!.genres.length ; i++){
+      if(movieGenresId.contains(genresModel!.genres[i].id)){
+        genresList.add(genresModel!.genres[i].name!);
+      }
+
+    }
+    print('here we go again');
+  }
+
+  int currentSimilarMoviesPage = 1;
+  MoviesModel? similarMovies;
+  Future<void> getSimilarMovies({required SingleMovieModel movie})async{
+    emit(FuryGetMovieDetailsLoadingState());
+    print('Movie ID =====> ${movie.id}');
+    await DioHelper.getData(url:'/movie/${movie.id}/recommendations', query: {
+      'api_key' : DioHelper.apiKey,
+      'language' : 'en-US',
+      'page' : currentSimilarMoviesPage,
+    }).then((value){
+      similarMovies = MoviesModel.fromJson(value.data);
+      getMovieKeyword(movie: movie);
+      fillGenresList(movieGenresId: movie.genresIds);
+      emit(FuryGetMovieDetailsSuccessState());
+    }).catchError((error){
+      debugPrint('Error in Get Similar Movies ${error.toString()}');
+      emit(FuryGetMovieDetailsErrorState());
     });
   }
 }

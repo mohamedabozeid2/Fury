@@ -10,16 +10,22 @@ import '../../../../../../../core/utils/helper.dart';
 import '../../../../../data/models/single_movie_model.dart';
 
 class CategoryItemBuilder extends StatefulWidget {
-  String title;
+  String? title;
   String category;
   List<SingleMovieModel> movies;
 
-  // Function loadMoreFun;
+
+  //// For similar movies part ////
+  int? movieID;
+  ////////
+
+
 
   CategoryItemBuilder({
-    required this.title,
+    this.title,
     required this.category,
     required this.movies,
+    this.movieID,
     // required this.loadMoreFun,
   });
 
@@ -55,15 +61,16 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.title,
+              widget.title!=null ? Text(
+                widget.title!,
                 style: Theme.of(context).textTheme.bodyText2,
-              ),
+              ): Container(),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: Helper.getScreenHeight(context: context) * 0.01),
                 child: Container(
                   height: Helper.getScreenHeight(context: context) * 0.2,
+
                   child: Row(
                     children: [
                       Expanded(

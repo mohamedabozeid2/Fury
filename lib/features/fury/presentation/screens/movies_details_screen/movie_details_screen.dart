@@ -8,11 +8,16 @@ import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/movie_keywards_model.dart';
 import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/Keywords.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/description.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/genres.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/rate_row.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/similar_movies.dart';
 import 'package:movies_application/logic/home_layout/home_cubit.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
 import '../../../../../core/api/dio_helper.dart';
 import '../../../../../core/utils/helper.dart';
+import '../../../../../core/widgets/divider.dart';
 import '../home_screen/widgets/appbar_movie_builder.dart';
 
 class MovieDetails extends StatefulWidget {
@@ -27,7 +32,7 @@ class MovieDetails extends StatefulWidget {
 class _MovieDetailsState extends State<MovieDetails> {
   @override
   void initState() {
-    MoviesCubit.get(context).getMovieKeyword(movieId: widget.movie.id!);
+    MoviesCubit.get(context).getSimilarMovies(movie: widget.movie);
     super.initState();
   }
 
@@ -37,7 +42,7 @@ class _MovieDetailsState extends State<MovieDetails> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-            body: state is FuryGetMovieKeywordLoadingState
+            body: state is FuryGetMovieDetailsLoadingState
                 ? Center(
                     child: AdaptiveIndicator(
                       os: Components.getOS(),
@@ -123,48 +128,40 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 'Language: ${widget.movie.language}',
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
-                              SizedBox(
-                                height:
-                                    Helper.getScreenHeight(context: context) *
-                                        0.01,
+                              MyDivider(
+                                color: AppColors.mainColor,
+                                paddingHorizontal: 0,
+                              ),
+                              Genres(
+                                  genres: MoviesCubit.get(context).genresList),
+                              MyDivider(
+                                color: AppColors.mainColor,
+                                paddingHorizontal: 0,
                               ),
                               MoviesCubit.get(context).keywords != null
-                                  ? SizedBox(
-                                      height: Helper.getScreenHeight(
-                                              context: context) *
-                                          0.03,
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemBuilder: (context, index) {
-                                                return Text(
-                                                  '#${MoviesCubit.get(context).keywords!.keywords[index].name} ',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle2,
-                                                );
-                                              },
-                                              itemCount:
-                                                  MoviesCubit.get(context)
-                                                      .keywords!
-                                                      .keywords
-                                                      .length,
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                  ? Keywords(
+                                      keywordsModel:
+                                          MoviesCubit.get(context).keywords!,
                                     )
                                   : Container(),
-                              Text(
-                                '${widget.movie.description}',
-                                style: Theme.of(context).textTheme.subtitle1,
+                              MyDivider(
+                                color: AppColors.mainColor,
+                                paddingHorizontal: 0,
                               ),
-                              SizedBox(
-                                height:
-                                    Helper.getScreenHeight(context: context) *
-                                        0.02,
+                              Description(
+                                  description: widget.movie.description!),
+                              // Text(
+                              //   '${widget.movie.description}',
+                              //   style: Theme.of(context).textTheme.subtitle1,
+                              // ),
+                              // SizedBox(
+                              //   height:
+                              //       Helper.getScreenHeight(context: context) *
+                              //           0.02,
+                              // ),
+                              MyDivider(
+                                color: AppColors.mainColor,
+                                paddingHorizontal: 0,
                               ),
                               CachedImage(
                                 image:
@@ -175,7 +172,12 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 width: Helper.getScreenWidth(context: context),
                                 circularColor: AppColors.mainColor,
                                 fit: BoxFit.cover,
-                              )
+                              ),
+                              MyDivider(
+                                color: AppColors.mainColor,
+                                paddingHorizontal: 0.0,
+                              ),
+                              SimilarMovies(),
                             ],
                           ),
                         ),

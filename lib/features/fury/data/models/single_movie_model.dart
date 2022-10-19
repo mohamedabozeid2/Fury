@@ -10,12 +10,14 @@ class SingleMovieModel{
   String? releaseDate;
   num? rate;
   String? backDropPath;
+  List<int> genresIds = [];
 
   SingleMovieModel({
     required this.name,
     required this.id,
     required this.description,
     required this.rate,
+    required this.genresIds,
     required this.backDropPath,
     required this.isAdult,
     required this.language,
@@ -29,6 +31,9 @@ class SingleMovieModel{
       language = json['original_language'];
       description = json['overview'];
       rate = json['vote_average'];
+      json['genre_ids'].forEach((element){
+        genresIds.add(element);
+      });
       backDropPath = json['backdrop_path'];
       posterPath = json['poster_path'];
       isAdult = json['adult'];

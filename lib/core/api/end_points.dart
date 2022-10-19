@@ -4,6 +4,8 @@ class EndPoints {
   static String topRated = '/movie/top_rated';
   static String upComing = '/movie/upcoming';
   static String latest =  '/movie/latest';
+  static String genres =  '/genre/movie/list';
+
 
 
 }
