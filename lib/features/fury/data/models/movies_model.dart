@@ -24,8 +24,6 @@ class MoviesModel {
   }
 
   void loadMoreMovies({required List<SingleMovieModel> movies}){
-    debugPrint('${movies.length}');
     moviesList.addAll(movies);
-    debugPrint('TEST =====> ${moviesList.length}');
   }
 }

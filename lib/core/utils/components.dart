@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class Components {
@@ -23,6 +24,15 @@ class Components {
 
   static String getOS(){
     return Platform.operatingSystem;
+  }
+
+  static showSnackBar({
+    required String title,
+    required String message,
+    required Color backgroundColor,
+    required Color textColor,
+}){
+    Get.snackbar(title, message,backgroundColor: backgroundColor, colorText: textColor);
   }
 
   static navigateAndFinish({required context, required widget}) {

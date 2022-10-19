@@ -4,6 +4,11 @@ import 'package:movies_application/core/utils/app_fonts.dart';
 
 ThemeData lightTheme = ThemeData(
   textTheme: TextTheme(
+    headline5: TextStyle(
+      fontSize: AppFontSize.s34,
+      color: Colors.white,
+      fontWeight: FontWeightManager.bold,
+    ),
     headline6: TextStyle(
       fontSize: AppFontSize.s26,
       color: Colors.white,

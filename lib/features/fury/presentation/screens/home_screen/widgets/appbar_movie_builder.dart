@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/core/utils/border_radius.dart';
+import 'package:movies_application/core/widgets/add_actions_button.dart';
 
 import '../../../../../../core/utils/Colors.dart';
+import '../../../../../../core/utils/app_fonts.dart';
 import '../../../../../../core/utils/helper.dart';
 import '../../../../../../core/widgets/cached_image.dart';
 
 class AppBarMovieBuilder extends StatelessWidget {
   final String image;
+  bool fromMovieDetails;
 
-  AppBarMovieBuilder({required this.image});
+  AppBarMovieBuilder({required this.image, this.fromMovieDetails = false});
 
   @override
   Widget build(BuildContext context) {
@@ -29,50 +33,43 @@ class AppBarMovieBuilder extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: Helper.getScreenHeight(context: context)*0.012),
-            decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.4),
-                borderRadius: BorderRadius.only(topRight: Radius.circular(20.0),topLeft: Radius.circular(20.0))
-            ),
-            // padding: EdgeInsets.symmetric(
-            //     horizontal: Helper.getScreenWidth(context: context) * 0.06,
-            //     vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                bottomBarItemBuilder(
-                    icon: Icons.add, title: 'Later', context: context),
-                bottomBarItemBuilder(
-                    icon: Icons.favorite,
-                    title: 'Favorite',
-                    context: context),
-                bottomBarItemBuilder(
-                    icon: Icons.info, title: 'Info', context: context),
-              ],
-            ),
-          )
+          fromMovieDetails
+              ? Container()
+              : Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical:
+                          Helper.getScreenHeight(context: context) * 0.012),
+                  decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.4),
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(AppRadius.large2),
+                          topLeft: Radius.circular(AppRadius.large2))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      AddActionsButton(
+                        fun: () {},
+                        icon: Icons.add,
+                        iconSize: AppFontSize.s22,
+                        title: 'Later',
+                      ),
+                      AddActionsButton(
+                        fun: () {},
+                        icon: Icons.favorite,
+                        iconSize: AppFontSize.s22,
+                        title: 'Favorite',
+                      ),
+                      AddActionsButton(
+                        fun: () {},
+                        icon: Icons.info,
+                        iconSize: AppFontSize.s22,
+                        title: 'Info',
+                      ),
+                    ],
+                  ),
+                )
         ],
       ),
-    );
-  }
-
-  Widget bottomBarItemBuilder(
-      {required IconData icon,
-      required String title,
-      required BuildContext context}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: Colors.white,size: 16),
-        Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .subtitle2!
-              .copyWith(color: Colors.white),
-        )
-      ],
     );
   }
 }

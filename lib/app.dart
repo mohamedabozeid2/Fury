@@ -6,11 +6,10 @@ import 'package:movies_application/config/themes/light_theme/light_theme.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
-import 'package:movies_application/features/fury/presentation/screens/internet_connection/internet_connection.dart';
+import 'package:movies_application/features/fury/presentation/screens/internet_connection/no_internet_screen.dart';
 import 'package:movies_application/features/fury/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:movies_application/logic/login_cubit/login_cubit.dart';
 
-import 'features/fury/presentation/screens/login_screen/login_screen.dart';
 import 'logic/home_layout/home_cubit.dart';
 import 'logic/register_cubit/register_cubit.dart';
 

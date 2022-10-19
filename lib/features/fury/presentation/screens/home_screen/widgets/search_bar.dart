@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
-import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
 

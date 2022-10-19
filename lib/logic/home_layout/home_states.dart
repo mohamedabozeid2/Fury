@@ -36,3 +36,7 @@ class FuryLoadMoreTopRatedMoviesSuccessState extends MoviesStates{}
 class FuryLoadMoreTopRatedMoviesErrorState extends MoviesStates{}
 
 //////
+
+class FuryGetMovieKeywordLoadingState extends MoviesStates{}
+class FuryGetMovieKeywordSuccessState extends MoviesStates{}
+class FuryGetMovieKeywordErrorState extends MoviesStates{}

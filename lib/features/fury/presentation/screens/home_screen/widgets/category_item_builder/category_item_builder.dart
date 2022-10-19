@@ -41,6 +41,8 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
       page = MoviesCubit.get(context).currentTrendingPage;
     } else if (widget.category == CategoryKeys.topRated) {
       page = MoviesCubit.get(context).currentTopRatedPage;
+    } else if (widget.category == CategoryKeys.upComing) {
+      page = MoviesCubit.get(context).currentUpComingPage;
     }
     bool hasNextPage = true;
     bool isLoadingMoreRunning = false;
@@ -72,15 +74,12 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                                 if (state is FuryLoadMoreMoviesLoadingState) {
                                   debugPrint('loading');
                                 } else {
-                                  print('page $page');
                                   MoviesCubit.get(context).loadMoreMovies(
                                       hasMorePages: hasNextPage,
                                       // isFirstLoad: false,
                                       isLoadingMore: isLoadingMoreRunning,
                                       page: page,
                                       moviesCategory: widget.category);
-                                  /*MoviesCubit.get(context)
-                                      .loadMoreTrendingMovies();*/
                                 }
                               }
                               return true;
@@ -93,10 +92,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return MovieItemBuilder(
-                                  movieModel: widget.movies[
-                                      index] /*trendingMovies!
-                                    .moviesList[index]*/
-                                  ,
+                                  movieModel: widget.movies[index],
                                   baseImageURL: DioHelper.baseImageURL,
                                   height:
                                       Helper.getScreenHeight(context: context) *

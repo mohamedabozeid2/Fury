@@ -28,6 +28,7 @@ dependencies:
   flutter_screenutil: ^5.5.4
   cached_network_image: ^3.2.1
   lottie: ^1.4.2
+  text_scroll: ^0.1.0
   firebase_core: ^1.24.0
   firebase_auth: ^3.11.2
   firebase_storage: ^10.2.15

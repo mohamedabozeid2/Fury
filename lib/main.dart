@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/app.dart';
 import 'package:movies_application/core/network/network.dart';
-import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 import 'package:movies_application/features/fury/presentation/screens/login_screen/login_screen.dart';

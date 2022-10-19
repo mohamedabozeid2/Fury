@@ -4,6 +4,7 @@ import 'package:movies_application/core/api/dio_helper.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/helper.dart';
+import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/category_item_builder/category_item_builder.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/appbar_movie_builder.dart';
 import 'package:movies_application/logic/home_layout/home_cubit.dart';
@@ -21,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    MoviesCubit.get(context).getAllMovies();
+    MoviesCubit.get(context).getAllMovies(context: context);
     MoviesCubit.get(context).getUserData(userID: uId, fromHomeScreen: true);
     super.initState();
   }
@@ -76,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Helper.getScreenHeight(context: context) * 0.7,
                       flexibleSpace: AppBarMovieBuilder(
                           image:
-                              '${DioHelper.baseImageURL}${popularMovies!.moviesList[0].posterPath}'),
+                              '${DioHelper.baseImageURL}${upComingMovies!.moviesList[0].posterPath}'),
                     ),
                     SliverFillRemaining(
                       hasScrollBody: false,
@@ -93,39 +94,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CategoryItemBuilder(
-                                    title: 'Popular Movies',
-                                    movies: popularMovies!.moviesList,
-                                    category: CategoryKeys.popular,
-                                    // loadMoreFun: () {
-                                    //   MoviesCubit.get(context).loadMoreMovies(
-                                    //       page: MoviesCubit.get(context)
-                                    //           .currentPopularPage,
-                                    //       moviesCategory: 'popular');
-                                    // },
+                                    title: AppStrings.upComingMovies,
+                                    movies: upComingMovies!.moviesList,
+                                    category: CategoryKeys.upComing,
                                   ),
                                   CategoryItemBuilder(
-                                    title: 'Trending Movies',
+                                    title: AppStrings.trendingMovies,
                                     movies: trendingMovies!.moviesList,
                                     category: CategoryKeys.trending,
-                                    // loadMoreFun: () {
-                                    //   MoviesCubit.get(context).loadMoreMovies(
-                                    //
-                                    //       page: MoviesCubit.get(context)
-                                    //           .currentTrendingPage,
-                                    //       moviesCategory: 'trending');
-                                    // }
                                   ),
                                   CategoryItemBuilder(
-                                    title: 'Top Rated',
+                                    title: AppStrings.popularMovies,
+                                    movies: popularMovies!.moviesList,
+                                    category: CategoryKeys.popular,
+                                  ),
+
+                                  CategoryItemBuilder(
+                                    title: AppStrings.topRatedMovies,
                                     movies: topRatedMovies!.moviesList,
                                     category: CategoryKeys.topRated,
-                                    // loadMoreFun: () {
-                                    //   MoviesCubit.get(context).loadMoreMovies(
-                                    //       page: MoviesCubit.get(context)
-                                    //           .currentTopRatedPage,
-                                    //       moviesCategory: 'topRated');
-                                    // },
                                   ),
+
                                 ],
                               ),
                             ),

@@ -12,7 +12,6 @@ import 'package:movies_application/core/widgets/button.dart';
 import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 
 class NoInternetScreen extends StatefulWidget {
-  const NoInternetScreen({Key? key}) : super(key: key);
 
   @override
   State<NoInternetScreen> createState() => _NoInternetScreenState();
@@ -45,7 +44,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
                     Components.navigateAndFinish(context: context, widget: HomeScreen());
                   }else{
                     internetConnection = false;
-                    Get.snackbar(AppStrings.appName, AppStrings.noInternet, colorText: Colors.white, backgroundColor: Colors.redAccent);
+                    Components.showSnackBar(title: AppStrings.appName, message: AppStrings.noInternet, backgroundColor: Colors.redAccent, textColor: Colors.white);
                   }
                 });
               });

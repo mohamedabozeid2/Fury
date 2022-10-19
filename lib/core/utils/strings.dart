@@ -11,4 +11,8 @@ class AppStrings{
   static const String register = "Register";
   static const String firstName = "First Name";
   static const String lastName = "Last Name";
+  static const String popularMovies = "Popular Movies";
+  static const String upComingMovies = "Up Coming Movies";
+  static const String topRatedMovies = "Top Rated Movies";
+  static const String trendingMovies = "Trending Movies ";
 }
