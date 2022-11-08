@@ -2,7 +2,7 @@ import 'package:movies_application/features/fury/data/models/movies_model.dart';
 import 'package:movies_application/features/fury/data/models/user_model.dart';
 
 bool internetConnection = false;
-FuryUserModel? userModel;
+UserModel? userModel;
 MoviesModel? popularMovies;
 MoviesModel? trendingMovies;
 MoviesModel? topRatedMovies;

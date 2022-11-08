@@ -6,12 +6,14 @@ import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_fonts.dart';
 import '../../../../../../core/utils/helper.dart';
 import '../../../../../../core/widgets/cached_image.dart';
+import '../../../../data/models/single_movie_model.dart';
 
 class AppBarMovieBuilder extends StatelessWidget {
   final String image;
   bool fromMovieDetails;
+  SingleMovieModel? movie;
 
-  AppBarMovieBuilder({required this.image, this.fromMovieDetails = false});
+  AppBarMovieBuilder({required this.image, this.fromMovieDetails = false, this.movie});
 
   @override
   Widget build(BuildContext context) {

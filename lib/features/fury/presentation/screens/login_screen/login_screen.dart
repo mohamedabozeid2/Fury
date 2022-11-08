@@ -7,16 +7,15 @@ import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/button.dart';
-import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/core/widgets/text_button.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 import 'package:movies_application/features/fury/presentation/screens/register_screen/register_screen.dart';
 import 'package:movies_application/logic/login_cubit/login_cubit.dart';
 import 'package:movies_application/logic/login_cubit/login_states.dart';
 
 import '../../../../../core/shared_preference/cache_helper.dart';
 import '../../../../../core/utils/constants.dart';
+import '../Layout/Layout.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -33,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) {
         if (state is FuryLoginSuccessState) {
-          Components.navigateAndFinish(context: context, widget: HomeScreen());
+          Components.navigateAndFinish(context: context, widget: Layout());
           CacheHelper.saveData(key: 'uId', value: state.uId);
           uId = state.uId;
         }
@@ -98,6 +97,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onChangeFunction: (value) {
                                   setState(() {});
                                 },
+                                contentStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                    color: Colors.black
+                                ),
                                 controller: emailController,
                                 hintStyle: Theme.of(context)
                                     .textTheme
@@ -118,6 +120,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onChangeFunction: (value) {
                                   setState(() {});
                                 },
+                                contentStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                  color: Colors.black
+                                ),
                                 controller: passwordController,
                                 isPassword: LoginCubit.get(context).isVisible,
                                 sufIconFun: () {

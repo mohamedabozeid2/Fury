@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/category_item_builder/category_keys.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/movie_item_builder.dart';
+import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
 import 'package:movies_application/logic/home_layout/home_cubit.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
 
 import '../../../../../../../core/api/dio_helper.dart';
 import '../../../../../../../core/utils/helper.dart';
 import '../../../../../data/models/single_movie_model.dart';
+import '../movie_item_builder.dart';
 
 class CategoryItemBuilder extends StatefulWidget {
   String? title;
@@ -17,9 +17,8 @@ class CategoryItemBuilder extends StatefulWidget {
 
   //// For similar movies part ////
   int? movieID;
+
   ////////
-
-
 
   CategoryItemBuilder({
     this.title,
@@ -50,11 +49,10 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
       page = MoviesCubit.get(context).currentTopRatedPage;
     } else if (widget.category == CategoryKeys.upComing) {
       page = MoviesCubit.get(context).currentUpComingPage;
-    } else if(widget.category == CategoryKeys.similarMovies){
+    } else if (widget.category == CategoryKeys.similarMovies) {
       page = MoviesCubit.get(context).currentSimilarMoviesPage;
     }
-    bool hasNextPage = true;
-    bool isLoadingMoreRunning = false;
+
     return BlocConsumer<MoviesCubit, MoviesStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -64,16 +62,17 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              widget.title!=null ? Text(
-                widget.title!,
-                style: Theme.of(context).textTheme.bodyText2,
-              ): Container(),
+              widget.title != null
+                  ? Text(
+                      widget.title!,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    )
+                  : Container(),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: Helper.getScreenHeight(context: context) * 0.01),
                 child: Container(
                   height: Helper.getScreenHeight(context: context) * 0.2,
-
                   child: Row(
                     children: [
                       Expanded(
@@ -81,7 +80,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                           onNotification: (value) {
                             if (scrollController.position.atEdge) {
                               if (scrollController.position.pixels != 0) {
-                                if (state is FuryLoadMoreMoviesLoadingState) {
+                                if (state is LoadMoreMoviesLoadingState) {
                                   debugPrint('loading');
                                 } else {
                                   MoviesCubit.get(context).loadMoreMovies(
@@ -90,8 +89,9 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                                       isLoadingMore: isLoadingMoreRunning,
                                       page: page,
                                       moviesCategory: widget.category,
-                                      movieID: widget.fromSimilarMovies ? widget.movieID : 0
-                                  );
+                                      movieID: widget.fromSimilarMovies
+                                          ? widget.movieID
+                                          : 0);
                                 }
                               }
                               return true;
@@ -100,7 +100,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                             }
                           },
                           child: ListView.separated(
-                            physics: BouncingScrollPhysics(),
+                              physics: BouncingScrollPhysics(),
                               controller: scrollController,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {

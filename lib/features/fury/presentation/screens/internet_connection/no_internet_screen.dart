@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/Colors.dart';
@@ -9,10 +8,10 @@ import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/button.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
+
+import '../Layout/Layout.dart';
 
 class NoInternetScreen extends StatefulWidget {
-
   @override
   State<NoInternetScreen> createState() => _NoInternetScreenState();
 }
@@ -37,21 +36,26 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
         ),
         DefaultButton(
             fun: () async {
-              await CheckConnection.checkConnection().then((value){
+              await CheckConnection.checkConnection().then((value) {
                 setState(() {
-                  if(value == true) {
+                  if (value == true) {
                     internetConnection = true;
-                    Components.navigateAndFinish(context: context, widget: HomeScreen());
-                  }else{
+                    Components.navigateAndFinish(
+                        context: context, widget: Layout());
+                  } else {
                     internetConnection = false;
-                    Components.showSnackBar(title: AppStrings.appName, message: AppStrings.noInternet, backgroundColor: Colors.redAccent, textColor: Colors.white);
+                    Components.showSnackBar(
+                        title: AppStrings.appName,
+                        message: AppStrings.noInternet,
+                        backgroundColor: Colors.redAccent,
+                        textColor: Colors.white);
                   }
                 });
               });
             },
             text: AppStrings.refresh,
             height: Helper.getScreenHeight(context: context) * 0.07,
-            width: Helper.getScreenWidth(context: context)*0.4,
+            width: Helper.getScreenWidth(context: context) * 0.4,
             textColor: Colors.white,
             backgroundColor: AppColors.mainColor,
             fontSize: AppFontSize.s14,

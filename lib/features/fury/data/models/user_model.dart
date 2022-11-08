@@ -1,17 +1,17 @@
-class FuryUserModel {
+class UserModel {
   String? email;
   String? firstName;
   String? lastName;
   String? uId;
 
-  FuryUserModel({
+  UserModel({
     required this.lastName,
     required this.firstName,
     required this.uId,
     required this.email,
   });
 
-  FuryUserModel.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];

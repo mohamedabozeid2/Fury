@@ -24,7 +24,6 @@ class DioHelper{
       'Content-Type':'application/json',
       'lang':lang,
     };
-
     return await dio!.get(url,queryParameters: query??null);
   }
 

@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/components.dart';
+import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
-import 'package:movies_application/features/fury/data/models/movie_keywards_model.dart';
 import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
+import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/movie_item_builder.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/Keywords.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/description.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/genres.dart';
@@ -18,7 +19,8 @@ import 'package:movies_application/logic/home_layout/home_states.dart';
 import '../../../../../core/api/dio_helper.dart';
 import '../../../../../core/utils/helper.dart';
 import '../../../../../core/widgets/divider.dart';
-import '../home_screen/widgets/appbar_movie_builder.dart';
+import '../HomeScreen/widgets/appbar_movie_builder.dart';
+import '../HomeScreen/widgets/category_item_builder/category_keys.dart';
 
 class MovieDetails extends StatefulWidget {
   SingleMovieModel movie;
@@ -30,19 +32,53 @@ class MovieDetails extends StatefulWidget {
 }
 
 class _MovieDetailsState extends State<MovieDetails> {
+  late ScrollController scrollController;
+  bool hasNextPage = true;
+  bool isLoadingMoreRunning = false;
+  late int page;
+  bool loadMore = false;
+
   @override
   void initState() {
     MoviesCubit.get(context).getSimilarMovies(movie: widget.movie);
+    scrollController = ScrollController()
+      ..addListener(() {
+        if (scrollController.position.atEdge) {
+          if (scrollController.position.pixels == 0) {
+            debugPrint('top');
+          } else {
+            if (loadMore) {
+              debugPrint('loading');
+            } else {
+              MoviesCubit.get(context).loadMoreMovies(
+                  hasMorePages: hasNextPage,
+                  // isFirstLoad: false,
+                  isLoadingMore: isLoadingMoreRunning,
+                  page: page,
+                  moviesCategory: CategoryKeys.similarMovies,
+                  movieID: widget.movie.id);
+              page = MoviesCubit.get(context).currentSimilarMoviesPage;
+            }
+          }
+        }
+      });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    page = MoviesCubit.get(context).currentSimilarMoviesPage;
     return BlocConsumer<MoviesCubit, MoviesStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is LoadMoreMoviesLoadingState) {
+          loadMore = true;
+        }else{
+          loadMore = false;
+        }
+      },
       builder: (context, state) {
         return Scaffold(
-            body: state is FuryGetMovieDetailsLoadingState
+            body: state is GetMovieDetailsLoadingState
                 ? Center(
                     child: AdaptiveIndicator(
                       os: Components.getOS(),
@@ -50,6 +86,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                     ),
                   )
                 : CustomScrollView(
+                    // shrinkWrap: true,
+                    controller: scrollController,
+                    physics: BouncingScrollPhysics(),
                     slivers: [
                       SliverAppBar(
                         pinned: true,
@@ -60,8 +99,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                             image:
                                 '${DioHelper.baseImageURL}${widget.movie.posterPath}'),
                       ),
-                      SliverFillRemaining(
-                        hasScrollBody: false,
+                      SliverToBoxAdapter(
+                        // hasScrollBody: false,
+                        // fillOverscroll: true,
                         child: Padding(
                           padding: EdgeInsets.all(
                               Helper.getScreenHeight(context: context) * 0.02),
@@ -110,9 +150,10 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 ],
                               ),
                               SizedBox(
-                                height:
-                                    Helper.getScreenHeight(context: context) *
-                                        0.008,
+                                height: widget.movie.releaseDate != null
+                                    ? Helper.getScreenHeight(context: context) *
+                                        0.008
+                                    : 0,
                               ),
                               widget.movie.releaseDate != null
                                   ? Text(
@@ -150,15 +191,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                               ),
                               Description(
                                   description: widget.movie.description!),
-                              // Text(
-                              //   '${widget.movie.description}',
-                              //   style: Theme.of(context).textTheme.subtitle1,
-                              // ),
-                              // SizedBox(
-                              //   height:
-                              //       Helper.getScreenHeight(context: context) *
-                              //           0.02,
-                              // ),
                               MyDivider(
                                 color: AppColors.mainColor,
                                 paddingHorizontal: 0,
@@ -177,7 +209,30 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 color: AppColors.mainColor,
                                 paddingHorizontal: 0.0,
                               ),
-                              SimilarMovies(movieId: widget.movie.id!),
+                              // ListView.separated(
+                              //     shrinkWrap: true,
+                              //     physics: NeverScrollableScrollPhysics(),
+                              //     itemBuilder: (context, index) {
+                              //       return MovieItemBuilder(
+                              //           movieModel: MoviesCubit.get(context)
+                              //               .similarMovies!
+                              //               .moviesList[index],
+                              //           baseImageURL: DioHelper.baseImageURL,
+                              //           height: 100,
+                              //           width: 100);
+                              //     },
+                              //     separatorBuilder: (context, index) {
+                              //       return SizedBox(
+                              //         height: 10.0,
+                              //       );
+                              //     },
+                              //     itemCount: MoviesCubit.get(context)
+                              //         .similarMovies!
+                              //         .moviesList
+                              //         .length)
+                              SimilarMovies(
+                                  movieId: widget.movie.id!,
+                                  scrollController: scrollController),
                             ],
                           ),
                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 
 ThemeData lightTheme = ThemeData(
@@ -54,9 +55,12 @@ ThemeData lightTheme = ThemeData(
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark),
   ),
-  // bottomNavigationBarTheme: BottomNavigationBarThemeData(
-  //     type: BottomNavigationBarType.fixed,
-  //     backgroundColor: Colors.white,
-  //     selectedItemColor: defaultColor,
-  //     elevation: 20.0),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.transparent,
+
+      selectedItemColor: AppColors.mainColor,
+      showUnselectedLabels: false,
+      unselectedItemColor: AppColors.textWhiteColor,
+      elevation: 20.0),
 );

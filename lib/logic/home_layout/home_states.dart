@@ -2,42 +2,44 @@ abstract class MoviesStates{}
 
 class MoviesInitialState extends MoviesStates{}
 
+class ChangeBotNavBarState extends MoviesStates{}
+
 //// Get User Data ////
 
-class FuryGetUserDataLoadingState extends MoviesStates{}
-class FuryGetUserDataSuccessState extends MoviesStates{}
-class FuryGetUserDataErrorState extends MoviesStates{}
+class GetUserDataLoadingState extends MoviesStates{}
+class GetUserDataSuccessState extends MoviesStates{}
+class GetUserDataErrorState extends MoviesStates{}
 
 //// Get Movies ////
 
-class FuryGetAllMoviesLoadingState extends MoviesStates{}
-class FuryGetAllMoviesSuccessState extends MoviesStates{}
-class FuryGetAllMoviesErrorState extends MoviesStates{}
+class GetAllMoviesLoadingState extends MoviesStates{}
+class GetAllMoviesSuccessState extends MoviesStates{}
+class GetAllMoviesErrorState extends MoviesStates{}
 
-class FuryGetPopularMoviesErrorState extends MoviesStates{}
+class GetPopularMoviesErrorState extends MoviesStates{}
 
-class FuryGetTrendingMoviesErrorState extends MoviesStates{}
+class GetTrendingMoviesErrorState extends MoviesStates{}
 
-class FuryGetTopRatedMoviesErrorState extends MoviesStates{}
+class GetTopRatedMoviesErrorState extends MoviesStates{}
 
 
 //// pagination (Load More)
-class FuryLoadMoreMoviesLoadingState extends MoviesStates{}
-class FuryLoadMoreMoviesSuccessState extends MoviesStates{}
-class FuryLoadMoreMoviesErrorState extends MoviesStates{}
+class LoadMoreMoviesLoadingState extends MoviesStates{}
+class LoadMoreMoviesSuccessState extends MoviesStates{}
+class LoadMoreMoviesErrorState extends MoviesStates{}
 
-class FuryLoadMorePopularMoviesSuccessState extends MoviesStates{}
-class FuryLoadMorePopularMoviesErrorState extends MoviesStates{}
+class LoadMorePopularMoviesSuccessState extends MoviesStates{}
+class LoadMorePopularMoviesErrorState extends MoviesStates{}
 
-class FuryLoadMoreTrendingMoviesSuccessState extends MoviesStates{}
-class FuryLoadMoreTrendingMoviesErrorState extends MoviesStates{}
+class LoadMoreTrendingMoviesSuccessState extends MoviesStates{}
+class LoadMoreTrendingMoviesErrorState extends MoviesStates{}
 
-class FuryLoadMoreTopRatedMoviesSuccessState extends MoviesStates{}
-class FuryLoadMoreTopRatedMoviesErrorState extends MoviesStates{}
+class LoadMoreTopRatedMoviesSuccessState extends MoviesStates{}
+class LoadMoreTopRatedMoviesErrorState extends MoviesStates{}
 
 //////
 
 ////// Get movie details//////
-class FuryGetMovieDetailsLoadingState extends MoviesStates{}
-class FuryGetMovieDetailsSuccessState extends MoviesStates{}
-class FuryGetMovieDetailsErrorState extends MoviesStates{}
+class GetMovieDetailsLoadingState extends MoviesStates{}
+class GetMovieDetailsSuccessState extends MoviesStates{}
+class GetMovieDetailsErrorState extends MoviesStates{}

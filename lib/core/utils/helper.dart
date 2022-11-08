@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Helper{
+  static late double maxHeight;
+  static late double maxWidth;
   static double getScreenWidth({required BuildContext context}){
     return MediaQuery.of(context).size.width;
   }

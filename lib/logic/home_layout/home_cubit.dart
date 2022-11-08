@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:movies_application/core/api/dio_helper.dart';
 import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/network/network.dart';
@@ -9,92 +11,145 @@ import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/data/models/GenresModel.dart';
 import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/widgets/category_item_builder/category_keys.dart';
+import 'package:movies_application/features/fury/presentation/screens/HomeScreen/HomeScreen.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/no_internet_screen.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
 import '../../core/utils/constants.dart';
 import '../../features/fury/data/models/movie_keywards_model.dart';
 import '../../features/fury/data/models/movies_model.dart';
 import '../../features/fury/data/models/user_model.dart';
+import '../../features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
+import '../../features/fury/presentation/screens/my_movies_screen/my_movies_screen.dart';
+import '../../features/fury/presentation/screens/settings/settings_screen.dart';
 
 class MoviesCubit extends Cubit<MoviesStates> {
   MoviesCubit() : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
 
+  int botNavCurrentIndex = 0;
+
+  void changBotNavBar({required int index}) {
+    botNavCurrentIndex = index;
+    emit(ChangeBotNavBarState());
+  }
+
+  List<Widget> screens = [
+    HomeScreen(),
+    MyMoviesScreen(),
+    SettingsScreen(),
+  ];
+
+  List<GButton> bottomNavItems = [
+    GButton(icon: Icons.home, text: AppStrings.home),
+    GButton(icon: Icons.movie_filter_outlined, text: AppStrings.movies),
+    GButton(icon: Icons.settings, text: AppStrings.settings),
+    // const BottomNavigationBarItem(
+    //     icon: Icon(Icons.movie_filter_outlined), label: AppStrings.movies),
+    // const BottomNavigationBarItem(
+    //     icon: Icon(Icons.settings), label: AppStrings.settings),
+  ];
+
   void getUserData({
     required String userID,
     bool fromHomeScreen = false,
   }) {
     if (!fromHomeScreen) {
-      emit(FuryGetUserDataLoadingState());
+      emit(GetUserDataLoadingState());
     }
     FirebaseFirestore.instance
         .collection("users")
         .doc(userID)
         .get()
         .then((value) {
-      userModel = FuryUserModel.fromJson(value.data()!);
+      userModel = UserModel.fromJson(value.data()!);
       if (!fromHomeScreen) {
-        emit(FuryGetUserDataSuccessState());
+        emit(GetUserDataSuccessState());
       }
     }).catchError((error) {
       print("Error ===> ${error.toString()}");
-      emit(FuryGetUserDataErrorState());
+      emit(GetUserDataErrorState());
     });
   }
 
   void getAllMovies({required BuildContext context}) {
-    emit(FuryGetAllMoviesLoadingState());
+    emit(GetAllMoviesLoadingState());
     CheckConnection.checkConnection().then((value) {
       internetConnection = value;
       if (value == true) {
-        // Popular Movies
-
-        getPopularMovies().then((value) {
-          popularMovies = MoviesModel.fromJson(value.data);
-          isFirstPopularLoadRunning = false;
-
-          // Trending Movies
-          getTrendingMovies().then((value) {
-            trendingMovies = MoviesModel.fromJson(value.data);
-            isFirstTrendingLoadRunning = false;
-
-            // Top Rated Movies
-            getTopRatedMovies().then((value) {
-              topRatedMovies = MoviesModel.fromJson(value.data);
+        Future.wait([
+          getPopularMovies(),
+          getTrendingMovies(),
+          getTopRatedMovies(),
+          getUpComingMovies(),
+        ]).then((value) {
+          for (int i = 0; i < value.length; i++) {
+            if (i == 0) {
+              popularMovies = MoviesModel.fromJson(value[i].data);
+              isFirstPopularLoadRunning = false;
+            } else if (i == 1) {
+              trendingMovies = MoviesModel.fromJson(value[i].data);
+              isFirstTrendingLoadRunning = false;
+            } else if (i == 2) {
+              topRatedMovies = MoviesModel.fromJson(value[i].data);
               isFirstTopRatedLoadRunning = false;
-
-              // Up Coming Movies
-              getUpComingMovies().then((value) {
-                upComingMovies = MoviesModel.fromJson(value.data);
-                isFirstUpComingLoadRunning = false;
-                getMovieGenres();
-                // throw Exception('Error');
-                emit(FuryGetAllMoviesSuccessState());
-              }).catchError((error) {
-                Components.navigateAndFinish(
-                    context: context, widget: NoInternetScreen());
-                debugPrint('Error in get upcoming movies ${error.toString()}');
-              });
-            }).catchError((error) {
-              Components.navigateAndFinish(
-                  context: context, widget: NoInternetScreen());
-              debugPrint('Error in get top rated movies ${error.toString()}');
-              emit(FuryGetTopRatedMoviesErrorState());
-            });
-          }).catchError((error) {
-            Components.navigateAndFinish(
-                context: context, widget: NoInternetScreen());
-            debugPrint('Error in get trending movies ${error.toString()}');
-            emit(FuryGetTrendingMoviesErrorState());
-          });
+            } else if (i == 3) {
+              upComingMovies = MoviesModel.fromJson(value[i].data);
+              isFirstUpComingLoadRunning = false;
+              getMovieGenres();
+            }
+          }
+          emit(GetAllMoviesSuccessState());
         }).catchError((error) {
           Components.navigateAndFinish(
               context: context, widget: NoInternetScreen());
-          debugPrint('Error in get popular movies ${error.toString()}');
-          emit(FuryGetPopularMoviesErrorState());
+          print('error ======================> ${error.toString()}');
+          emit(GetTopRatedMoviesErrorState());
         });
+
+        // getPopularMovies().then((value) {
+        //   popularMovies = MoviesModel.fromJson(value.data);
+        //   isFirstPopularLoadRunning = false;
+        //
+        //   // Trending Movies
+        //   getTrendingMovies().then((value) {
+        //     trendingMovies = MoviesModel.fromJson(value.data);
+        //     isFirstTrendingLoadRunning = false;
+        //
+        //     // Top Rated Movies
+        //     getTopRatedMovies().then((value) {
+        //       topRatedMovies = MoviesModel.fromJson(value.data);
+        //       isFirstTopRatedLoadRunning = false;
+        //
+        //       // Up Coming Movies
+        //       getUpComingMovies().then((value) {
+        //         upComingMovies = MoviesModel.fromJson(value.data);
+        //         isFirstUpComingLoadRunning = false;
+        //         getMovieGenres();
+        //         emit(GetAllMoviesSuccessState());
+        //       }).catchError((error) {
+        //         Components.navigateAndFinish(
+        //             context: context, widget: NoInternetScreen());
+        //         debugPrint('Error in get upcoming movies ${error.toString()}');
+        //       });
+        //     }).catchError((error) {
+        //       Components.navigateAndFinish(
+        //           context: context, widget: NoInternetScreen());
+        //       debugPrint('Error in get top rated movies ${error.toString()}');
+        //       emit(GetTopRatedMoviesErrorState());
+        //     });
+        //   }).catchError((error) {
+        //     Components.navigateAndFinish(
+        //         context: context, widget: NoInternetScreen());
+        //     debugPrint('Error in get trending movies ${error.toString()}');
+        //     emit(GetTrendingMoviesErrorState());
+        //   });
+        // }).catchError((error) {
+        //   Components.navigateAndFinish(
+        //       context: context, widget: NoInternetScreen());
+        //   debugPrint('Error in get popular movies ${error.toString()}');
+        //   emit(GetPopularMoviesErrorState());
+        // });
       } else {
         debugPrint('No Internet');
         Components.navigateAndFinish(
@@ -149,8 +204,14 @@ class MoviesCubit extends Cubit<MoviesStates> {
   Future<Response> getUpComingMovies() {
     isFirstUpComingLoadRunning = true;
     return DioHelper.getData(
-        url: EndPoints.upComing,
-        query: {'api_key': DioHelper.apiKey, 'page': currentUpComingPage});
+      url: EndPoints.upComing,
+      lang: 'en-US',
+      query: {
+        'api_key': DioHelper.apiKey,
+        'page': currentUpComingPage,
+        'language': 'en-US'
+      },
+    );
   }
 
 //////////// Latest Movie ////////////
@@ -167,7 +228,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     required bool isLoadingMore,
     int? movieID,
   }) {
-    emit(FuryLoadMoreMoviesLoadingState());
+    emit(LoadMoreMoviesLoadingState());
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
     late String endPoint;
@@ -192,7 +253,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
         currentSimilarMoviesPage++;
         endPoint = '/movie/$movieID/recommendations';
       }
-
       DioHelper.getData(
           url: endPoint,
           query: {'api_key': DioHelper.apiKey, 'page': page + 1}).then((value) {
@@ -235,12 +295,13 @@ class MoviesCubit extends Cubit<MoviesStates> {
             similarMovies!.loadMoreMovies(movies: more);
           } else {
             hasNextPage = false;
+            print('no more');
           }
         }
-        emit(FuryLoadMoreMoviesSuccessState());
+        emit(LoadMoreMoviesSuccessState());
       }).catchError((error) {
         print('Error from load more movies ===> ${error.toString()}');
-        emit(FuryLoadMoreMoviesErrorState());
+        emit(LoadMoreMoviesErrorState());
       });
       isLoadingMoreRunning = false;
     }
@@ -254,23 +315,23 @@ class MoviesCubit extends Cubit<MoviesStates> {
         query: {'api_key': DioHelper.apiKey}).then((value) {
       keywords = MovieKeywordsModel.fromJson(value.data);
     }).catchError((error) {
-      emit(FuryGetMovieDetailsErrorState());
+      emit(GetMovieDetailsErrorState());
     });
   }
 
   GenresModel? genresModel;
 
   void getMovieGenres() {
-    // emit(FuryGetMovieGenresLoadingState());
+    // emit(GetMovieGenresLoadingState());
     DioHelper.getData(url: EndPoints.genres, query: {
       'api_key': DioHelper.apiKey,
       'language': 'en-US',
     }).then((value) {
       genresModel = GenresModel.fromJson(value.data);
-      // emit(FuryGetMovieGenresSuccessState());
+      // emit(GetMovieGenresSuccessState());
     }).catchError((error) {
       debugPrint('Error in get genres ${error.toString()}');
-      emit(FuryGetMovieDetailsErrorState());
+      emit(GetMovieDetailsErrorState());
     });
   }
 
@@ -286,22 +347,28 @@ class MoviesCubit extends Cubit<MoviesStates> {
   }
 
   int currentSimilarMoviesPage = 1;
-  MoviesModel? similarMovies;
+
+  // MoviesModel? similarMovies;
 
   Future<void> getSimilarMovies({required SingleMovieModel movie}) async {
-    emit(FuryGetMovieDetailsLoadingState());
+    currentSimilarMoviesPage = 1;
+    emit(GetMovieDetailsLoadingState());
     await DioHelper.getData(url: '/movie/${movie.id}/recommendations', query: {
       'api_key': DioHelper.apiKey,
       'language': 'en-US',
       'page': currentSimilarMoviesPage,
     }).then((value) {
+      currentSimilarMoviesPage = 1;
       similarMovies = MoviesModel.fromJson(value.data);
-      getMovieKeyword(movie: movie);
-      fillGenresList(movieGenresId: movie.genresIds);
-      emit(FuryGetMovieDetailsSuccessState());
+      getMovieKeyword(movie: movie).then((value) {
+        fillGenresList(movieGenresId: movie.genresIds).then((value) {
+          print('from get similar ${similarMovies!.moviesList.length}');
+          emit(GetMovieDetailsSuccessState());
+        });
+      });
     }).catchError((error) {
       debugPrint('Error in Get Similar Movies ${error.toString()}');
-      emit(FuryGetMovieDetailsErrorState());
+      emit(GetMovieDetailsErrorState());
     });
   }
 }

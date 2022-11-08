@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/components.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 
 import '../../../../../core/utils/assets_manager.dart';
 import '../../../../../core/utils/helper.dart';
+import '../Layout/Layout.dart';
 
 class SplashScreen extends StatefulWidget {
 
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     timer = Timer(const Duration(milliseconds: 2500), () {
-      Components.navigateAndFinish(context: context, widget: HomeScreen());
+      Components.navigateAndFinish(context: context, widget: Layout());
     });
     super.initState();
   }

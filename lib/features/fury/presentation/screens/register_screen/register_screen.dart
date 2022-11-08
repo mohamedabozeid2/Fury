@@ -7,7 +7,6 @@ import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/button.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
-import 'package:movies_application/features/fury/presentation/screens/home_screen/home_screen.dart';
 import 'package:movies_application/logic/register_cubit/register_cubit.dart';
 import 'package:movies_application/logic/register_cubit/register_states.dart';
 import '../../../../../core/shared_preference/cache_helper.dart';
@@ -15,6 +14,7 @@ import '../../../../../core/utils/Colors.dart';
 import '../../../../../core/utils/border_radius.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/helper.dart';
+import '../Layout/Layout.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -34,12 +34,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<RegisterCubit, RegisterStates>(
       listener: (context, state) {
-        if (state is FuryRegisterSuccessState) {
+        if (state is RegisterSuccessState) {
           Get.snackbar('Fury', 'Registered Successfully',
               colorText: Colors.white, backgroundColor: Colors.greenAccent);
           CacheHelper.saveData(key: 'uId', value: state.uId);
           uId = state.uId;
-          Components.navigateAndFinish(context: context, widget: HomeScreen());
+          Components.navigateAndFinish(context: context, widget: Layout());
         }
       },
       builder: (context, state) {
@@ -171,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     Helper.getScreenHeight(context: context) *
                                         0.03,
                               ),
-                              state is FuryRegisterLoadingState
+                              state is RegisterLoadingState
                                   ? Center(
                                       child: AdaptiveIndicator(
                                       os: Components.getOS(),

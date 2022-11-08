@@ -2,11 +2,11 @@ abstract class RegisterStates{}
 
 class RegisterInitialState extends RegisterStates{}
 
-class FuryRegisterChangeVisibility extends RegisterStates{}
+class RegisterChangeVisibility extends RegisterStates{}
 
-class FuryRegisterLoadingState extends RegisterStates{}
-class FuryRegisterSuccessState extends RegisterStates{
+class RegisterLoadingState extends RegisterStates{}
+class RegisterSuccessState extends RegisterStates{
   final String uId;
-  FuryRegisterSuccessState({required this.uId});
+  RegisterSuccessState({required this.uId});
 }
-class FuryRegisterErrorState extends RegisterStates{}
+class RegisterErrorState extends RegisterStates{}

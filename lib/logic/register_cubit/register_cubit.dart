@@ -22,7 +22,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     } else {
       icon = Icons.visibility_off;
     }
-    emit(FuryRegisterChangeVisibility());
+    emit(RegisterChangeVisibility());
   }
 
   void userRegister({
@@ -32,7 +32,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String password,
     required BuildContext context,
   }) {
-    emit(FuryRegisterLoadingState());
+    emit(RegisterLoadingState());
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email.trim(), password: password)
         .then((value) {
@@ -44,7 +44,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
           context: context);
     }).catchError((error) {
       print("Error in creating user ${error.toString()}");
-      emit(FuryRegisterErrorState());
+      emit(RegisterErrorState());
     });
   }
 
@@ -55,7 +55,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String uId,
     required BuildContext context,
   }) {
-    FuryUserModel model = FuryUserModel(
+    UserModel model = UserModel(
       email: email,
       firstName: firstName,
       lastName: lastName,
@@ -67,10 +67,10 @@ class RegisterCubit extends Cubit<RegisterStates> {
         .set(model.toJson())
         .then((value) {
       FirebaseAuth.instance.currentUser!.sendEmailVerification();
-      emit(FuryRegisterSuccessState(uId: uId));
+      emit(RegisterSuccessState(uId: uId));
     }).catchError((error) {
       print('Error in adding user to database ===> ${error.toString()}');
-      emit(FuryRegisterErrorState());
+      emit(RegisterErrorState());
     });
   }
 }
