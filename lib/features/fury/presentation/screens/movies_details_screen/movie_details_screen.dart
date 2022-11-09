@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/components.dart';
-import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
-import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/movie_item_builder.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/Keywords.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/description.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/genres.dart';
@@ -40,7 +38,8 @@ class _MovieDetailsState extends State<MovieDetails> {
 
   @override
   void initState() {
-    MoviesCubit.get(context).getSimilarMovies(movie: widget.movie);
+    MoviesCubit.get(context).getMovieDetailsData(movie: widget.movie);
+    // MoviesCubit.get(context).getSimilarMovies(movie: widget.movie);
     scrollController = ScrollController()
       ..addListener(() {
         if (scrollController.position.atEdge) {
@@ -93,7 +92,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                       SliverAppBar(
                         pinned: true,
                         expandedHeight:
-                            Helper.getScreenHeight(context: context) * 0.7,
+                            Helper.maxHeight * 0.7,
                         flexibleSpace: AppBarMovieBuilder(
                             fromMovieDetails: true,
                             image:
@@ -104,7 +103,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                         // fillOverscroll: true,
                         child: Padding(
                           padding: EdgeInsets.all(
-                              Helper.getScreenHeight(context: context) * 0.02),
+                              Helper.maxHeight * 0.02),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -124,7 +123,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                               ),
                               SizedBox(
                                 height:
-                                    Helper.getScreenHeight(context: context) *
+                                    Helper.maxHeight *
                                         0.03,
                               ),
                               Row(
@@ -151,7 +150,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                               ),
                               SizedBox(
                                 height: widget.movie.releaseDate != null
-                                    ? Helper.getScreenHeight(context: context) *
+                                    ? Helper.maxHeight *
                                         0.008
                                     : 0,
                               ),
@@ -199,9 +198,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 image:
                                     '${DioHelper.baseImageURL}${widget.movie.backDropPath}',
                                 height:
-                                    Helper.getScreenHeight(context: context) *
+                                    Helper.maxHeight *
                                         0.3,
-                                width: Helper.getScreenWidth(context: context),
+                                width: Helper.maxWidth,
                                 circularColor: AppColors.mainColor,
                                 fit: BoxFit.cover,
                               ),
@@ -233,6 +232,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                               SimilarMovies(
                                   movieId: widget.movie.id!,
                                   scrollController: scrollController),
+                              state is LoadMoreMoviesLoadingState ? Center(child: AdaptiveIndicator(os: Components.getOS(),color: AppColors.mainColor,)) : Container()
                             ],
                           ),
                         ),

@@ -15,7 +15,7 @@ class Description extends StatelessWidget {
       children: [
         Container(
           padding:
-              EdgeInsets.all(Helper.getScreenHeight(context: context) * 0.005),
+              EdgeInsets.all(Helper.maxHeight * 0.005),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.low1),
               color: AppColors.mainColor),
@@ -25,7 +25,7 @@ class Description extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Helper.getScreenHeight(context: context) * 0.01,
+          height: Helper.maxHeight * 0.01,
         ),
         Text(description, style: Theme.of(context).textTheme.subtitle2,)
       ],

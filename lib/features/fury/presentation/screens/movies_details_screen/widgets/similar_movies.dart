@@ -43,7 +43,7 @@ class _SimilarMoviesState extends State<SimilarMovies> {
           children: [
             Container(
               padding: EdgeInsets.all(
-                  Helper.getScreenHeight(context: context) * 0.005),
+                  Helper.maxHeight * 0.005),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppRadius.low1),
                   color: AppColors.mainColor),
@@ -53,7 +53,7 @@ class _SimilarMoviesState extends State<SimilarMovies> {
               ),
             ),
             SizedBox(
-              height: Helper.getScreenHeight(context: context) * 0.01,
+              height: Helper.maxHeight * 0.01,
             ),
             if (/*MoviesCubit.get(context).*/ similarMovies!
                 .moviesList.isNotEmpty)

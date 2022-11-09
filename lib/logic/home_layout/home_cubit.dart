@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -41,9 +40,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
   ];
 
   List<GButton> bottomNavItems = [
-    GButton(icon: Icons.home, text: AppStrings.home),
-    GButton(icon: Icons.movie_filter_outlined, text: AppStrings.movies),
-    GButton(icon: Icons.settings, text: AppStrings.settings),
+    const GButton(icon: Icons.home, text: AppStrings.home),
+    const GButton(icon: Icons.movie_filter_outlined, text: AppStrings.movies),
+    const GButton(icon: Icons.settings, text: AppStrings.settings),
     // const BottomNavigationBarItem(
     //     icon: Icon(Icons.movie_filter_outlined), label: AppStrings.movies),
     // const BottomNavigationBarItem(
@@ -71,6 +70,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
       emit(GetUserDataErrorState());
     });
   }
+
+
 
   void getAllMovies({required BuildContext context}) {
     emit(GetAllMoviesLoadingState());
@@ -104,52 +105,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
           Components.navigateAndFinish(
               context: context, widget: NoInternetScreen());
           print('error ======================> ${error.toString()}');
-          emit(GetTopRatedMoviesErrorState());
+          emit(GetAllMoviesErrorState());
         });
-
-        // getPopularMovies().then((value) {
-        //   popularMovies = MoviesModel.fromJson(value.data);
-        //   isFirstPopularLoadRunning = false;
-        //
-        //   // Trending Movies
-        //   getTrendingMovies().then((value) {
-        //     trendingMovies = MoviesModel.fromJson(value.data);
-        //     isFirstTrendingLoadRunning = false;
-        //
-        //     // Top Rated Movies
-        //     getTopRatedMovies().then((value) {
-        //       topRatedMovies = MoviesModel.fromJson(value.data);
-        //       isFirstTopRatedLoadRunning = false;
-        //
-        //       // Up Coming Movies
-        //       getUpComingMovies().then((value) {
-        //         upComingMovies = MoviesModel.fromJson(value.data);
-        //         isFirstUpComingLoadRunning = false;
-        //         getMovieGenres();
-        //         emit(GetAllMoviesSuccessState());
-        //       }).catchError((error) {
-        //         Components.navigateAndFinish(
-        //             context: context, widget: NoInternetScreen());
-        //         debugPrint('Error in get upcoming movies ${error.toString()}');
-        //       });
-        //     }).catchError((error) {
-        //       Components.navigateAndFinish(
-        //           context: context, widget: NoInternetScreen());
-        //       debugPrint('Error in get top rated movies ${error.toString()}');
-        //       emit(GetTopRatedMoviesErrorState());
-        //     });
-        //   }).catchError((error) {
-        //     Components.navigateAndFinish(
-        //         context: context, widget: NoInternetScreen());
-        //     debugPrint('Error in get trending movies ${error.toString()}');
-        //     emit(GetTrendingMoviesErrorState());
-        //   });
-        // }).catchError((error) {
-        //   Components.navigateAndFinish(
-        //       context: context, widget: NoInternetScreen());
-        //   debugPrint('Error in get popular movies ${error.toString()}');
-        //   emit(GetPopularMoviesErrorState());
-        // });
       } else {
         debugPrint('No Internet');
         Components.navigateAndFinish(
@@ -167,9 +124,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int currentPopularPage = 1;
   bool isFirstPopularLoadRunning = false;
 
-  Future<Response> getPopularMovies() {
+  Future<Response> getPopularMovies() async{
     isFirstPopularLoadRunning = true;
-    return DioHelper.getData(
+    return await DioHelper.getData(
         url: EndPoints.popular,
         query: {'api_key': DioHelper.apiKey, 'page': currentPopularPage});
   }
@@ -178,10 +135,10 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int currentTopRatedPage = 1;
   bool isFirstTopRatedLoadRunning = false;
 
-  Future<Response> getTopRatedMovies() {
+  Future<Response> getTopRatedMovies() async{
     isFirstTopRatedLoadRunning = true;
     /////
-    return DioHelper.getData(
+    return await DioHelper.getData(
         url: EndPoints.topRated,
         query: {'api_key': DioHelper.apiKey, 'page': currentTrendingPage});
   }
@@ -190,9 +147,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int currentTrendingPage = 1;
   bool isFirstTrendingLoadRunning = false;
 
-  Future<Response> getTrendingMovies() {
+  Future<Response> getTrendingMovies() async{
     isFirstTrendingLoadRunning = true;
-    return DioHelper.getData(
+    return await DioHelper.getData(
         url: EndPoints.trending,
         query: {'api_key': DioHelper.apiKey, 'page': currentTrendingPage});
   }
@@ -201,9 +158,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int currentUpComingPage = 1;
   bool isFirstUpComingLoadRunning = false;
 
-  Future<Response> getUpComingMovies() {
+  Future<Response> getUpComingMovies() async{
     isFirstUpComingLoadRunning = true;
-    return DioHelper.getData(
+    return await DioHelper.getData(
       url: EndPoints.upComing,
       lang: 'en-US',
       query: {
@@ -215,8 +172,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
   }
 
 //////////// Latest Movie ////////////
-  Future<Response> getLatestMovie() {
-    return DioHelper.getData(
+  Future<Response> getLatestMovie() async{
+    return await DioHelper.getData(
         url: EndPoints.latest,
         query: {'api_key': DioHelper.apiKey, 'language': 'en-US'});
   }
@@ -309,14 +266,10 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
   MovieKeywordsModel? keywords;
 
-  Future<void> getMovieKeyword({required SingleMovieModel movie}) async {
-    await DioHelper.getData(
+  Future<Response> getMovieKeyword({required SingleMovieModel movie}) async {
+    return await DioHelper.getData(
         url: '/movie/${movie.id}/keywords',
-        query: {'api_key': DioHelper.apiKey}).then((value) {
-      keywords = MovieKeywordsModel.fromJson(value.data);
-    }).catchError((error) {
-      emit(GetMovieDetailsErrorState());
-    });
+        query: {'api_key': DioHelper.apiKey});
   }
 
   GenresModel? genresModel;
@@ -349,26 +302,38 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int currentSimilarMoviesPage = 1;
 
   // MoviesModel? similarMovies;
+  void getMovieDetailsData({
+  required SingleMovieModel movie
+}){
+    Future.wait([
+      getSimilarMovies(movie: movie),
+      getMovieKeyword(movie: movie),
 
-  Future<void> getSimilarMovies({required SingleMovieModel movie}) async {
+    ]).then((value){
+      for(int i=0;i<value.length; i++){
+        if(i==0){
+          currentSimilarMoviesPage = 1;
+          similarMovies = MoviesModel.fromJson(value[i].data);
+        }else if(i==1){
+          keywords = MovieKeywordsModel.fromJson(value[i].data);
+        }
+      }
+      fillGenresList(movieGenresId: movie.genresIds).then((value){
+        emit(GetMovieDetailsSuccessState());
+      });
+    }).catchError((error){
+      debugPrint("Error in get movie details ${error.toString()}");
+      emit(GetMovieDetailsErrorState());
+    });
+  }
+
+  Future<Response> getSimilarMovies({required SingleMovieModel movie}) async {
     currentSimilarMoviesPage = 1;
     emit(GetMovieDetailsLoadingState());
-    await DioHelper.getData(url: '/movie/${movie.id}/recommendations', query: {
+    return await DioHelper.getData(url: '/movie/${movie.id}/recommendations', query: {
       'api_key': DioHelper.apiKey,
       'language': 'en-US',
       'page': currentSimilarMoviesPage,
-    }).then((value) {
-      currentSimilarMoviesPage = 1;
-      similarMovies = MoviesModel.fromJson(value.data);
-      getMovieKeyword(movie: movie).then((value) {
-        fillGenresList(movieGenresId: movie.genresIds).then((value) {
-          print('from get similar ${similarMovies!.moviesList.length}');
-          emit(GetMovieDetailsSuccessState());
-        });
-      });
-    }).catchError((error) {
-      debugPrint('Error in Get Similar Movies ${error.toString()}');
-      emit(GetMovieDetailsErrorState());
     });
   }
 }

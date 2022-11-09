@@ -59,14 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Image(
                             image: const AssetImage('assets/images/logo.png'),
                             height:
-                                Helper.getScreenHeight(context: context) * 0.05,
+                                Helper.maxHeight * 0.05,
                           ),
                         ),
                         GestureDetector(
                           onTap: () {},
                           child: Container(
                             padding: EdgeInsets.all(
-                                Helper.getScreenHeight(context: context) *
+                                Helper.maxHeight *
                                     0.01),
                             decoration: BoxDecoration(
                                 color: AppColors.mainColor,
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     // pinned: true,
                     expandedHeight:
-                        Helper.getScreenHeight(context: context) * 0.7,
+                        Helper.maxHeight * 0.7,
                     flexibleSpace: AppBarMovieBuilder(
                         movie: trendingMovies!.moviesList[randomPosterNumber],
                         image:
@@ -90,9 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal:
-                              Helper.getScreenHeight(context: context) * 0.01,
+                              Helper.maxHeight * 0.01,
                           vertical:
-                              Helper.getScreenHeight(context: context) * 0.04),
+                              Helper.maxHeight * 0.04),
                       child: Column(
                         children: [
                           Expanded(

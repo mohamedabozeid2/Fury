@@ -40,164 +40,193 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         return Scaffold(
           extendBodyBehindAppBar: true,
-          body: Container(
-            height: Helper.getScreenHeight(context: context),
-            width: Helper.getScreenWidth(context: context),
-            child: Stack(
-              children: [
-                Container(
-                  height: Helper.getScreenHeight(context: context),
-                  width: Helper.getScreenWidth(context: context),
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image:
+          body: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              Helper.maxWidth = constraints.maxWidth;
+              Helper.maxHeight = constraints.maxHeight;
+              return SizedBox(
+                height: Helper.maxHeight,
+                width: Helper.maxWidth,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: Helper.maxHeight,
+                      width: Helper.maxWidth,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image:
                               AssetImage('assets/images/loginWallpaper.jpg'))),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: Helper.getScreenHeight(context: context) * 0.05,
-                    horizontal: Helper.getScreenWidth(context: context) * 0.03,
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical:
-                                  Helper.getScreenHeight(context: context) *
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Helper.maxHeight * 0.05,
+                        horizontal: Helper.maxWidth * 0.03,
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical:
+                                  Helper.maxHeight *
                                       0.05,
-                              horizontal:
-                                  Helper.getScreenWidth(context: context) *
+                                  horizontal:
+                                  Helper.maxHeight *
                                       0.05),
-                          decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.7),
-                              borderRadius:
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.7),
+                                  borderRadius:
                                   BorderRadius.circular(AppRadius.medium2)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppStrings.signIn,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(color: AppColors.mainColor),
-                              ),
-                              SizedBox(
-                                height:
-                                    Helper.getScreenHeight(context: context) *
-                                        0.02,
-                              ),
-                              DefaultTextField(
-                                fillColor: Colors.white,
-                                borderRadius: AppRadius.medium2,
-                                context: context,
-                                onChangeFunction: (value) {
-                                  setState(() {});
-                                },
-                                contentStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                    color: Colors.black
-                                ),
-                                controller: emailController,
-                                hintStyle: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: AppColors.greyColor),
-                                type: TextInputType.emailAddress,
-                                label: AppStrings.emailAddress,
-                              ),
-                              SizedBox(
-                                height:
-                                    Helper.getScreenHeight(context: context) *
-                                        0.02,
-                              ),
-                              DefaultTextField(
-                                fillColor: Colors.white,
-                                borderRadius: AppRadius.medium2,
-                                context: context,
-                                onChangeFunction: (value) {
-                                  setState(() {});
-                                },
-                                contentStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                  color: Colors.black
-                                ),
-                                controller: passwordController,
-                                isPassword: LoginCubit.get(context).isVisible,
-                                sufIconFun: () {
-                                  LoginCubit.get(context).changeVisibility();
-                                },
-                                suffixIcon: LoginCubit.get(context).icon,
-                                hintStyle: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: AppColors.greyColor),
-                                type: TextInputType.visiblePassword,
-                                label: AppStrings.password,
-                              ),
-                              SizedBox(
-                                height:
-                                    Helper.getScreenHeight(context: context) *
-                                        0.02,
-                              ),
-                              DefaultButton(
-                                fun: () {
-                                  if (emailController.text.isNotEmpty &&
-                                      passwordController.text.isNotEmpty) {
-                                    LoginCubit.get(context).userLogin(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                      context: context,
-                                    );
-                                  }
-                                },
-                                text: AppStrings.login,
-                                textColor: Colors.white,
-                                backgroundColor:
-                                    emailController.text.isNotEmpty &&
-                                            passwordController.text.isNotEmpty
-                                        ? AppColors.mainColor
-                                        : AppColors.lightBlack,
-                                height:
-                                    Helper.getScreenHeight(context: context) *
-                                        0.07,
-                                fontSize: AppFontSize.s20,
-                                borderRadius: AppRadius.medium2,
-                              ),
-                              const SizedBox(
-                                height: 15.0,
-                              ),
-                              Row(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    AppStrings.noAccount,
-                                    style: Theme.of(context)
+                                    AppStrings.signIn,
+                                    style: Theme
+                                        .of(context)
                                         .textTheme
-                                        .subtitle2!
-                                        .copyWith(color: Colors.white),
+                                        .bodyText1!
+                                        .copyWith(color: AppColors.mainColor),
                                   ),
-                                  DefaultTextButton(
-                                    text: AppStrings.signUp,
-                                    fun: () {
-                                      Components.navigateTo(
-                                          context, RegisterScreen());
+                                  SizedBox(
+                                    height:
+                                    Helper.maxHeight *
+                                        0.02,
+                                  ),
+                                  DefaultTextField(
+                                    fillColor: Colors.white,
+                                    borderRadius: AppRadius.medium2,
+                                    context: context,
+                                    onChangeFunction: (value) {
+                                      setState(() {});
                                     },
-                                    fontSize: AppFontSize.s14,
-                                    fontWeight: FontWeightManager.semiBold,
-                                    textColor: AppColors.mainColor,
+                                    contentStyle: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                        color: Colors.black
+                                    ),
+                                    controller: emailController,
+                                    hintStyle: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(color: AppColors.greyColor),
+                                    type: TextInputType.emailAddress,
+                                    label: AppStrings.emailAddress,
+                                  ),
+                                  SizedBox(
+                                    height:
+                                    Helper.maxHeight *
+                                        0.02,
+                                  ),
+                                  DefaultTextField(
+                                    fillColor: Colors.white,
+                                    borderRadius: AppRadius.medium2,
+                                    context: context,
+                                    onChangeFunction: (value) {
+                                      setState(() {});
+                                    },
+                                    contentStyle: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                        color: Colors.black
+                                    ),
+                                    controller: passwordController,
+                                    isPassword: LoginCubit
+                                        .get(context)
+                                        .isVisible,
+                                    sufIconFun: () {
+                                      LoginCubit.get(context)
+                                          .changeVisibility();
+                                    },
+                                    suffixIcon: LoginCubit
+                                        .get(context)
+                                        .icon,
+                                    hintStyle: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(color: AppColors.greyColor),
+                                    type: TextInputType.visiblePassword,
+                                    label: AppStrings.password,
+                                  ),
+                                  SizedBox(
+                                    height:
+                                    Helper.maxHeight *
+                                        0.02,
+                                  ),
+                                  DefaultButton(
+                                    fun: () {
+                                      if (emailController.text.isNotEmpty &&
+                                          passwordController.text.isNotEmpty) {
+                                        LoginCubit.get(context).userLogin(
+                                          email: emailController.text,
+                                          password: passwordController.text,
+                                          context: context,
+                                        );
+                                      } else {
+                                        Components.showSnackBar(
+                                            title: AppStrings.appName,
+                                            message: AppStrings.emailAndPassword,
+                                            backgroundColor: Colors.redAccent,
+                                            textColor: Colors.white);
+                                      }
+                                    },
+                                    text: AppStrings.login,
+                                    textColor: Colors.white,
+                                    backgroundColor:
+                                    emailController.text.isNotEmpty &&
+                                        passwordController.text.isNotEmpty
+                                        ? AppColors.mainColor
+                                        : AppColors.lightBlack,
+                                    height:
+                                    Helper.maxHeight *
+                                        0.07,
+                                    fontSize: AppFontSize.s20,
+                                    borderRadius: AppRadius.medium2,
+                                  ),
+                                  const SizedBox(
+                                    height: 15.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        AppStrings.noAccount,
+                                        style: Theme
+                                            .of(context)
+                                            .textTheme
+                                            .subtitle2!
+                                            .copyWith(color: Colors.white),
+                                      ),
+                                      DefaultTextButton(
+                                        text: AppStrings.signUp,
+                                        fun: () {
+                                          Components.scaleNavigateTo(
+                                              context, RegisterScreen());
+                                        },
+                                        fontSize: AppFontSize.s14,
+                                        fontWeight: FontWeightManager.semiBold,
+                                        textColor: AppColors.mainColor,
+                                      )
+                                    ],
                                   )
                                 ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         );
       },

@@ -12,7 +12,7 @@ class AddActionsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Helper.getScreenWidth(context: context)*0.015),
+      padding: EdgeInsets.symmetric(horizontal: Helper.maxWidth*0.015),
       child: Row(
         children: [
           GestureDetector(

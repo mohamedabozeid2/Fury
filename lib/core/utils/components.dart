@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:movies_application/core/animate_route/rotation_transition.dart';
+import 'package:movies_application/core/animate_route/scale_transition.dart';
+import 'package:movies_application/core/animate_route/slide_transition.dart';
+
+import '../animate_route/opacity_transition.dart';
+import '../animate_route/size_transition.dart';
 
 class Components {
   static showToast({
@@ -44,5 +50,24 @@ class Components {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return widget;
     }));
+  }
+  
+  static slideNavigateTo(context, page){
+    Navigator.of(context).push(SlideAnimationNav(page: page, context: context));
+  }
+
+  static scaleNavigateTo(context, page){
+    Navigator.of(context).push(ScaleAnimationNav(page: page, context: context));
+  }
+
+  static rotationNavigateTo(context, page){
+    Navigator.of(context).push(RotationAnimationNav(page: page, context: context));
+  }
+  static sizeNavigateTo(context, page){
+    Navigator.of(context).push(SizeAnimationNav(page: page, context: context));
+  }
+
+  static opacityNavigateTo(context, page){
+    Navigator.of(context).push(OpacityAnimationNav(page: page, context: context));
   }
 }

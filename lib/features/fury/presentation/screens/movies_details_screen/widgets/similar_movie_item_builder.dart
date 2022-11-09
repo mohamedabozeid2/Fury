@@ -27,18 +27,18 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
         widget.movie.posterPath == null
             ? Image.asset(
                 'assets/images/empty_movie.png',
-                height: Helper.getScreenHeight(context: context) * 0.3,
-                width: Helper.getScreenWidth(context: context) * 0.4,
+                height: Helper.maxHeight * 0.3,
+                width: Helper.maxWidth * 0.4,
                 fit: BoxFit.cover,
               )
             : CachedImage(
                 image: '${DioHelper.baseImageURL}${widget.movie.posterPath!}',
-                height: Helper.getScreenHeight(context: context) * 0.3,
-                width: Helper.getScreenWidth(context: context) * 0.4),
+                height: Helper.maxHeight * 0.3,
+                width: Helper.maxWidth * 0.4),
         Expanded(
           child: Padding(
             padding:
-                EdgeInsets.all(Helper.getScreenWidth(context: context) * 0.03),
+                EdgeInsets.all(Helper.maxWidth * 0.03),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,7 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 SizedBox(
-                    height: Helper.getScreenHeight(context: context) * 0.005),
+                    height: Helper.maxHeight * 0.005),
                 Text(
                   '${widget.movie.description}',
                   textAlign: TextAlign.start,
@@ -57,7 +57,7 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 SizedBox(
-                  height: Helper.getScreenHeight(context: context)*0.025,
+                  height: Helper.maxHeight*0.025,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

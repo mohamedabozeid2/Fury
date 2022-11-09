@@ -53,8 +53,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               alignment: Alignment.center,
               children: [
                 Container(
-                  height: Helper.getScreenHeight(context: context),
-                  width: Helper.getScreenWidth(context: context),
+                  height: Helper.maxHeight,
+                  width: Helper.maxWidth,
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
@@ -63,9 +63,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: Helper.getScreenHeight(context: context) * 0.05,
+                      vertical: Helper.maxHeight * 0.05,
                       horizontal:
-                          Helper.getScreenWidth(context: context) * 0.05),
+                          Helper.maxWidth * 0.05),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -73,10 +73,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical:
-                                  Helper.getScreenHeight(context: context) *
+                                  Helper.maxHeight *
                                       0.05,
                               horizontal:
-                                  Helper.getScreenWidth(context: context) *
+                                  Helper.maxWidth *
                                       0.05),
                           decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.7),
@@ -102,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    Helper.getScreenHeight(context: context) *
+                                    Helper.maxHeight *
                                         0.02,
                               ),
                               DefaultTextField(
@@ -122,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    Helper.getScreenHeight(context: context) *
+                                    Helper.maxHeight *
                                         0.02,
                               ),
                               DefaultTextField(
@@ -142,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    Helper.getScreenHeight(context: context) *
+                                    Helper.maxHeight *
                                         0.02,
                               ),
                               DefaultTextField(
@@ -168,7 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    Helper.getScreenHeight(context: context) *
+                                    Helper.maxHeight *
                                         0.03,
                               ),
                               state is RegisterLoadingState
@@ -207,8 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               lastNameController.text.isNotEmpty
                                           ? AppColors.mainColor
                                           : AppColors.lightBlack,
-                                      height: Helper.getScreenHeight(
-                                              context: context) *
+                                      height: Helper.maxHeight *
                                           0.07,
                                       fontSize: AppFontSize.s20,
                                       borderRadius: AppRadius.medium2,

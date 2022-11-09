@@ -10,7 +10,7 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Helper.getScreenHeight(context: context) * 0.08,
+      height: Helper.maxHeight * 0.08,
       decoration: BoxDecoration(
           color: Colors.black54,
           borderRadius: BorderRadius.circular(AppRadius.large1)),

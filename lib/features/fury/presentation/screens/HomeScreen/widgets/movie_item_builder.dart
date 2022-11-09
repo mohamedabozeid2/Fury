@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/core/animate_route/slide_transition.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
@@ -24,7 +25,9 @@ class MovieItemBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Components.navigateTo(context, MovieDetails(movie: movieModel));
+        Components.sizeNavigateTo(context, MovieDetails(movie: movieModel));
+        // Components.navigateTo(context, SlideAnimation(page: MovieDetails(movie: movieModel), context: context));
+        // Components.navigateTo(context, MovieDetails(movie: movieModel));
       },
       child: Container(
         clipBehavior: Clip.antiAlias,

@@ -14,9 +14,9 @@ class RateRow extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical:
-        Helper.getScreenHeight(context: context) * 0.01,
+        Helper.maxHeight * 0.01,
         horizontal:
-        Helper.getScreenWidth(context: context) * 0.03,
+        Helper.maxWidth * 0.03,
       ),
       decoration: BoxDecoration(
         color: AppColors.mainColor,

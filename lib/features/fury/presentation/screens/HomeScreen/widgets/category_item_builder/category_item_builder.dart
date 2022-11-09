@@ -58,7 +58,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.symmetric(
-              vertical: Helper.getScreenHeight(context: context) * 0.002),
+              vertical: Helper.maxHeight * 0.002),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -70,9 +70,9 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                   : Container(),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: Helper.getScreenHeight(context: context) * 0.01),
+                    vertical: Helper.maxHeight * 0.01),
                 child: Container(
-                  height: Helper.getScreenHeight(context: context) * 0.2,
+                  height: Helper.maxHeight * 0.2,
                   child: Row(
                     children: [
                       Expanded(
@@ -108,10 +108,10 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                                   movieModel: widget.movies[index],
                                   baseImageURL: DioHelper.baseImageURL,
                                   height:
-                                      Helper.getScreenHeight(context: context) *
+                                      Helper.maxHeight *
                                           0.2,
                                   width:
-                                      Helper.getScreenWidth(context: context) *
+                                      Helper.maxWidth *
                                           0.3,
                                 );
                               },

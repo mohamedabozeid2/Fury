@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         body: Center(
             child: Image(
                 image: AssetImage(ImageAssets.splashScreen),
-                height: Helper.getScreenHeight(context: context) * 0.3)),
+                height: Helper.maxHeight * 0.3)),
       ),
     );
   }

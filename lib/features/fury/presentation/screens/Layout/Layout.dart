@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/helper.dart';
@@ -37,14 +38,6 @@ class _LayoutState extends State<Layout> {
               ))
             : Scaffold(
                 bottomNavigationBar: BottomNavBar(),
-                // bottomNavigationBar: BottomNavigationBar(
-                //     currentIndex: MoviesCubit.get(context).botNavCurrentIndex,
-                //     onTap: (index) {
-                //       setState(() {
-                //         MoviesCubit.get(context).changBotNavBar(index: index);
-                //       });
-                //     },
-                //     items: MoviesCubit.get(context).bottomNavItems),
                 body: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     Helper.maxWidth = constraints.maxWidth;

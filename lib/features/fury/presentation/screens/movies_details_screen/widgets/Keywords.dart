@@ -34,7 +34,7 @@ class _KeywordsState extends State<Keywords> {
       children: [
         Container(
           padding:
-              EdgeInsets.all(Helper.getScreenHeight(context: context) * 0.005),
+              EdgeInsets.all(Helper.maxHeight * 0.005),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.low1),
               color: AppColors.mainColor),
@@ -44,7 +44,7 @@ class _KeywordsState extends State<Keywords> {
           ),
         ),
         SizedBox(
-          height: Helper.getScreenHeight(context: context) * 0.01,
+          height: Helper.maxHeight * 0.01,
         ),
         Text(
           keywords,

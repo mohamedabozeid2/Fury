@@ -54,8 +54,8 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
               });
             },
             text: AppStrings.refresh,
-            height: Helper.getScreenHeight(context: context) * 0.07,
-            width: Helper.getScreenWidth(context: context) * 0.4,
+            height: Helper.maxHeight * 0.07,
+            width: Helper.maxWidth * 0.4,
             textColor: Colors.white,
             backgroundColor: AppColors.mainColor,
             fontSize: AppFontSize.s14,

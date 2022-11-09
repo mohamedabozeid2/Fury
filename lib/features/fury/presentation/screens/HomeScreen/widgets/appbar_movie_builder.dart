@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
+import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
 
 import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_fonts.dart';
@@ -25,13 +27,17 @@ class AppBarMovieBuilder extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if(!fromMovieDetails){
+                  Components.navigateTo(context, MovieDetails(movie:movie!));
+                }
+              },
               child: CachedImage(
                 fit: BoxFit.cover,
                 circularColor: AppColors.mainColor,
                 image: image,
-                width: Helper.getScreenWidth(context: context),
-                height: Helper.getScreenHeight(context: context) * 0.75,
+                width: Helper.maxWidth,
+                height: Helper.maxHeight * 0.75,
               ),
             ),
           ),
@@ -40,7 +46,7 @@ class AppBarMovieBuilder extends StatelessWidget {
               : Container(
                   padding: EdgeInsets.symmetric(
                       vertical:
-                          Helper.getScreenHeight(context: context) * 0.012),
+                          Helper.maxHeight * 0.012),
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.4),
                       borderRadius: const BorderRadius.only(
