@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/utils/Colors.dart';
+import '../../../../../../core/utils/app_values.dart';
 import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/helper.dart';
 
@@ -17,7 +18,7 @@ class Description extends StatelessWidget {
           padding:
               EdgeInsets.all(Helper.maxHeight * 0.005),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppRadius.low1),
+              borderRadius: BorderRadius.circular(AppSize.s5),
               color: AppColors.mainColor),
           child: Text(
             'Description',

@@ -1,19 +1,19 @@
-import 'package:movies_application/features/fury/data/models/movies_model.dart';
-import 'package:movies_application/features/fury/data/models/user_model.dart';
+import 'package:movies_application/features/fury/domain/entities/movies.dart';
+import 'package:movies_application/features/fury/domain/entities/user_data.dart';
 
 bool internetConnection = false;
-UserModel? userModel;
-MoviesModel? popularMovies;
-MoviesModel? trendingMovies;
-MoviesModel? topRatedMovies;
-MoviesModel? upComingMovies;
-MoviesModel? similarMovies;
-MoviesModel? latestMovie;
-MoviesModel? moreUpComingMovies;
-MoviesModel? morePopularMovies;
-MoviesModel? moreTopRatedMovies;
-MoviesModel? moreTrendingMovies;
-MoviesModel? moreSimilarMovies;
+UserData? userModel;
+Movies? popularMovies;
+Movies? trendingMovies;
+Movies? topRatedMovies;
+Movies? upComingMovies;
+Movies? similarMovies;
+Movies? latestMovie;
+Movies? moreUpComingMovies;
+Movies? morePopularMovies;
+Movies? moreTopRatedMovies;
+Movies? moreTrendingMovies;
+Movies? moreSimilarMovies;
 dynamic uId = "";
 
 

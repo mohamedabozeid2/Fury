@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/logic/home_layout/home_cubit.dart';
 import 'package:movies_application/logic/register_cubit/register_states.dart';
 
-import '../../features/fury/data/models/user_model.dart';
+import '../../features/fury/domain/entities/user_data.dart';
+
 
 class RegisterCubit extends Cubit<RegisterStates> {
   RegisterCubit() : super(RegisterInitialState());
@@ -55,7 +55,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String uId,
     required BuildContext context,
   }) {
-    UserModel model = UserModel(
+    UserData model = UserData(
       email: email,
       firstName: firstName,
       lastName: lastName,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/Colors.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
@@ -13,7 +14,7 @@ class SearchBar extends StatelessWidget {
       height: Helper.maxHeight * 0.08,
       decoration: BoxDecoration(
           color: Colors.black54,
-          borderRadius: BorderRadius.circular(AppRadius.large1)),
+          borderRadius: BorderRadius.circular(AppSize.s20)),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

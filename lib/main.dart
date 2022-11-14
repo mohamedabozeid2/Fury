@@ -7,7 +7,8 @@ import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/features/fury/presentation/screens/login_screen/login_screen.dart';
 
-import 'core/api/dio_helper.dart';
+import 'core/api/movies_dio_helper.dart';
+import 'core/api/news_dio_helper.dart';
 import 'core/shared_preference/cache_helper.dart';
 import 'features/fury/presentation/cubit/BlocObserver/BlocObserver.dart';
 import 'features/fury/presentation/screens/Layout/Layout.dart';
@@ -40,8 +41,8 @@ void main() async {
   });
 
 
-  DioHelper.init();
-
+  MoviesDioHelper.init();
+  NewsDioHelper.init();
   BlocOverrides.runZoned(
     () {
       runApp(MoviesApp(

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/core/api/dio_helper.dart';
+import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
-import 'package:movies_application/features/fury/data/models/single_movie_model.dart';
+import 'package:movies_application/features/fury/domain/entities/single_movie.dart';
 
 class SimilarMovieItemBuilder extends StatefulWidget {
-  SingleMovieModel movie;
+  SingleMovie movie;
   int index;
 
   SimilarMovieItemBuilder({required this.movie, required this.index});
@@ -32,7 +32,7 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                 fit: BoxFit.cover,
               )
             : CachedImage(
-                image: '${DioHelper.baseImageURL}${widget.movie.posterPath!}',
+                image: '${MoviesDioHelper.baseImageURL}${widget.movie.posterPath!}',
                 height: Helper.maxHeight * 0.3,
                 width: Helper.maxWidth * 0.4),
         Expanded(

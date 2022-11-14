@@ -17,6 +17,7 @@ class AppStrings{
   static const String trendingMovies = "Trending Movies";
   static const String home = " Home";
   static const String movies = " My Movies";
+  static const String news = " News";
   static const String settings = " Settings";
   static const String emailAndPassword = "Please enter email and password";
 }

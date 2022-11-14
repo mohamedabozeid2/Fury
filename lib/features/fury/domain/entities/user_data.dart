@@ -1,17 +1,17 @@
-class UserModel {
+class UserData {
   String? email;
   String? firstName;
   String? lastName;
   String? uId;
 
-  UserModel({
+  UserData({
     required this.lastName,
     required this.firstName,
     required this.uId,
     required this.email,
   });
 
-  UserModel.fromJson(Map<String, dynamic> json) {
+  UserData.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];

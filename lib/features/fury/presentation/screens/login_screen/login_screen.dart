@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
@@ -78,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.grey.withOpacity(0.7),
                                   borderRadius:
-                                  BorderRadius.circular(AppRadius.medium2)),
+                                  BorderRadius.circular(AppSize.s12)),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -97,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   DefaultTextField(
                                     fillColor: Colors.white,
-                                    borderRadius: AppRadius.medium2,
+                                    borderRadius: AppSize.s12,
                                     context: context,
                                     onChangeFunction: (value) {
                                       setState(() {});
@@ -125,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   DefaultTextField(
                                     fillColor: Colors.white,
-                                    borderRadius: AppRadius.medium2,
+                                    borderRadius: AppSize.s12,
                                     context: context,
                                     onChangeFunction: (value) {
                                       setState(() {});
@@ -189,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Helper.maxHeight *
                                         0.07,
                                     fontSize: AppFontSize.s20,
-                                    borderRadius: AppRadius.medium2,
+                                    borderRadius: AppSize.s12,
                                   ),
                                   const SizedBox(
                                     height: 15.0,

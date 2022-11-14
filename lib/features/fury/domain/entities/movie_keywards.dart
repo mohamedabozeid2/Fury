@@ -1,10 +1,10 @@
-class MovieKeywordsModel{
+class MovieKeywords{
   int? id;
   List<KeywordsData> keywords = [];
 
-  MovieKeywordsModel({required this.id, required this.keywords});
+  MovieKeywords({required this.id, required this.keywords});
 
-  MovieKeywordsModel.fromJson(Map<String, dynamic> json){
+  MovieKeywords.fromJson(Map<String, dynamic> json){
     id = json['id'];
     json['keywords'].forEach((element){
       keywords.add(KeywordsData.fromJson(element));

@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
 
-class DioHelper{
+class NewsDioHelper{
   static Dio? dio;
-  static String apiKey = 'a33a26fbf615c3f68bcd6ebc1fb6e018';
-  static String baseImageURL = 'https://image.tmdb.org/t/p/original';
+  static String apiKey = '630419e429614eeba4a862f027042e42';
   static init(){
     dio=Dio(
         BaseOptions(
-          baseUrl: 'https://api.themoviedb.org/3',
+          baseUrl: 'https://newsapi.org',
           receiveDataWhenStatusError: true,
         )
     );

@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/appbar_movie_builder.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_item_builder.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
 import 'package:movies_application/logic/home_layout/home_cubit.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
 
-import '../../../../../core/api/dio_helper.dart';
+import '../../../../../core/api/movies_dio_helper.dart';
 import '../../../../../core/utils/Colors.dart';
 import '../../../../../core/utils/border_radius.dart';
 import '../../../../../core/utils/components.dart';
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius:
-                                BorderRadius.circular(AppRadius.large1),
+                                BorderRadius.circular(AppSize.s20),
                             color: AppColors.mainColor,
                           ),
                           child: Image(
@@ -71,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                                 color: AppColors.mainColor,
                                 borderRadius:
-                                    BorderRadius.circular(AppRadius.large1)),
+                                    BorderRadius.circular(AppSize.s20)),
                             child: const Icon(Icons.search),
                           ),
                         )
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     flexibleSpace: AppBarMovieBuilder(
                         movie: trendingMovies!.moviesList[randomPosterNumber],
                         image:
-                            '${DioHelper.baseImageURL}${trendingMovies!.moviesList[randomPosterNumber].posterPath}'),
+                            '${MoviesDioHelper.baseImageURL}${trendingMovies!.moviesList[randomPosterNumber].posterPath}'),
                   ),
                   SliverFillRemaining(
                     hasScrollBody: false,

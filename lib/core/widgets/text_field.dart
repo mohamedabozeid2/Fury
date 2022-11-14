@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/Colors.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 
 class DefaultTextField extends StatelessWidget {
@@ -39,7 +40,7 @@ class DefaultTextField extends StatelessWidget {
     this.onChangeFunction,
     this.prefixWidget,
     this.borderColor = Colors.white,
-    this.borderRadius = AppRadius.low1,
+    this.borderRadius = 0,
     this.paddingInside,
     this.prefixIcon,
     this.hintStyle,

@@ -4,6 +4,8 @@ import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/divider.dart';
 
+import '../../../../../../core/utils/app_values.dart';
+
 class Genres extends StatefulWidget {
   List<String> genres;
 
@@ -37,7 +39,7 @@ class _GenresState extends State<Genres> {
           padding:
               EdgeInsets.all(Helper.maxHeight * 0.005),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppRadius.low1),
+              borderRadius: BorderRadius.circular(AppSize.s5),
               color: AppColors.mainColor),
           child: Text(
             'Genre',

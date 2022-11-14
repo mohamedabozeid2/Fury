@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
@@ -8,12 +9,12 @@ import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_fonts.dart';
 import '../../../../../../core/utils/helper.dart';
 import '../../../../../../core/widgets/cached_image.dart';
-import '../../../../data/models/single_movie_model.dart';
+import '../../../../domain/entities/single_movie.dart';
 
 class AppBarMovieBuilder extends StatelessWidget {
   final String image;
   bool fromMovieDetails;
-  SingleMovieModel? movie;
+  SingleMovie? movie;
 
   AppBarMovieBuilder({required this.image, this.fromMovieDetails = false, this.movie});
 
@@ -49,9 +50,9 @@ class AppBarMovieBuilder extends StatelessWidget {
                           Helper.maxHeight * 0.012),
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.4),
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(AppRadius.large2),
-                          topLeft: Radius.circular(AppRadius.large2))),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(AppSize.s22),
+                          topLeft: Radius.circular(AppSize.s22))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

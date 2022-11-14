@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/widgets/divider.dart';
 
+import '../../../../../../core/utils/app_values.dart';
 import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/helper.dart';
-import '../../../../data/models/movie_keywards_model.dart';
+import '../../../../domain/entities/movie_keywards.dart';
 
 class Keywords extends StatefulWidget {
-  MovieKeywordsModel keywordsModel;
+  MovieKeywords keywordsModel;
 
   Keywords({required this.keywordsModel});
 
@@ -36,7 +37,7 @@ class _KeywordsState extends State<Keywords> {
           padding:
               EdgeInsets.all(Helper.maxHeight * 0.005),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppRadius.low1),
+              borderRadius: BorderRadius.circular(AppSize.s5),
               color: AppColors.mainColor),
           child: Text(
             'Keywords',

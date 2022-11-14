@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:movies_application/core/widgets/divider.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/similar_movie_item_builder.dart';
 import 'package:movies_application/logic/home_layout/home_cubit.dart';
 import 'package:movies_application/logic/home_layout/home_states.dart';
-import '../../../../../../core/api/dio_helper.dart';
 import '../../../../../../core/utils/Colors.dart';
+import '../../../../../../core/utils/app_values.dart';
 import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/constants.dart';
 import '../../../../../../core/utils/helper.dart';
-import '../../HomeScreen/widgets/movie_item_builder.dart';
 
 class SimilarMovies extends StatefulWidget {
   int movieId;
@@ -29,6 +29,9 @@ class _SimilarMoviesState extends State<SimilarMovies> {
 
   @override
   void initState() {
+    // widget.scrollController.addListener(() {
+    //   print(widget.scrollController.offset);
+    // });
     // TODO: implement initState
     super.initState();
   }
@@ -45,7 +48,7 @@ class _SimilarMoviesState extends State<SimilarMovies> {
               padding: EdgeInsets.all(
                   Helper.maxHeight * 0.005),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppRadius.low1),
+                  borderRadius: BorderRadius.circular(AppSize.s5),
                   color: AppColors.mainColor),
               child: Text(
                 'Similar Movies',
@@ -71,7 +74,7 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                   },
                   itemCount: /*MoviesCubit.get(context)
                       .*/
-                      similarMovies!.moviesList.length)
+                  similarMovies!.moviesList.length)
             // CategoryItemBuilder(
             //     category: CategoryKeys.similarMovies,
             //     fromSimilarMovies: true,

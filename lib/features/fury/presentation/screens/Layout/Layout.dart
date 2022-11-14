@@ -42,12 +42,6 @@ class _LayoutState extends State<Layout> {
                   builder: (BuildContext context, BoxConstraints constraints) {
                     Helper.maxWidth = constraints.maxWidth;
                     Helper.maxHeight = constraints.maxHeight;
-                    // print(constraints.maxHeight);
-                    // print(MediaQuery.of(context).size.height);
-                    // print(constraints.maxWidth);
-                    // print(MediaQuery.of(context).size.width);
-
-
                     return MoviesCubit.get(context)
                         .screens[MoviesCubit.get(context).botNavCurrentIndex];
                   },

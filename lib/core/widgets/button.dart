@@ -37,6 +37,7 @@ class DefaultButton extends StatelessWidget {
           child: Text(
             isUpperCase ? text.toUpperCase() : text,
             style: TextStyle(
+              decoration: TextDecoration.none,
               color: textColor,
               fontSize: fontSize,
             ),

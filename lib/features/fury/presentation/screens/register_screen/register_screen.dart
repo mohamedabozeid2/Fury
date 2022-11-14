@@ -11,6 +11,7 @@ import 'package:movies_application/logic/register_cubit/register_cubit.dart';
 import 'package:movies_application/logic/register_cubit/register_states.dart';
 import '../../../../../core/shared_preference/cache_helper.dart';
 import '../../../../../core/utils/Colors.dart';
+import '../../../../../core/utils/app_values.dart';
 import '../../../../../core/utils/border_radius.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/helper.dart';
@@ -81,13 +82,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.7),
                               borderRadius:
-                                  BorderRadius.circular(AppRadius.medium2)),
+                                  BorderRadius.circular(AppSize.s12)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               DefaultTextField(
                                 fillColor: Colors.white,
-                                borderRadius: AppRadius.medium2,
+                                borderRadius: AppSize.s12,
                                 context: context,
                                 onChangeFunction: (value) {
                                   setState(() {});
@@ -107,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               DefaultTextField(
                                 fillColor: Colors.white,
-                                borderRadius: AppRadius.medium2,
+                                borderRadius: AppSize.s12,
                                 context: context,
                                 onChangeFunction: (value) {
                                   setState(() {});
@@ -127,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               DefaultTextField(
                                 fillColor: Colors.white,
-                                borderRadius: AppRadius.medium2,
+                                borderRadius: AppSize.s12,
                                 context: context,
                                 onChangeFunction: (value) {
                                   setState(() {});
@@ -147,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               DefaultTextField(
                                 fillColor: Colors.white,
-                                borderRadius: AppRadius.medium2,
+                                borderRadius: AppSize.s12,
                                 context: context,
                                 onChangeFunction: (value) {
                                   setState(() {});
@@ -210,7 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       height: Helper.maxHeight *
                                           0.07,
                                       fontSize: AppFontSize.s20,
-                                      borderRadius: AppRadius.medium2,
+                                      borderRadius: AppSize.s12,
                                     ),
                             ],
                           ),

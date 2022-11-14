@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:movies_application/config/themes/light_theme/light_theme.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/logic/login_cubit/login_cubit.dart';
+import 'package:movies_application/logic/news_cubit/news_cubit.dart';
 
 import 'logic/home_layout/home_cubit.dart';
 import 'logic/register_cubit/register_cubit.dart';
@@ -25,6 +26,7 @@ class MoviesApp extends StatelessWidget {
             BlocProvider(create: (BuildContext context) => MoviesCubit()),
             BlocProvider(create: (BuildContext context) => LoginCubit()),
             BlocProvider(create: (BuildContext context) => RegisterCubit()),
+            BlocProvider(create: (BuildContext context) => NewsCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

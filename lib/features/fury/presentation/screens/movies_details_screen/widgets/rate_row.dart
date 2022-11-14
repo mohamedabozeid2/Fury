@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/utils/Colors.dart';
+import '../../../../../../core/utils/app_values.dart';
 import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/helper.dart';
 
@@ -20,7 +21,7 @@ class RateRow extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.mainColor,
-        borderRadius: BorderRadius.circular(AppRadius.low1),
+        borderRadius: BorderRadius.circular(AppSize.s5),
       ),
       child: Row(
         children: [
