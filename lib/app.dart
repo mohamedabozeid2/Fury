@@ -3,17 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:movies_application/config/themes/light_theme/light_theme.dart';
+import 'package:movies_application/core/services/services_locator.dart';
 import 'package:movies_application/core/utils/strings.dart';
-import 'package:movies_application/logic/login_cubit/login_cubit.dart';
-import 'package:movies_application/logic/news_cubit/news_cubit.dart';
 
-import 'logic/home_layout/home_cubit.dart';
-import 'logic/register_cubit/register_cubit.dart';
+
+import 'features/fury/presentation/controller/home_cubit/home_cubit.dart';
+import 'features/fury/presentation/controller/login_cubit/login_cubit.dart';
+import 'features/fury/presentation/controller/news_cubit/news_cubit.dart';
+import 'features/fury/presentation/controller/register_cubit/register_cubit.dart';
 
 class MoviesApp extends StatelessWidget {
+  final Widget startWidget;
 
-  Widget startWidget;
-  MoviesApp({required this.startWidget});
+  const MoviesApp({super.key, required this.startWidget});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -23,10 +26,16 @@ class MoviesApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (BuildContext context) => MoviesCubit()),
+            BlocProvider(
+                create: (BuildContext context) => MoviesCubit(
+                      sl(),
+                      sl(),
+                      sl(),
+                      sl(),
+                    )),
             BlocProvider(create: (BuildContext context) => LoginCubit()),
             BlocProvider(create: (BuildContext context) => RegisterCubit()),
-            BlocProvider(create: (BuildContext context) => NewsCubit()),
+            BlocProvider(create: (BuildContext context) => NewsCubit(sl())),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

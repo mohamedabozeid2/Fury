@@ -1,11 +1,15 @@
-import 'package:movies_application/features/fury/domain/entities/news_item.dart';
-import 'package:movies_application/features/fury/domain/repositories/movies_news_repository.dart';
+import 'package:dartz/dartz.dart';
+import 'package:movies_application/features/fury/domain/repositories/base_movies_news_repository.dart';
 
-class GetMoviesNews{
-  final MoviesNewsRepository repository;
-  GetMoviesNews({required this.repository});
+import '../../../../core/error/failure.dart';
+import '../entities/news_item.dart';
 
-  Future<NewsItem> execute()async{
-    return await repository.getMoviesNews();
+class GetMoviesNewsUserCase{
+  final BaseMoviesNewsRepository baseMoviesNewsRepository;
+
+  GetMoviesNewsUserCase(this.baseMoviesNewsRepository);
+
+  Future<Either<Failure,NewsItem>> execute() async{
+    return await baseMoviesNewsRepository.getMoviesNews();
   }
 }

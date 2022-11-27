@@ -11,7 +11,7 @@ import '../../../../domain/entities/movie_keywards.dart';
 class Keywords extends StatefulWidget {
   MovieKeywords keywordsModel;
 
-  Keywords({required this.keywordsModel});
+  Keywords({super.key, required this.keywordsModel});
 
   @override
   State<Keywords> createState() => _KeywordsState();

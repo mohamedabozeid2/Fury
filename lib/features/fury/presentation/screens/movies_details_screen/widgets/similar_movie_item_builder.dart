@@ -4,13 +4,13 @@ import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
-import 'package:movies_application/features/fury/domain/entities/single_movie.dart';
+import 'package:movies_application/features/fury/data/models/single_movie.dart';
 
 class SimilarMovieItemBuilder extends StatefulWidget {
   SingleMovie movie;
   int index;
 
-  SimilarMovieItemBuilder({required this.movie, required this.index});
+  SimilarMovieItemBuilder({super.key, required this.movie, required this.index});
 
   @override
   State<SimilarMovieItemBuilder> createState() =>
@@ -32,7 +32,7 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                 fit: BoxFit.cover,
               )
             : CachedImage(
-                image: '${MoviesDioHelper.baseImageURL}${widget.movie.posterPath!}',
+                image: '${MoviesDioHelper.baseImageURL}${widget.movie.posterPath}',
                 height: Helper.maxHeight * 0.3,
                 width: Helper.maxWidth * 0.4),
         Expanded(
@@ -44,13 +44,13 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.index + 1}. ${widget.movie.name}',
+                  '${widget.index + 1}. ${widget.movie.name ?? widget.movie.title}',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 SizedBox(
                     height: Helper.maxHeight * 0.005),
                 Text(
-                  '${widget.movie.description}',
+                  widget.movie.description,
                   textAlign: TextAlign.start,
                   maxLines: 5,
                   overflow: TextOverflow.ellipsis,

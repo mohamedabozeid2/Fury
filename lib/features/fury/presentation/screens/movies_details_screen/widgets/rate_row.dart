@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_values.dart';
-import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/helper.dart';
 
 class RateRow extends StatelessWidget {
   num rate;
-  RateRow({required this.rate});
+  RateRow({super.key, required this.rate});
 
 
   @override

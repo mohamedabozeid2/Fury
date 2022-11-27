@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
-import 'package:movies_application/logic/home_layout/home_cubit.dart';
-import 'package:movies_application/logic/home_layout/home_states.dart';
 
 import '../../../../../../../core/api/movies_dio_helper.dart';
 import '../../../../../../../core/utils/helper.dart';
-import '../../../../../domain/entities/single_movie.dart';
+import '../../../../../data/models/single_movie.dart';
+import '../../../../controller/home_cubit/home_cubit.dart';
+import '../../../../controller/home_cubit/home_states.dart';
 import '../movie_item_builder.dart';
 
 class CategoryItemBuilder extends StatefulWidget {
@@ -20,7 +20,7 @@ class CategoryItemBuilder extends StatefulWidget {
 
   ////////
 
-  CategoryItemBuilder({
+  CategoryItemBuilder({super.key,
     this.title,
     required this.category,
     required this.movies,
@@ -88,7 +88,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
               Padding(
                 padding:
                 EdgeInsets.symmetric(vertical: Helper.maxHeight * 0.01),
-                child: Container(
+                child: SizedBox(
                   height: Helper.maxHeight * 0.2,
                   child: Row(
                     children: [

@@ -1,40 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:movies_application/core/widgets/divider.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/similar_movie_item_builder.dart';
-import 'package:movies_application/logic/home_layout/home_cubit.dart';
-import 'package:movies_application/logic/home_layout/home_states.dart';
+
 import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_values.dart';
-import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/constants.dart';
 import '../../../../../../core/utils/helper.dart';
+import '../../../controller/home_cubit/home_cubit.dart';
+import '../../../controller/home_cubit/home_states.dart';
 
 class SimilarMovies extends StatefulWidget {
   int movieId;
   ScrollController scrollController;
 
-  SimilarMovies({required this.movieId, required this.scrollController});
+  SimilarMovies({super.key, required this.movieId, required this.scrollController});
 
   @override
   State<SimilarMovies> createState() => _SimilarMoviesState();
 }
 
 class _SimilarMoviesState extends State<SimilarMovies> {
-  // ScrollController scrollController = ScrollController();
   late bool hasNextPage = true;
   bool isLoadingMoreRunning = false;
   late int page = MoviesCubit.get(context).currentSimilarMoviesPage;
 
-  @override
-  void initState() {
-    // widget.scrollController.addListener(() {
-    //   print(widget.scrollController.offset);
-    // });
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +35,7 @@ class _SimilarMoviesState extends State<SimilarMovies> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.all(
-                  Helper.maxHeight * 0.005),
+              padding: EdgeInsets.all(Helper.maxHeight * 0.005),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppSize.s5),
                   color: AppColors.mainColor),
@@ -58,28 +47,24 @@ class _SimilarMoviesState extends State<SimilarMovies> {
             SizedBox(
               height: Helper.maxHeight * 0.01,
             ),
-            if (/*MoviesCubit.get(context).*/ similarMovies!
-                .moviesList.isNotEmpty)
+            if (similarMovies!.moviesList.isNotEmpty)
               ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return SimilarMovieItemBuilder(
-                      index: index,
-                      movie: similarMovies!.moviesList[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return  MyDivider(color: AppColors.mainColor,paddingHorizontal: 0,);
-                  },
-                  itemCount: /*MoviesCubit.get(context)
-                      .*/
-                  similarMovies!.moviesList.length)
-            // CategoryItemBuilder(
-            //     category: CategoryKeys.similarMovies,
-            //     fromSimilarMovies: true,
-            //     movieID: widget.movieId,
-            //     movies: MoviesCubit.get(context).similarMovies!.moviesList)
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return SimilarMovieItemBuilder(
+                    index: index,
+                    movie: similarMovies!.moviesList[index],
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return MyDivider(
+                    color: AppColors.mainColor,
+                    paddingHorizontal: 0,
+                  );
+                },
+                itemCount: similarMovies!.moviesList.length,
+              )
             else
               Text(
                 'Sorry, There is no similar movies for this movie',

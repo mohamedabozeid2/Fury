@@ -16,12 +16,30 @@ class GetAllMoviesLoadingState extends MoviesStates{}
 class GetAllMoviesSuccessState extends MoviesStates{}
 class GetAllMoviesErrorState extends MoviesStates{}
 
-class GetPopularMoviesErrorState extends MoviesStates{}
+class GetPopularMoviesErrorState extends MoviesStates{
+  final String message;
 
-class GetTrendingMoviesErrorState extends MoviesStates{}
+  GetPopularMoviesErrorState({required this.message});
+}
 
-class GetTopRatedMoviesErrorState extends MoviesStates{}
+class GetTrendingMoviesErrorState extends MoviesStates{
+  final String message;
 
+  GetTrendingMoviesErrorState({required this.message});
+}
+
+class GetTopRatedMoviesErrorState extends MoviesStates{
+  final String message;
+
+  GetTopRatedMoviesErrorState({required this.message});
+}
+
+class GetUpComingMoviesErrorState extends MoviesStates{
+  final String message;
+
+  GetUpComingMoviesErrorState({required this.message});
+
+}
 
 //// pagination (Load More)
 class LoadMoreMoviesLoadingState extends MoviesStates{}

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/app_values.dart';
-import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
@@ -11,14 +10,16 @@ import 'package:movies_application/core/widgets/button.dart';
 import 'package:movies_application/core/widgets/text_button.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
 import 'package:movies_application/features/fury/presentation/screens/register_screen/register_screen.dart';
-import 'package:movies_application/logic/login_cubit/login_cubit.dart';
-import 'package:movies_application/logic/login_cubit/login_states.dart';
 
 import '../../../../../core/shared_preference/cache_helper.dart';
 import '../../../../../core/utils/constants.dart';
+import '../../controller/login_cubit/login_cubit.dart';
+import '../../controller/login_cubit/login_states.dart';
 import '../Layout/Layout.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -33,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) {
         if (state is FuryLoginSuccessState) {
-          Components.navigateAndFinish(context: context, widget: Layout());
+          Components.navigateAndFinish(context: context, widget: const Layout());
           CacheHelper.saveData(key: 'uId', value: state.uId);
           uId = state.uId;
         }

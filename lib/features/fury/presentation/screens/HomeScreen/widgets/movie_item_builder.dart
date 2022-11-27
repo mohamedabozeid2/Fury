@@ -4,7 +4,7 @@ import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
-import 'package:movies_application/features/fury/domain/entities/single_movie.dart';
+import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
 
 import '../../../../../../core/utils/Colors.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/logic/news_cubit/news_cubit.dart';
-import 'package:movies_application/logic/news_cubit/news_states.dart';
 
 import '../../../../../core/utils/helper.dart';
+import '../../controller/news_cubit/news_cubit.dart';
+import '../../controller/news_cubit/news_states.dart';
 import 'widgets/hottest_news.dart';
 
 class NewsScreen extends StatefulWidget {
@@ -19,6 +19,7 @@ class _NewsScreenState extends State<NewsScreen> {
     NewsCubit.get(context).getMoviesNews();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<NewsCubit, NewsStates>(

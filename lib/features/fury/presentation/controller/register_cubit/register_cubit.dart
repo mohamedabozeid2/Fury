@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/logic/register_cubit/register_states.dart';
+import 'package:movies_application/features/fury/presentation/controller/register_cubit/register_states.dart';
 
-import '../../features/fury/domain/entities/user_data.dart';
+import '../../../domain/entities/user_data.dart';
+
 
 
 class RegisterCubit extends Cubit<RegisterStates> {
@@ -43,7 +44,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
           uId: value.user!.uid,
           context: context);
     }).catchError((error) {
-      print("Error in creating user ${error.toString()}");
+      debugPrint("Error in creating user ${error.toString()}");
       emit(RegisterErrorState());
     });
   }
@@ -69,7 +70,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
       FirebaseAuth.instance.currentUser!.sendEmailVerification();
       emit(RegisterSuccessState(uId: uId));
     }).catchError((error) {
-      print('Error in adding user to database ===> ${error.toString()}');
+      debugPrint('Error in adding user to database ===> ${error.toString()}');
       emit(RegisterErrorState());
     });
   }

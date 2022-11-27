@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/helper.dart';
-import 'package:movies_application/logic/home_layout/home_cubit.dart';
-import 'package:movies_application/logic/home_layout/home_states.dart';
-
 import '../../../../../../core/utils/Colors.dart';
+import '../../../controller/home_cubit/home_cubit.dart';
+import '../../../controller/home_cubit/home_states.dart';
 
 class BottomNavBar extends StatefulWidget {
   @override

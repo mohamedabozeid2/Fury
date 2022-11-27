@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/logic/login_cubit/login_states.dart';
+
+import 'login_states.dart';
 
 
 class LoginCubit extends Cubit<LoginStates>{
@@ -37,7 +38,7 @@ class LoginCubit extends Cubit<LoginStates>{
       }
       emit(FuryLoginSuccessState(uId: value.user!.uid));
     }).catchError((error) {
-      print("Error from Login===> ${error.toString()}");
+      debugPrint("Error from Login===> ${error.toString()}");
       emit(FuryLoginErrorState());
     });
   }

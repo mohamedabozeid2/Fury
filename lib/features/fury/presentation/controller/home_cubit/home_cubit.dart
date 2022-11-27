@@ -1,29 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/api/end_points.dart';
+import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
-import 'package:movies_application/features/fury/domain/entities/single_movie.dart';
+import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/HomeScreen.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/no_internet_screen.dart';
-import 'package:movies_application/logic/home_layout/home_states.dart';
-import '../../core/utils/constants.dart';
-import '../../features/fury/domain/entities/movie_keywards.dart';
-import '../../features/fury/domain/entities/movies.dart';
-import '../../features/fury/domain/entities/user_data.dart';
-import '../../features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
-import '../../features/fury/presentation/screens/my_movies_screen/my_movies_screen.dart';
-import '../../features/fury/presentation/screens/news_screen/news_screen.dart';
-import '../../features/fury/presentation/screens/settings/settings_screen.dart';
+
+import '../../../../../core/utils/constants.dart';
+import '../../../data/models/movies_model.dart';
+import '../../../domain/entities/movie_keywards.dart';
+import '../../../domain/entities/movies.dart';
+import '../../../domain/entities/user_data.dart';
+import '../../../domain/usecases/get_popular_movies_data.dart';
+import '../../../domain/usecases/get_top_rated_movies_data.dart';
+import '../../../domain/usecases/get_trending_movies_data.dart';
+import '../../../domain/usecases/get_upcoming_movies_data.dart';
+import '../../screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
+import '../../screens/my_movies_screen/my_movies_screen.dart';
+import '../../screens/news_screen/news_screen.dart';
+import '../../screens/settings/settings_screen.dart';
+import 'home_states.dart';
 
 class MoviesCubit extends Cubit<MoviesStates> {
-  MoviesCubit() : super(MoviesInitialState());
+  final GetPopularMoviesDataUseCase getPopularMoviesDataUseCase;
+  final GetTrendingMoviesDataUseCase getTrendingMoviesDataUseCase;
+  final GetTopRatedMoviesDataUseCase getTopRatedMoviesDataUseCase;
+  final GetUpcomingMoviesDataUseCase getUpcomingMoviesDataUseCase;
+
+  MoviesCubit(
+    this.getPopularMoviesDataUseCase,
+    this.getTopRatedMoviesDataUseCase,
+    this.getUpcomingMoviesDataUseCase,
+    this.getTrendingMoviesDataUseCase,
+  ) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
 
@@ -35,9 +53,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
   }
 
   List<Widget> screens = [
-    HomeScreen(),
+    const HomeScreen(),
     MyMoviesScreen(),
-    NewsScreen(),
+    const NewsScreen(),
     SettingsScreen(),
   ];
 
@@ -46,7 +64,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
     const GButton(icon: Icons.movie_filter_outlined, text: AppStrings.movies),
     const GButton(icon: Icons.newspaper, text: AppStrings.news),
     const GButton(icon: Icons.settings, text: AppStrings.settings),
-
   ];
 
   void getUserData({
@@ -66,12 +83,10 @@ class MoviesCubit extends Cubit<MoviesStates> {
         emit(GetUserDataSuccessState());
       }
     }).catchError((error) {
-      print("Error ===> ${error.toString()}");
+      debugPrint("Error ===> ${error.toString()}");
       emit(GetUserDataErrorState());
     });
   }
-
-
 
   void getAllMovies({required BuildContext context}) {
     emit(GetAllMoviesLoadingState());
@@ -86,25 +101,41 @@ class MoviesCubit extends Cubit<MoviesStates> {
         ]).then((value) {
           for (int i = 0; i < value.length; i++) {
             if (i == 0) {
-              popularMovies = Movies.fromJson(value[i].data);
-              isFirstPopularLoadRunning = false;
+              value[i].fold((l) {
+                emit(GetPopularMoviesErrorState(message: l.message));
+              }, (r) {
+                popularMovies = r;
+                isFirstPopularLoadRunning = false;
+              });
             } else if (i == 1) {
-              trendingMovies = Movies.fromJson(value[i].data);
-              isFirstTrendingLoadRunning = false;
+              value[i].fold((l) {
+                emit(GetTrendingMoviesErrorState(message: l.message));
+              }, (r) {
+                isFirstTrendingLoadRunning = false;
+                trendingMovies = r;
+              });
             } else if (i == 2) {
-              topRatedMovies = Movies.fromJson(value[i].data);
-              isFirstTopRatedLoadRunning = false;
+              value[i].fold((l) {
+                emit(GetTopRatedMoviesErrorState(message: l.message));
+              }, (r) {
+                topRatedMovies = r;
+                isFirstTopRatedLoadRunning = false;
+              });
             } else if (i == 3) {
-              upComingMovies = Movies.fromJson(value[i].data);
-              isFirstUpComingLoadRunning = false;
-              getMovieGenres();
+              value[i].fold((l) {
+                emit(GetUpComingMoviesErrorState(message: l.message));
+              }, (r) {
+                upComingMovies = r;
+                isFirstUpComingLoadRunning = false;
+              });
             }
           }
+          getMovieGenres();
           emit(GetAllMoviesSuccessState());
         }).catchError((error) {
           Components.navigateAndFinish(
               context: context, widget: NoInternetScreen());
-          print('error ======================> ${error.toString()}');
+          debugPrint('error ======================> ${error.toString()}');
           emit(GetAllMoviesErrorState());
         });
       } else {
@@ -120,63 +151,53 @@ class MoviesCubit extends Cubit<MoviesStates> {
     });
   }
 
-  ///////////// Popular Movies ////////////
+  /////////// Popular Movies ////////////
   int currentPopularPage = 1;
   bool isFirstPopularLoadRunning = false;
 
-  Future<Response> getPopularMovies() async{
+  Future<Either<Failure, Movies>> getPopularMovies() async {
     isFirstPopularLoadRunning = true;
-    return await MoviesDioHelper.getData(
-        url: EndPoints.popular,
-        query: {'api_key': MoviesDioHelper.apiKey, 'page': currentPopularPage});
+    debugPrint('Done');
+    return await getPopularMoviesDataUseCase.execute(
+        currentPopularPage: currentPopularPage);
   }
 
   ///////////// Top Rated Movies ////////////
   int currentTopRatedPage = 1;
   bool isFirstTopRatedLoadRunning = false;
 
-  Future<Response> getTopRatedMovies() async{
+  Future<Either<Failure, Movies>> getTopRatedMovies() async {
     isFirstTopRatedLoadRunning = true;
-    /////
-    return await MoviesDioHelper.getData(
-        url: EndPoints.topRated,
-        query: {'api_key': MoviesDioHelper.apiKey, 'page': currentTrendingPage});
+    return await getTopRatedMoviesDataUseCase.execute(
+        currentTopRatedPage: currentTopRatedPage);
   }
 
   ///////////// Trending Movies ////////////
   int currentTrendingPage = 1;
   bool isFirstTrendingLoadRunning = false;
 
-  Future<Response> getTrendingMovies() async{
+  Future<Either<Failure, Movies>> getTrendingMovies() async {
     isFirstTrendingLoadRunning = true;
-    return await MoviesDioHelper.getData(
-        url: EndPoints.trending,
-        query: {'api_key': MoviesDioHelper.apiKey, 'page': currentTrendingPage});
+    return await getTrendingMoviesDataUseCase.execute(
+        currentTrendingPage: currentTrendingPage);
   }
 
   ///////////// Up Coming Movies ////////////
   int currentUpComingPage = 1;
   bool isFirstUpComingLoadRunning = false;
 
-  Future<Response> getUpComingMovies() async{
+  Future<Either<Failure, Movies>> getUpComingMovies() async {
     isFirstUpComingLoadRunning = true;
-    return await MoviesDioHelper.getData(
-      url: EndPoints.upComing,
-      lang: 'en-US',
-      query: {
-        'api_key': MoviesDioHelper.apiKey,
-        'page': currentUpComingPage,
-        'language': 'en-US'
-      },
-    );
+    return await getUpcomingMoviesDataUseCase.execute(
+        currentUpComingPage: currentUpComingPage);
   }
 
 //////////// Latest Movie ////////////
-  Future<Response> getLatestMovie() async{
-    return await MoviesDioHelper.getData(
-        url: EndPoints.latest,
-        query: {'api_key': MoviesDioHelper.apiKey, 'language': 'en-US'});
-  }
+//   Future<Response> getLatestMovie() async{
+//     return await MoviesDioHelper.getData(
+//         url: EndPoints.latest,
+//         query: {'api_key': MoviesDioHelper.apiKey, 'language': 'en-US'});
+//   }
 
   void loadMoreMovies({
     required int page,
@@ -211,10 +232,11 @@ class MoviesCubit extends Cubit<MoviesStates> {
         endPoint = '/movie/$movieID/recommendations';
       }
       MoviesDioHelper.getData(
-          url: endPoint,
-          query: {'api_key': MoviesDioHelper.apiKey, 'page': page + 1}).then((value) {
+              url: endPoint,
+              query: {'api_key': MoviesDioHelper.apiKey, 'page': page + 1})
+          .then((value) {
         if (moviesCategory == CategoryKeys.popular) {
-          morePopularMovies = Movies.fromJson(value.data);
+          morePopularMovies = MoviesModel.fromJson(value.data);
           if (morePopularMovies!.moviesList.isNotEmpty) {
             more.addAll(morePopularMovies!.moviesList);
             popularMovies!.loadMoreMovies(movies: more);
@@ -222,7 +244,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             hasNextPage = false;
           }
         } else if (moviesCategory == CategoryKeys.trending) {
-          moreTrendingMovies = Movies.fromJson(value.data);
+          moreTrendingMovies = MoviesModel.fromJson(value.data);
           if (moreTrendingMovies!.moviesList.isNotEmpty) {
             more.addAll(moreTrendingMovies!.moviesList);
             trendingMovies!.loadMoreMovies(movies: more);
@@ -230,7 +252,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             hasNextPage = false;
           }
         } else if (moviesCategory == CategoryKeys.topRated) {
-          moreTopRatedMovies = Movies.fromJson(value.data);
+          moreTopRatedMovies = MoviesModel.fromJson(value.data);
           if (moreTopRatedMovies!.moviesList.isNotEmpty) {
             more.addAll(moreTopRatedMovies!.moviesList);
             topRatedMovies!.loadMoreMovies(movies: more);
@@ -238,7 +260,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             hasNextPage = false;
           }
         } else if (moviesCategory == CategoryKeys.upComing) {
-          moreUpComingMovies = Movies.fromJson(value.data);
+          moreUpComingMovies = MoviesModel.fromJson(value.data);
           if (moreUpComingMovies!.moviesList.isNotEmpty) {
             more.addAll(moreUpComingMovies!.moviesList);
             upComingMovies!.loadMoreMovies(movies: more);
@@ -246,25 +268,24 @@ class MoviesCubit extends Cubit<MoviesStates> {
             hasNextPage = false;
           }
         } else if (moviesCategory == CategoryKeys.similarMovies) {
-          moreSimilarMovies = Movies.fromJson(value.data);
+          moreSimilarMovies = MoviesModel.fromJson(value.data);
           if (moreSimilarMovies!.moviesList.isNotEmpty) {
             more.addAll(moreSimilarMovies!.moviesList);
             similarMovies!.loadMoreMovies(movies: more);
           } else {
             hasNextPage = false;
-            print('no more');
+            debugPrint('no more');
           }
         }
         emit(LoadMoreMoviesSuccessState());
       }).catchError((error) {
-        print('Error from load more movies ===> ${error.toString()}');
+        debugPrint('Error from load more movies ===> ${error.toString()}');
         emit(LoadMoreMoviesErrorState());
       });
       isLoadingMoreRunning = false;
     }
+  }
 
-
-}
   MovieKeywords? keywords;
 
   Future<Response> getMovieKeyword({required SingleMovie movie}) async {
@@ -272,16 +293,15 @@ class MoviesCubit extends Cubit<MoviesStates> {
         url: '/movie/${movie.id}/keywords',
         query: {'api_key': MoviesDioHelper.apiKey});
   }
+
   Genres? genresModel;
 
   void getMovieGenres() {
-    // emit(GetMovieGenresLoadingState());
     MoviesDioHelper.getData(url: EndPoints.genres, query: {
       'api_key': MoviesDioHelper.apiKey,
       'language': 'en-US',
     }).then((value) {
       genresModel = Genres.fromJson(value.data);
-      // emit(GetMovieGenresSuccessState());
     }).catchError((error) {
       debugPrint('Error in get genres ${error.toString()}');
       emit(GetMovieDetailsErrorState());
@@ -302,26 +322,24 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int currentSimilarMoviesPage = 1;
 
   // MoviesModel? similarMovies;
-  void getMovieDetailsData({
-    required SingleMovie movie
-  }){
+  void getMovieDetailsData({required SingleMovie movie}) {
     Future.wait([
       getSimilarMovies(movie: movie),
       getMovieKeyword(movie: movie),
-
-    ]).then((value){
-      for(int i=0;i<value.length; i++){
-        if(i==0){
+    ]).then((value) {
+      for (int i = 0; i < value.length; i++) {
+        if (i == 0) {
           currentSimilarMoviesPage = 1;
-          similarMovies = Movies.fromJson(value[i].data);
-        }else if(i==1){
+          similarMovies = MoviesModel.fromJson(value[i].data);
+        } else if (i == 1) {
+          debugPrint('KeyWords ${value[i].data}');
           keywords = MovieKeywords.fromJson(value[i].data);
         }
       }
-      fillGenresList(movieGenresId: movie.genresIds).then((value){
+      fillGenresList(movieGenresId: movie.genresIds).then((value) {
         emit(GetMovieDetailsSuccessState());
       });
-    }).catchError((error){
+    }).catchError((error) {
       debugPrint("Error in get movie details ${error.toString()}");
       emit(GetMovieDetailsErrorState());
     });
@@ -330,10 +348,12 @@ class MoviesCubit extends Cubit<MoviesStates> {
   Future<Response> getSimilarMovies({required SingleMovie movie}) async {
     currentSimilarMoviesPage = 1;
     emit(GetMovieDetailsLoadingState());
-    return await MoviesDioHelper.getData(url: '/movie/${movie.id}/recommendations', query: {
-      'api_key': MoviesDioHelper.apiKey,
-      'language': 'en-US',
-      'page': currentSimilarMoviesPage,
-    });
+    return await MoviesDioHelper.getData(
+        url: '/movie/${movie.id}/recommendations',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'language': 'en-US',
+          'page': currentSimilarMoviesPage,
+        });
   }
 }

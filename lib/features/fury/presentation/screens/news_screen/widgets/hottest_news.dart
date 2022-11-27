@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
-import 'package:movies_application/logic/news_cubit/news_cubit.dart';
-import 'package:movies_application/logic/news_cubit/news_states.dart';
+
+import '../../../controller/news_cubit/news_cubit.dart';
+import '../../../controller/news_cubit/news_states.dart';
+
 
 class HottestNews extends StatefulWidget {
+  const HottestNews({super.key});
+
   @override
   State<HottestNews> createState() => _HottestNewsState();
 }
@@ -31,7 +35,7 @@ class _HottestNewsState extends State<HottestNews> {
       listener: (context, state) {},
       builder: (context, state) {
         double newsSize = newsItemWidth + newsDivider;
-        return Container(
+        return SizedBox(
           height: newsItemHeight,
           child: Row(
             children: [

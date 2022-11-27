@@ -7,17 +7,18 @@ import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/button.dart';
 import 'package:movies_application/core/widgets/text_field.dart';
-import 'package:movies_application/logic/register_cubit/register_cubit.dart';
-import 'package:movies_application/logic/register_cubit/register_states.dart';
 import '../../../../../core/shared_preference/cache_helper.dart';
 import '../../../../../core/utils/Colors.dart';
 import '../../../../../core/utils/app_values.dart';
-import '../../../../../core/utils/border_radius.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/helper.dart';
+import '../../controller/register_cubit/register_cubit.dart';
+import '../../controller/register_cubit/register_states.dart';
 import '../Layout/Layout.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -40,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               colorText: Colors.white, backgroundColor: Colors.greenAccent);
           CacheHelper.saveData(key: 'uId', value: state.uId);
           uId = state.uId;
-          Components.navigateAndFinish(context: context, widget: Layout());
+          Components.navigateAndFinish(context: context, widget: const Layout());
         }
       },
       builder: (context, state) {

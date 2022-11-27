@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/app_values.dart';
-import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
@@ -9,14 +8,14 @@ import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_fonts.dart';
 import '../../../../../../core/utils/helper.dart';
 import '../../../../../../core/widgets/cached_image.dart';
-import '../../../../domain/entities/single_movie.dart';
+import '../../../../data/models/single_movie.dart';
 
 class AppBarMovieBuilder extends StatelessWidget {
   final String image;
   bool fromMovieDetails;
   SingleMovie? movie;
 
-  AppBarMovieBuilder({required this.image, this.fromMovieDetails = false, this.movie});
+  AppBarMovieBuilder({super.key, required this.image, this.fromMovieDetails = false, this.movie});
 
   @override
   Widget build(BuildContext context) {

@@ -1,31 +1,21 @@
-class NewsItem {
-  int? totalResults;
-  List<NewsItemModel> news = [];
+import '../../data/models/single_news_model.dart';
+import 'package:equatable/equatable.dart';
 
-  NewsItem.fromJson(Map<String, dynamic> json) {
-    totalResults = json['totalResults'];
-    json['articles'].forEach((element) {
-      news.add(NewsItemModel.fromJson(element));
-    });
-  }
-}
+class NewsItem extends Equatable{
+  final String status;
+  final int totalResults;
+  final List<SingleNewsModel> articles;
 
-class NewsItemModel {
-  String? author;
-  String? title;
-  String? description;
-  String? url;
-  String? imageUrl;
-  String? date;
-  String? content;
+  const NewsItem({
+    required this.status,
+    required this.totalResults,
+    required this.articles,
+  });
 
-  NewsItemModel.fromJson(Map<String, dynamic> json) {
-    author = json['author'];
-    title = json['title'];
-    description = json['description'];
-    url = json['url'];
-    imageUrl = json['urlToImage'];
-    date = json['publishedAt'];
-    content = json['content'];
-  }
+  @override
+  List<Object?> get props => [
+    status,
+    totalResults,
+    articles,
+  ];
 }
