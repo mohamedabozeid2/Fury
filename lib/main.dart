@@ -30,12 +30,12 @@ void main() async {
     startWidget = const LoginScreen();
   }
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // st
-      // a
-      statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.light // tus bar color
-      ));
+  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent, // st
+  //     // a
+  //     statusBarBrightness: Brightness.light,
+  //     statusBarIconBrightness: Brightness.light // tus bar color
+  //     ));
 
   await CheckConnection.checkConnection().then((value) {
     internetConnection = value;

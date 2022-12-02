@@ -52,8 +52,8 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.transparent,
     systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark),
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light),
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,

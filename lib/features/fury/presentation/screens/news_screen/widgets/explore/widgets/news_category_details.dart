@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/features/fury/presentation/controller/news_cubit/news_cubit.dart';
 import 'package:movies_application/features/fury/presentation/controller/news_cubit/news_states.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../../../core/utils/app_values.dart';
 import '../../../../../../../../core/utils/helper.dart';
@@ -110,59 +111,64 @@ class _NewsCategoryDetailsState extends State<NewsCategoryDetails> {
   Widget generalNewsItem({required int index}) {
     String date = newsData.articles[index].publishAt;
     date = date.substring(0, 10);
-    return Container(
-      padding: EdgeInsets.all(newsItemPadding),
-      decoration: BoxDecoration(
-        color: AppColors.mainColor.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(AppSize.s20),
-      ),
-      child: Row(
-        children: [
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(AppSize.s20)),
-            child: CachedImage(
-              image: newsData.articles[index].urlToImage,
-              height: newsItemHeight,
-              width: Helper.maxWidth * 0.5,
-              circularColor: AppColors.mainColor,
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(
-            width: Helper.maxWidth * 0.02,
-          ),
-          Expanded(
-            child: SizedBox(
-              height: newsItemHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    newsData.articles[index].title,
-                    maxLines: 5,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.subtitle2,
-                  ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        date,
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption!
-                            .copyWith(color: AppColors.whiteButtonText),
-                      )
-                    ],
-                  )
-                ],
+    return GestureDetector(
+      onTap: () {
+        launchUrl(Uri.parse(newsData.articles[index].url));
+      },
+      child: Container(
+        padding: EdgeInsets.all(newsItemPadding),
+        decoration: BoxDecoration(
+          color: AppColors.mainColor.withOpacity(0.4),
+          borderRadius: BorderRadius.circular(AppSize.s20),
+        ),
+        child: Row(
+          children: [
+            Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppSize.s20)),
+              child: CachedImage(
+                image: newsData.articles[index].urlToImage,
+                height: newsItemHeight,
+                width: Helper.maxWidth * 0.5,
+                circularColor: AppColors.mainColor,
+                fit: BoxFit.cover,
               ),
             ),
-          )
-        ],
+            SizedBox(
+              width: Helper.maxWidth * 0.02,
+            ),
+            Expanded(
+              child: SizedBox(
+                height: newsItemHeight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      newsData.articles[index].title,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    const Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          date,
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption!
+                              .copyWith(color: AppColors.whiteButtonText),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
