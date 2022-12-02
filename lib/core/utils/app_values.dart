@@ -89,6 +89,7 @@ class AppSize {
   static double s28 = 28.sp;
   static double s29 = 29.sp;
   static double s30 = 30.sp;
+  static double s35 = 35.sp;
   static double s40 = 40.sp;
   static double s50 = 50.sp;
   static double s60 = 60.sp;

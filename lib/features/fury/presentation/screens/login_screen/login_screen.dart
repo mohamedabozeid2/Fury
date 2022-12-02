@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/app_values.dart';
+import 'package:movies_application/core/utils/assets_manager.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
@@ -54,11 +55,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       height: Helper.maxHeight,
                       width: Helper.maxWidth,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image:
-                              AssetImage('assets/images/loginWallpaper.jpg'))),
+                              AssetImage(ImageAssets.loginWallpaper))),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(

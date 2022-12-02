@@ -4,10 +4,10 @@ import 'package:movies_application/features/fury/domain/repositories/base_movies
 import '../../../../core/error/failure.dart';
 import '../entities/news_item.dart';
 
-class GetMoviesNewsUserCase{
+class GetMoviesNewsUseCase{
   final BaseMoviesNewsRepository baseMoviesNewsRepository;
 
-  GetMoviesNewsUserCase(this.baseMoviesNewsRepository);
+  GetMoviesNewsUseCase(this.baseMoviesNewsRepository);
 
   Future<Either<Failure,NewsItem>> execute() async{
     return await baseMoviesNewsRepository.getMoviesNews();

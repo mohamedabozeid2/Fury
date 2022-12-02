@@ -25,16 +25,16 @@ void main() async {
   Widget startWidget;
   uId = CacheHelper.getData(key: 'uId');
   if (uId != null) {
-    startWidget = Layout();
+    startWidget = const Layout();
   } else {
-    startWidget = LoginScreen();
+    startWidget = const LoginScreen();
   }
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // st
       // a
-      statusBarBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark // tus bar color
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.light // tus bar color
       ));
 
   await CheckConnection.checkConnection().then((value) {

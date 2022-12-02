@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
+import 'package:movies_application/core/utils/assets_manager.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
@@ -41,7 +42,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               colorText: Colors.white, backgroundColor: Colors.greenAccent);
           CacheHelper.saveData(key: 'uId', value: state.uId);
           uId = state.uId;
-          Components.navigateAndFinish(context: context, widget: const Layout());
+          Components.navigateAndFinish(
+              context: context, widget: const Layout());
         }
       },
       builder: (context, state) {
@@ -57,33 +59,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Container(
                   height: Helper.maxHeight,
                   width: Helper.maxWidth,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image:
-                              AssetImage('assets/images/loginWallpaper.jpg'))),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage(ImageAssets.loginWallpaper),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       vertical: Helper.maxHeight * 0.05,
-                      horizontal:
-                          Helper.maxWidth * 0.05),
+                      horizontal: Helper.maxWidth * 0.05),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                              vertical:
-                                  Helper.maxHeight *
-                                      0.05,
-                              horizontal:
-                                  Helper.maxWidth *
-                                      0.05),
+                              vertical: Helper.maxHeight * 0.05,
+                              horizontal: Helper.maxWidth * 0.05),
                           decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.7),
-                              borderRadius:
-                                  BorderRadius.circular(AppSize.s12)),
+                              borderRadius: BorderRadius.circular(AppSize.s12)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -103,9 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 label: AppStrings.firstName,
                               ),
                               SizedBox(
-                                height:
-                                    Helper.maxHeight *
-                                        0.02,
+                                height: Helper.maxHeight * 0.02,
                               ),
                               DefaultTextField(
                                 fillColor: Colors.white,
@@ -123,9 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 label: AppStrings.lastName,
                               ),
                               SizedBox(
-                                height:
-                                    Helper.maxHeight *
-                                        0.02,
+                                height: Helper.maxHeight * 0.02,
                               ),
                               DefaultTextField(
                                 fillColor: Colors.white,
@@ -143,9 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 label: AppStrings.emailAddress,
                               ),
                               SizedBox(
-                                height:
-                                    Helper.maxHeight *
-                                        0.02,
+                                height: Helper.maxHeight * 0.02,
                               ),
                               DefaultTextField(
                                 fillColor: Colors.white,
@@ -169,9 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 label: AppStrings.password,
                               ),
                               SizedBox(
-                                height:
-                                    Helper.maxHeight *
-                                        0.03,
+                                height: Helper.maxHeight * 0.03,
                               ),
                               state is RegisterLoadingState
                                   ? Center(
@@ -209,8 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               lastNameController.text.isNotEmpty
                                           ? AppColors.mainColor
                                           : AppColors.lightBlack,
-                                      height: Helper.maxHeight *
-                                          0.07,
+                                      height: Helper.maxHeight * 0.07,
                                       fontSize: AppFontSize.s20,
                                       borderRadius: AppSize.s12,
                                     ),

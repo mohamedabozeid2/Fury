@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:movies_application/core/animate_route/rotation_transition.dart';
 import 'package:movies_application/core/animate_route/scale_transition.dart';
 import 'package:movies_application/core/animate_route/slide_transition.dart';

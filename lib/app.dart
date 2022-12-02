@@ -6,7 +6,6 @@ import 'package:movies_application/config/themes/light_theme/light_theme.dart';
 import 'package:movies_application/core/services/services_locator.dart';
 import 'package:movies_application/core/utils/strings.dart';
 
-
 import 'features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import 'features/fury/presentation/controller/login_cubit/login_cubit.dart';
 import 'features/fury/presentation/controller/news_cubit/news_cubit.dart';
@@ -35,7 +34,16 @@ class MoviesApp extends StatelessWidget {
                     )),
             BlocProvider(create: (BuildContext context) => LoginCubit()),
             BlocProvider(create: (BuildContext context) => RegisterCubit()),
-            BlocProvider(create: (BuildContext context) => NewsCubit(sl())),
+            BlocProvider(
+                create: (BuildContext context) => NewsCubit(
+                      sl(),
+                      sl(),
+                      sl(),
+                      sl(),
+                      sl(),
+                      sl(),
+                      sl(),
+                    )),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    randomPosterNumber = Random().nextInt(19);
+    randomPosterNumber = Random().nextInt(10);
   }
 
   @override

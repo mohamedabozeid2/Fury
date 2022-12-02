@@ -5,8 +5,14 @@ import 'package:movies_application/features/fury/data/repositories/movies_reposi
 import 'package:movies_application/features/fury/data/repositories/news_repository.dart';
 import 'package:movies_application/features/fury/domain/repositories/base_movies_news_repository.dart';
 import 'package:movies_application/features/fury/domain/repositories/base_movies_repository.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_business_news.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_general_news.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_health_news.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_movies_news.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_popular_movies_data.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_science_news.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_sports_news.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_technology_news.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_trending_movies_data.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_upcoming_movies_data.dart';
 
@@ -19,11 +25,21 @@ final sl = GetIt.instance;
 class ServicesLocator {
   void init() {
     ///// Cubit
-    sl.registerFactory(() => NewsCubit(sl()));
-    sl.registerFactory(() => MoviesCubit(sl(),sl(),sl(),sl()));
+    sl.registerFactory(
+        () => NewsCubit(sl(), sl(), sl(), sl(), sl(), sl(), sl()));
+    sl.registerFactory(() => MoviesCubit(sl(), sl(), sl(), sl()));
 
     /////Use Cases
-    sl.registerLazySingleton(() => GetMoviesNewsUserCase(sl()));
+    //// News
+    sl.registerLazySingleton(() => GetMoviesNewsUseCase(sl()));
+    sl.registerLazySingleton(() => GetBusinessNewsUseCase(sl()));
+    sl.registerLazySingleton(() => GetGeneralNewsUseCase(sl()));
+    sl.registerLazySingleton(() => GetHealthNewsUseCase(sl()));
+    sl.registerLazySingleton(() => GetScienceNewsUseCase(sl()));
+    sl.registerLazySingleton(() => GetSportsNewsUseCase(sl()));
+    sl.registerLazySingleton(() => GetTechnologyNewsUseCase(sl()));
+
+    //// Movies
     sl.registerLazySingleton(() => GetPopularMoviesDataUseCase(sl()));
     sl.registerLazySingleton(() => GetTopRatedMoviesDataUseCase(sl()));
     sl.registerLazySingleton(() => GetTrendingMoviesDataUseCase(sl()));

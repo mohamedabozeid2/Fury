@@ -20,4 +20,11 @@ class AppStrings{
   static const String news = " News";
   static const String settings = " Settings";
   static const String emailAndPassword = "Please enter email and password";
+  static const String hottestNews = "Hottest News";
+  static const String explore = "Explore";
+  static const String business = "Business";
+  static const String health = "Health";
+  static const String sports = "Sports";
+  static const String science = "Science";
+  static const String technology = "Technology";
 }

@@ -6,6 +6,8 @@ import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
 
+import '../../../../../../core/utils/assets_manager.dart';
+
 class SimilarMovieItemBuilder extends StatefulWidget {
   SingleMovie movie;
   int index;
@@ -26,7 +28,7 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
       children: [
         widget.movie.posterPath == null
             ? Image.asset(
-                'assets/images/empty_movie.png',
+                ImageAssets.emptyMovie,
                 height: Helper.maxHeight * 0.3,
                 width: Helper.maxWidth * 0.4,
                 fit: BoxFit.cover,

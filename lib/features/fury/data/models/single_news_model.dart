@@ -1,13 +1,15 @@
 class SingleNewsModel {
+  final dynamic source;
   final dynamic author;
-  final String title;
-  final String description;
-  final String url;
+  final dynamic title;
+  final dynamic description;
+  final dynamic url;
   final dynamic urlToImage;
-  final String publishAt;
-  final String content;
+  final dynamic publishAt;
+  final dynamic content;
 
   SingleNewsModel({
+    required this.source,
     required this.author,
     required this.description,
     required this.url,
@@ -19,6 +21,7 @@ class SingleNewsModel {
 
   factory SingleNewsModel.fromJson(Map<String, dynamic> json) {
     return SingleNewsModel(
+      source: json['source']['name'],
       author: json['author'],
       description: json['description'],
       url: json['url'],
