@@ -2,22 +2,25 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 
 import 'adaptive_indicator.dart';
 
 class CachedImage extends StatelessWidget {
   final String image;
-  Color circularColor;
+  final Color circularColor;
   final double height;
   final double width;
-  BoxFit fit;
+  final BoxFit fit;
 
-  CachedImage(
-      {required this.image,
-      this.circularColor = Colors.blue,
-      required this.height,
-      required this.width,
-      this.fit = BoxFit.cover});
+  const CachedImage({
+    super.key,
+    required this.image,
+    this.circularColor = Colors.blue,
+    required this.height,
+    required this.width,
+    this.fit = BoxFit.cover,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,8 @@ class CachedImage extends StatelessWidget {
         os: Platform.operatingSystem,
         color: circularColor,
       )),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
+      errorWidget: (context, url, error) =>
+          Icon(Icons.error, color: AppColors.whiteButtonText),
     );
   }
 }

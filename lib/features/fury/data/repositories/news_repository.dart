@@ -32,51 +32,63 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
   }
 
   @override
-  Future<Either<Failure, NewsItem>> getGeneralNews()async {
+  Future<Either<Failure, NewsItem>> getGeneralNews() async {
     final result = await baseMoviesNewsRemoteDataSource.getGeneralNews();
-    try{
+    try {
       return Right(result);
-    } on NewsServerException catch(failure){
+    } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
     }
   }
 
   @override
-  Future<Either<Failure, NewsItem>> getHealthNews() async{
+  Future<Either<Failure, NewsItem>> getHealthNews() async {
     final result = await baseMoviesNewsRemoteDataSource.getHealthNews();
-    try{
+    try {
       return Right(result);
-    } on NewsServerException catch(failure){
+    } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
     }
   }
 
   @override
-  Future<Either<Failure, NewsItem>> getScienceNews() async{
+  Future<Either<Failure, NewsItem>> getScienceNews() async {
     final result = await baseMoviesNewsRemoteDataSource.getScienceNews();
-    try{
+    try {
       return Right(result);
-    } on NewsServerException catch(failure){
+    } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
     }
   }
 
   @override
-  Future<Either<Failure, NewsItem>> getSportsNews() async{
+  Future<Either<Failure, NewsItem>> getSportsNews() async {
     final result = await baseMoviesNewsRemoteDataSource.getSportsNews();
-    try{
+    try {
       return Right(result);
-    } on NewsServerException catch(failure){
+    } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
     }
   }
 
   @override
-  Future<Either<Failure, NewsItem>> getTechnologyNews() async{
+  Future<Either<Failure, NewsItem>> getTechnologyNews() async {
     final result = await baseMoviesNewsRemoteDataSource.getTechnologyNews();
+    try {
+      return Right(result);
+    } on NewsServerException catch (failure) {
+      return Left(ServerFailure(failure.newsErrorMessageModel.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, NewsItem>> loadMoreNews(
+      {required String category, required int page}) async {
+    final result =
+        await baseMoviesNewsRemoteDataSource.loadMoreNews(category: category,page: page);
     try{
       return Right(result);
-    } on NewsServerException catch(failure){
+    }on NewsServerException catch(failure){
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
     }
   }

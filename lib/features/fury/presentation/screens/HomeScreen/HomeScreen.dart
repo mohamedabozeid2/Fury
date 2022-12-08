@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/appbar_movie_builder.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_item_builder.dart';
-import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
+import 'package:movies_application/core/keys/movies_category_keys.dart';
 
 import '../../../../../core/api/movies_dio_helper.dart';
 import '../../../../../core/utils/Colors.dart';
@@ -88,22 +88,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           CategoryItemBuilder(
                             title: AppStrings.upComingMovies,
                             movies: upComingMovies!.moviesList,
-                            category: CategoryKeys.upComing,
+                            category: MoviesCategoryKeys.upComing,
                           ),
                           CategoryItemBuilder(
                             title: AppStrings.trendingMovies,
                             movies: trendingMovies!.moviesList,
-                            category: CategoryKeys.trending,
+                            category: MoviesCategoryKeys.trending,
                           ),
                           CategoryItemBuilder(
                             title: AppStrings.popularMovies,
                             movies: popularMovies!.moviesList,
-                            category: CategoryKeys.popular,
+                            category: MoviesCategoryKeys.popular,
                           ),
                           CategoryItemBuilder(
                             title: AppStrings.topRatedMovies,
                             movies: topRatedMovies!.moviesList,
-                            category: CategoryKeys.topRated,
+                            category: MoviesCategoryKeys.topRated,
                           ),
                         ],
                       ),

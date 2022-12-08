@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/core/animate_route/slide_transition.dart';
 import 'package:movies_application/core/utils/app_values.dart';
-import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
@@ -10,12 +8,12 @@ import 'package:movies_application/features/fury/presentation/screens/movies_det
 import '../../../../../../core/utils/Colors.dart';
 
 class MovieItemBuilder extends StatelessWidget {
-  SingleMovie movieModel;
-  String baseImageURL;
-  double height;
-  double width;
+  final SingleMovie movieModel;
+  final String baseImageURL;
+  final double height;
+  final double width;
 
-  MovieItemBuilder({
+  const MovieItemBuilder({super.key,
     required this.movieModel,
     required this.baseImageURL,
     required this.height,

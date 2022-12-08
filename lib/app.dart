@@ -43,6 +43,7 @@ class MoviesApp extends StatelessWidget {
                       sl(),
                       sl(),
                       sl(),
+                      sl(),
                     )),
           ],
           child: GetMaterialApp(

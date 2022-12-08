@@ -24,7 +24,7 @@ import '../../../domain/usecases/get_popular_movies_data.dart';
 import '../../../domain/usecases/get_top_rated_movies_data.dart';
 import '../../../domain/usecases/get_trending_movies_data.dart';
 import '../../../domain/usecases/get_upcoming_movies_data.dart';
-import '../../screens/HomeScreen/widgets/category_item_builder/category_keys.dart';
+import '../../../../../core/keys/movies_category_keys.dart';
 import '../../screens/my_movies_screen/my_movies_screen.dart';
 import '../../screens/news_screen/news_screen.dart';
 import '../../screens/settings/settings_screen.dart';
@@ -215,19 +215,19 @@ class MoviesCubit extends Cubit<MoviesStates> {
     if (hasNextPage && !isLoadingMoreRunning /*&& !isFirstLoadRunning*/) {
       isLoadingMoreRunning = true;
       more = [];
-      if (moviesCategory == CategoryKeys.popular) {
+      if (moviesCategory == MoviesCategoryKeys.popular) {
         currentPopularPage++;
         endPoint = EndPoints.popular;
-      } else if (moviesCategory == CategoryKeys.trending) {
+      } else if (moviesCategory == MoviesCategoryKeys.trending) {
         currentTrendingPage++;
         endPoint = EndPoints.trending;
-      } else if (moviesCategory == CategoryKeys.topRated) {
+      } else if (moviesCategory == MoviesCategoryKeys.topRated) {
         currentTopRatedPage++;
         endPoint = EndPoints.topRated;
-      } else if (moviesCategory == CategoryKeys.upComing) {
+      } else if (moviesCategory == MoviesCategoryKeys.upComing) {
         currentUpComingPage++;
         endPoint = EndPoints.upComing;
-      } else if (moviesCategory == CategoryKeys.similarMovies) {
+      } else if (moviesCategory == MoviesCategoryKeys.similarMovies) {
         currentSimilarMoviesPage++;
         endPoint = '/movie/$movieID/recommendations';
       }
@@ -235,7 +235,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
               url: endPoint,
               query: {'api_key': MoviesDioHelper.apiKey, 'page': page + 1})
           .then((value) {
-        if (moviesCategory == CategoryKeys.popular) {
+        if (moviesCategory == MoviesCategoryKeys.popular) {
           morePopularMovies = MoviesModel.fromJson(value.data);
           if (morePopularMovies!.moviesList.isNotEmpty) {
             more.addAll(morePopularMovies!.moviesList);
@@ -243,7 +243,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
           } else {
             hasNextPage = false;
           }
-        } else if (moviesCategory == CategoryKeys.trending) {
+        } else if (moviesCategory == MoviesCategoryKeys.trending) {
           moreTrendingMovies = MoviesModel.fromJson(value.data);
           if (moreTrendingMovies!.moviesList.isNotEmpty) {
             more.addAll(moreTrendingMovies!.moviesList);
@@ -251,7 +251,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
           } else {
             hasNextPage = false;
           }
-        } else if (moviesCategory == CategoryKeys.topRated) {
+        } else if (moviesCategory == MoviesCategoryKeys.topRated) {
           moreTopRatedMovies = MoviesModel.fromJson(value.data);
           if (moreTopRatedMovies!.moviesList.isNotEmpty) {
             more.addAll(moreTopRatedMovies!.moviesList);
@@ -259,7 +259,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
           } else {
             hasNextPage = false;
           }
-        } else if (moviesCategory == CategoryKeys.upComing) {
+        } else if (moviesCategory == MoviesCategoryKeys.upComing) {
           moreUpComingMovies = MoviesModel.fromJson(value.data);
           if (moreUpComingMovies!.moviesList.isNotEmpty) {
             more.addAll(moreUpComingMovies!.moviesList);
@@ -267,7 +267,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
           } else {
             hasNextPage = false;
           }
-        } else if (moviesCategory == CategoryKeys.similarMovies) {
+        } else if (moviesCategory == MoviesCategoryKeys.similarMovies) {
           moreSimilarMovies = MoviesModel.fromJson(value.data);
           if (moreSimilarMovies!.moviesList.isNotEmpty) {
             more.addAll(moreSimilarMovies!.moviesList);

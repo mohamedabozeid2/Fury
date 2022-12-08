@@ -10,4 +10,5 @@ class ImageAssets{
  static String health = '$imagePath/health.jpg';
  static String science = '$imagePath/science.jpg';
  static String sports = '$imagePath/sports.jpg';
+ static String emptyNews = '$imagePath/empty_news.jpg';
 }

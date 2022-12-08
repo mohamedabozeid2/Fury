@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class NewsDioHelper{
   static Dio? dio;
-  static String apiKey = '630419e429614eeba4a862f027042e42';
+  static String apiKey = 'b08371119bd34917a135197f688bd938';
   static init(){
     dio=Dio(
         BaseOptions(

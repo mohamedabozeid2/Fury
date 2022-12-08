@@ -11,4 +11,5 @@ abstract class BaseMoviesNewsRepository{
   Future<Either<Failure,NewsItem>> getScienceNews();
   Future<Either<Failure,NewsItem>> getSportsNews();
   Future<Either<Failure,NewsItem>> getTechnologyNews();
+  Future<Either<Failure,NewsItem>> loadMoreNews({required String category, required int page});
 }

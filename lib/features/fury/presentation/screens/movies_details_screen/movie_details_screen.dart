@@ -19,12 +19,12 @@ import '../../../../../core/widgets/divider.dart';
 import '../../controller/home_cubit/home_cubit.dart';
 import '../../controller/home_cubit/home_states.dart';
 import '../HomeScreen/widgets/appbar_movie_builder.dart';
-import '../HomeScreen/widgets/category_item_builder/category_keys.dart';
+import '../../../../../core/keys/movies_category_keys.dart';
 
 class MovieDetails extends StatefulWidget {
-  SingleMovie movie;
+  final SingleMovie movie;
 
-  MovieDetails({super.key, required this.movie});
+  const MovieDetails({super.key, required this.movie});
 
   @override
   State<MovieDetails> createState() => _MovieDetailsState();
@@ -53,7 +53,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                 hasMorePages: hasNextPage,
                 isLoadingMore: isLoadingMoreRunning,
                 page: page,
-                moviesCategory: CategoryKeys.similarMovies,
+                moviesCategory: MoviesCategoryKeys.similarMovies,
                 movieID: widget.movie.id);
             page = MoviesCubit.get(context).currentSimilarMoviesPage;
           }
@@ -90,7 +90,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                     slivers: [
                       SliverAppBar(
                         // floating: false,
-
                         pinned: true,
                         expandedHeight: Helper.maxHeight * 0.7,
                         flexibleSpace: AppBarMovieBuilder(
@@ -99,8 +98,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 '${MoviesDioHelper.baseImageURL}${widget.movie.posterPath}'),
                       ),
                       SliverToBoxAdapter(
-                        // hasScrollBody: false,
-                        // fillOverscroll: true,
                         child: Padding(
                           padding: EdgeInsets.all(Helper.maxHeight * 0.02),
                           child: Column(
