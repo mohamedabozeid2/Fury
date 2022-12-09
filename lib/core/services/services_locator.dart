@@ -7,7 +7,9 @@ import 'package:movies_application/features/fury/domain/repositories/base_movies
 import 'package:movies_application/features/fury/domain/repositories/base_movies_repository.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_business_news.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_general_news.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_genres.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_health_news.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_movies_news.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_popular_movies_data.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_science_news.dart';
@@ -17,6 +19,7 @@ import 'package:movies_application/features/fury/domain/usecases/get_trending_mo
 import 'package:movies_application/features/fury/domain/usecases/get_upcoming_movies_data.dart';
 import 'package:movies_application/features/fury/domain/usecases/load_more_news.dart';
 
+import '../../features/fury/domain/usecases/get_similar_movies.dart';
 import '../../features/fury/domain/usecases/get_top_rated_movies_data.dart';
 import '../../features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import '../../features/fury/presentation/controller/news_cubit/news_cubit.dart';
@@ -26,9 +29,25 @@ final sl = GetIt.instance;
 class ServicesLocator {
   void init() {
     ///// Cubit
-    sl.registerFactory(
-        () => NewsCubit(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));
-    sl.registerFactory(() => MoviesCubit(sl(), sl(), sl(), sl()));
+    sl.registerFactory(() => NewsCubit(
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+        ));
+    sl.registerFactory(() => MoviesCubit(
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+        ));
 
     /////Use Cases
     //// News
@@ -46,6 +65,9 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetTopRatedMoviesDataUseCase(sl()));
     sl.registerLazySingleton(() => GetTrendingMoviesDataUseCase(sl()));
     sl.registerLazySingleton(() => GetUpcomingMoviesDataUseCase(sl()));
+    sl.registerLazySingleton(() => GetMovieKeywordUseCase(sl()));
+    sl.registerLazySingleton(() => GetSimilarMoviesUseCase(sl()));
+    sl.registerLazySingleton(() => GetGenresUseCase(sl()));
 
     ///// Repository
     sl.registerLazySingleton<BaseMoviesNewsRepository>(

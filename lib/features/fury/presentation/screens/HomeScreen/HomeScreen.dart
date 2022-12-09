@@ -70,7 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
               flexibleSpace: AppBarMovieBuilder(
                 movie: trendingMovies!.moviesList[randomPosterNumber],
                 image:
-                    '${MoviesDioHelper.baseImageURL}${trendingMovies!.moviesList[randomPosterNumber].posterPath}',
+                '${MoviesDioHelper.baseImageURL}${trendingMovies!
+                    .moviesList[randomPosterNumber].posterPath}',
               ),
             ),
             SliverFillRemaining(
@@ -85,6 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          MaterialButton(onPressed: () {
+                            MoviesCubit.get(context).getMovieDetailsData(
+                                movie: popularMovies!.moviesList[0]);
+                          }, child: Text("TEST", style: TextStyle(
+                              color: Colors.blue
+                          ),),),
                           CategoryItemBuilder(
                             title: AppStrings.upComingMovies,
                             movies: upComingMovies!.moviesList,

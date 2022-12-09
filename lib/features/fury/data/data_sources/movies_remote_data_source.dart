@@ -1,10 +1,13 @@
 import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/error/exception.dart';
-import 'package:movies_application/core/network/news_error_message_model.dart';
+import 'package:movies_application/features/fury/data/models/movie_keywords_model.dart';
 
 import '../../../../core/network/movies_error_message_model.dart';
+import '../../domain/entities/genres.dart';
+import '../models/genres_model.dart';
 import '../models/movies_model.dart';
+import '../models/single_movie.dart';
 
 abstract class BaseMoviesRemoteDataSource {
   Future<MoviesModel> getPopularMoviesData({required int currentPopularPage});
@@ -14,6 +17,13 @@ abstract class BaseMoviesRemoteDataSource {
   Future<MoviesModel> getTrendingMoviesData({required int currentTrendingPage});
 
   Future<MoviesModel> getTopRatedMoviesData({required int currentTopRatedPage});
+
+  Future<MovieKeywordsModel> getMovieKeyWords({required SingleMovie movie});
+
+  Future<MoviesModel> getSimilarMovies(
+      {required SingleMovie movie, required int currentSimilarMoviesPage});
+
+  Future<Genres> getGenres();
 }
 
 class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
@@ -79,6 +89,62 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     });
     if (response.statusCode == 200) {
       return MoviesModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<MovieKeywordsModel> getMovieKeyWords(
+      {required SingleMovie movie}) async {
+    final response = await MoviesDioHelper.getData(
+        url: '/movie/${movie.id}/keywords',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+        });
+    if (response.statusCode == 200) {
+      return MovieKeywordsModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<MoviesModel> getSimilarMovies(
+      {required SingleMovie movie,
+      required int currentSimilarMoviesPage}) async {
+    final response = await MoviesDioHelper.getData(
+        url: "/movie/${movie.id}/recommendations",
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'language': 'en-US',
+          'page': currentSimilarMoviesPage,
+        });
+    if (response.statusCode == 200) {
+      return MoviesModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<Genres> getGenres() async {
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.genres, query: {
+      'api_key': MoviesDioHelper.apiKey,
+      'language': 'en-US',
+    });
+    if (response.statusCode == 200) {
+      return GenresModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:

@@ -1,20 +1,13 @@
-class Genres{
+import 'package:equatable/equatable.dart';
 
-  List<GenresData> genres = [];
+import '../../data/models/genres_data_model.dart';
 
-  Genres.fromJson(Map<String, dynamic> json){
-    json['genres'].forEach((element){
-      genres.add(GenresData.fromJson(element));
-    });
-  }
-}
+class Genres extends Equatable {
+  final List<GenresData> genres;
 
-class GenresData{
-  int? id;
-  String? name;
+  const Genres({required this.genres});
 
-  GenresData.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    name = json['name'];
-  }
+  @override
+  // TODO: implement props
+  List<Object?> get props => [genres];
 }

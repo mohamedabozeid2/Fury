@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_application/core/keys/news_category_keys.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/assets_manager.dart';
@@ -20,11 +21,11 @@ class Explore extends StatelessWidget {
     ImageAssets.technologyImage,
   ];
   final List<String> titles = [
-    AppStrings.business,
-    AppStrings.sports,
-    AppStrings.health,
-    AppStrings.science,
-    AppStrings.technology,
+    NewsCategoryKeys.business,
+    NewsCategoryKeys.sports,
+    NewsCategoryKeys.health,
+    NewsCategoryKeys.science,
+    NewsCategoryKeys.technology,
   ];
 
   Explore({Key? key}) : super(key: key);

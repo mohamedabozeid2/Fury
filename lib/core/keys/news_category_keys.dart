@@ -1,10 +1,10 @@
 class NewsCategoryKeys {
-static const String movies = 'entertainment';
-static const String general = 'general';
-static const String sports = 'sports';
-static const String health = 'health';
-static const String business = 'business';
-static const String science = 'science';
-static const String technology = 'technology';
+static const String movies = 'Entertainment';
+static const String general = 'General';
+static const String sports = 'Sports';
+static const String health = 'Health';
+static const String business = 'Business';
+static const String science = 'Science';
+static const String technology = 'Technology';
 
 }

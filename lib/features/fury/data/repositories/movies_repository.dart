@@ -1,10 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:movies_application/core/error/exception.dart';
 import 'package:movies_application/core/error/failure.dart';
+import 'package:movies_application/features/fury/domain/entities/genres.dart';
+import 'package:movies_application/features/fury/domain/entities/movie_keywards.dart';
 import 'package:movies_application/features/fury/domain/entities/movies.dart';
 import 'package:movies_application/features/fury/domain/repositories/base_movies_repository.dart';
 
 import '../data_sources/movies_remote_data_source.dart';
+import '../models/single_movie.dart';
 
 class MoviesRepository extends BaseMoviesRepository {
   final BaseMoviesRemoteDataSource baseMoviesRemoteDataSource;
@@ -41,7 +44,7 @@ class MoviesRepository extends BaseMoviesRepository {
 
   @override
   Future<Either<Failure, Movies>> getTrendingMoviesData(
-      {required int currentTrendingPage}) async{
+      {required int currentTrendingPage}) async {
     final result = await baseMoviesRemoteDataSource.getTrendingMoviesData(
         currentTrendingPage: currentTrendingPage);
     try {
@@ -65,6 +68,45 @@ class MoviesRepository extends BaseMoviesRepository {
       return Left(
         ServerFailure(failure.moviesErrorMessageModel.statusMessage),
       );
+    }
+  }
+
+  @override
+  Future<Either<Failure, MovieKeywords>> getMovieKeywords(
+      {required SingleMovie movie}) async {
+    final result =
+        await baseMoviesRemoteDataSource.getMovieKeyWords(movie: movie);
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Movies>> getSimilarMovie(
+      {required SingleMovie movie,
+      required int currentSimilarMoviesPage}) async {
+    final result = await baseMoviesRemoteDataSource.getSimilarMovies(
+      movie: movie,
+      currentSimilarMoviesPage: currentSimilarMoviesPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(failure.moviesErrorMessageModel.statusMessage),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Genres>> getGenres() async {
+    final result = await baseMoviesRemoteDataSource.getGenres();
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
     }
   }
 }

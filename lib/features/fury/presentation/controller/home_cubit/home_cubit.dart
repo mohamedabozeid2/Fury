@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -20,7 +19,10 @@ import '../../../data/models/movies_model.dart';
 import '../../../domain/entities/movie_keywards.dart';
 import '../../../domain/entities/movies.dart';
 import '../../../domain/entities/user_data.dart';
+import '../../../domain/usecases/get_genres.dart';
+import '../../../domain/usecases/get_movie_keywords.dart';
 import '../../../domain/usecases/get_popular_movies_data.dart';
+import '../../../domain/usecases/get_similar_movies.dart';
 import '../../../domain/usecases/get_top_rated_movies_data.dart';
 import '../../../domain/usecases/get_trending_movies_data.dart';
 import '../../../domain/usecases/get_upcoming_movies_data.dart';
@@ -35,12 +37,18 @@ class MoviesCubit extends Cubit<MoviesStates> {
   final GetTrendingMoviesDataUseCase getTrendingMoviesDataUseCase;
   final GetTopRatedMoviesDataUseCase getTopRatedMoviesDataUseCase;
   final GetUpcomingMoviesDataUseCase getUpcomingMoviesDataUseCase;
+  final GetMovieKeywordUseCase getMovieKeywordUseCase;
+  final GetSimilarMoviesUseCase getSimilarMoviesUseCase;
+  final GetGenresUseCase getGenresUseCase;
 
   MoviesCubit(
     this.getPopularMoviesDataUseCase,
     this.getTopRatedMoviesDataUseCase,
     this.getUpcomingMoviesDataUseCase,
     this.getTrendingMoviesDataUseCase,
+    this.getMovieKeywordUseCase,
+    this.getSimilarMoviesUseCase,
+    this.getGenresUseCase,
   ) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
@@ -94,44 +102,51 @@ class MoviesCubit extends Cubit<MoviesStates> {
       internetConnection = value;
       if (value == true) {
         Future.wait([
-          getPopularMovies(),
-          getTrendingMovies(),
-          getTopRatedMovies(),
-          getUpComingMovies(),
+          ///////// POPULAR MOVIES //////////
+          getPopularMovies().then((value){
+            value.fold((l) {
+              emit(GetPopularMoviesErrorState(message: l.message));
+            }, (r) {
+              popularMovies = r;
+              isFirstPopularLoadRunning = false;
+            });
+          }),
+          ///////// TRENDING MOVIES //////////
+          getTrendingMovies().then((value){
+            value.fold((l) {
+              emit(GetTrendingMoviesErrorState(message: l.message));
+            }, (r) {
+              isFirstTrendingLoadRunning = false;
+              trendingMovies = r;
+            });
+          }),
+          ///////// TOP RATED MOVIES //////////
+          getTopRatedMovies().then((value){
+            value.fold((l) {
+              emit(GetTopRatedMoviesErrorState(message: l.message));
+            }, (r) {
+              topRatedMovies = r;
+              isFirstTopRatedLoadRunning = false;
+            });
+          }),
+          ///////// UPCOMING MOVIES //////////
+          getUpComingMovies().then((value){
+            value.fold((l) {
+              emit(GetUpComingMoviesErrorState(message: l.message));
+            }, (r) {
+              upComingMovies = r;
+              isFirstUpComingLoadRunning = false;
+            });
+          }),
         ]).then((value) {
-          for (int i = 0; i < value.length; i++) {
-            if (i == 0) {
-              value[i].fold((l) {
-                emit(GetPopularMoviesErrorState(message: l.message));
-              }, (r) {
-                popularMovies = r;
-                isFirstPopularLoadRunning = false;
-              });
-            } else if (i == 1) {
-              value[i].fold((l) {
-                emit(GetTrendingMoviesErrorState(message: l.message));
-              }, (r) {
-                isFirstTrendingLoadRunning = false;
-                trendingMovies = r;
-              });
-            } else if (i == 2) {
-              value[i].fold((l) {
-                emit(GetTopRatedMoviesErrorState(message: l.message));
-              }, (r) {
-                topRatedMovies = r;
-                isFirstTopRatedLoadRunning = false;
-              });
-            } else if (i == 3) {
-              value[i].fold((l) {
-                emit(GetUpComingMoviesErrorState(message: l.message));
-              }, (r) {
-                upComingMovies = r;
-                isFirstUpComingLoadRunning = false;
-              });
-            }
-          }
-          getMovieGenres();
-          emit(GetAllMoviesSuccessState());
+          getMovieGenres().then((value) {
+            value.fold((l) {
+              emit(GetGenresErrorState(l.message));
+            }, (r) {
+              genresModel = r;
+            });
+            emit(GetAllMoviesSuccessState());
+          });
         }).catchError((error) {
           Components.navigateAndFinish(
               context: context, widget: NoInternetScreen());
@@ -157,7 +172,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
   Future<Either<Failure, Movies>> getPopularMovies() async {
     isFirstPopularLoadRunning = true;
-    debugPrint('Done');
     return await getPopularMoviesDataUseCase.execute(
         currentPopularPage: currentPopularPage);
   }
@@ -191,13 +205,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
     return await getUpcomingMoviesDataUseCase.execute(
         currentUpComingPage: currentUpComingPage);
   }
-
-//////////// Latest Movie ////////////
-//   Future<Response> getLatestMovie() async{
-//     return await MoviesDioHelper.getData(
-//         url: EndPoints.latest,
-//         query: {'api_key': MoviesDioHelper.apiKey, 'language': 'en-US'});
-//   }
 
   void loadMoreMovies({
     required int page,
@@ -288,24 +295,15 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
   MovieKeywords? keywords;
 
-  Future<Response> getMovieKeyword({required SingleMovie movie}) async {
-    return await MoviesDioHelper.getData(
-        url: '/movie/${movie.id}/keywords',
-        query: {'api_key': MoviesDioHelper.apiKey});
+  Future<Either<Failure, MovieKeywords>> getMovieKeyword(
+      {required SingleMovie movie}) async {
+    return await getMovieKeywordUseCase.execute(movie: movie);
   }
 
   Genres? genresModel;
 
-  void getMovieGenres() {
-    MoviesDioHelper.getData(url: EndPoints.genres, query: {
-      'api_key': MoviesDioHelper.apiKey,
-      'language': 'en-US',
-    }).then((value) {
-      genresModel = Genres.fromJson(value.data);
-    }).catchError((error) {
-      debugPrint('Error in get genres ${error.toString()}');
-      emit(GetMovieDetailsErrorState());
-    });
+  Future<Either<Failure, Genres>> getMovieGenres() async {
+    return await getGenresUseCase.execute();
   }
 
   List<String> genresList = [];
@@ -314,28 +312,31 @@ class MoviesCubit extends Cubit<MoviesStates> {
     genresList = [];
     for (int i = 0; i < genresModel!.genres.length; i++) {
       if (movieGenresId.contains(genresModel!.genres[i].id)) {
-        genresList.add(genresModel!.genres[i].name!);
+        genresList.add(genresModel!.genres[i].name);
       }
     }
   }
 
   int currentSimilarMoviesPage = 1;
 
-  // MoviesModel? similarMovies;
   void getMovieDetailsData({required SingleMovie movie}) {
-    Future.wait([
-      getSimilarMovies(movie: movie),
-      getMovieKeyword(movie: movie),
+    Future.wait<void>([
+      getSimilarMovies(movie: movie).then((value) {
+        value.fold((l) {
+          emit(GetSimilarMoviesErrorState(l.message));
+        }, (r) {
+          similarMovies = r;
+
+        });
+      }),
+      getMovieKeyword(movie: movie).then((value) {
+        value.fold((l) {
+          emit(GetMoviesKeywordsErrorState(l.message));
+        }, (r) {
+          keywords = r;
+        });
+      }),
     ]).then((value) {
-      for (int i = 0; i < value.length; i++) {
-        if (i == 0) {
-          currentSimilarMoviesPage = 1;
-          similarMovies = MoviesModel.fromJson(value[i].data);
-        } else if (i == 1) {
-          debugPrint('KeyWords ${value[i].data}');
-          keywords = MovieKeywords.fromJson(value[i].data);
-        }
-      }
       fillGenresList(movieGenresId: movie.genresIds).then((value) {
         emit(GetMovieDetailsSuccessState());
       });
@@ -345,15 +346,13 @@ class MoviesCubit extends Cubit<MoviesStates> {
     });
   }
 
-  Future<Response> getSimilarMovies({required SingleMovie movie}) async {
-    currentSimilarMoviesPage = 1;
+  Future<Either<Failure, Movies>> getSimilarMovies(
+      {required SingleMovie movie}) async {
     emit(GetMovieDetailsLoadingState());
-    return await MoviesDioHelper.getData(
-        url: '/movie/${movie.id}/recommendations',
-        query: {
-          'api_key': MoviesDioHelper.apiKey,
-          'language': 'en-US',
-          'page': currentSimilarMoviesPage,
-        });
+    currentSimilarMoviesPage = 1;
+    return await getSimilarMoviesUseCase.execute(
+      movie: movie,
+      currentSimilarMoviesPage: currentSimilarMoviesPage,
+    );
   }
 }

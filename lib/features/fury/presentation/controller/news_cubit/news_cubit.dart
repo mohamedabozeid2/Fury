@@ -230,6 +230,7 @@ class NewsCubit extends Cubit<NewsStates> {
           }
         } else if (category == NewsCategoryKeys.business) {
           currentBusinessPage++;
+
           for(var element in r.articles){
             businessNewsList.add(element);
           }
