@@ -109,4 +109,18 @@ class MoviesRepository extends BaseMoviesRepository {
       return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
     }
   }
+
+  @override
+  Future<Either<Failure, Movies>> searchMovie({
+    required int page,
+    required String searchContent,
+  }) async {
+    final result = await baseMoviesRemoteDataSource.searchMovies(
+        searchContent: searchContent, page: page);
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
+    }
+  }
 }

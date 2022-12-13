@@ -21,6 +21,7 @@ import 'package:movies_application/features/fury/domain/usecases/load_more_news.
 
 import '../../features/fury/domain/usecases/get_similar_movies.dart';
 import '../../features/fury/domain/usecases/get_top_rated_movies_data.dart';
+import '../../features/fury/domain/usecases/search_movies.dart';
 import '../../features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import '../../features/fury/presentation/controller/news_cubit/news_cubit.dart';
 
@@ -40,6 +41,7 @@ class ServicesLocator {
           sl(),
         ));
     sl.registerFactory(() => MoviesCubit(
+          sl(),
           sl(),
           sl(),
           sl(),
@@ -68,6 +70,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetMovieKeywordUseCase(sl()));
     sl.registerLazySingleton(() => GetSimilarMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetGenresUseCase(sl()));
+    sl.registerLazySingleton(() => SearchMoviesUseCase(sl()));
 
     ///// Repository
     sl.registerLazySingleton<BaseMoviesNewsRepository>(

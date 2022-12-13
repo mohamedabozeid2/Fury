@@ -5,13 +5,13 @@ class DefaultButton extends StatelessWidget {
   final String text;
   final double height;
   final double fontSize;
-  double width;
-  Color backgroundColor = Colors.blue;
-  double borderRadius;
-  bool isUpperCase;
-  Color textColor;
+  final double width;
+  final Color backgroundColor;
+  final double borderRadius;
+  final bool isUpperCase;
+  final Color textColor;
 
-  DefaultButton({
+  const DefaultButton({super.key,
     required this.fun,
     required this.text,
     this.width = double.infinity,

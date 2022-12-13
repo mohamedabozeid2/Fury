@@ -27,4 +27,10 @@ class AppStrings{
   static const String sports = "Sports";
   static const String science = "Science";
   static const String technology = "Technology";
+  static const String search = "Search";
+  static const String genre = "Genre";
+  static const String noData = "No data available";
+  static const String later = "Later";
+  static const String favorite = "Favorite";
+  static const String noSimilarMovies = "Sorry, There are no similar movies available for this movie";
 }

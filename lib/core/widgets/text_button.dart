@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/core/utils/app_fonts.dart';
 
 class DefaultTextButton extends StatelessWidget {
   final String text;
   final fun;
-  double fontSize;
-  Color textColor;
-  FontWeight fontWeight;
+  final double fontSize;
+  final Color textColor;
+  final FontWeight fontWeight;
 
-  DefaultTextButton({
+  const DefaultTextButton({super.key,
     required this.text,
     required this.fun,
     required this.fontSize,

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/helper.dart';
 
 class AddActionsButton extends StatelessWidget {
-  void Function() fun;
-  IconData icon;
-  double iconSize;
-  String title;
+  final void Function() fun;
+  final IconData icon;
+  final double iconSize;
+  final String title;
 
-  AddActionsButton({required this.fun, this.title = '', required this.icon, this.iconSize = 16});
+  const AddActionsButton({super.key, required this.fun, this.title = '', required this.icon, this.iconSize = 16});
 
   @override
   Widget build(BuildContext context) {

@@ -5,8 +5,8 @@ import '../../../../../../core/utils/app_values.dart';
 import '../../../../../../core/utils/helper.dart';
 
 class RateRow extends StatelessWidget {
-  num rate;
-  RateRow({super.key, required this.rate});
+  final num rate;
+  const RateRow({super.key, required this.rate});
 
 
   @override

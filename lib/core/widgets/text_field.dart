@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_values.dart';
-import 'package:movies_application/core/utils/border_radius.dart';
 
 class DefaultTextField extends StatelessWidget {
   final BuildContext? context;
   final TextEditingController controller;
   final TextInputType type;
   final String label;
-  bool isPassword;
-  String validation;
-  Color? iconColor;
-  Color? cursorColor;
-  Color fillColor;
+  final bool isPassword;
+  final String validation;
+  final Color iconColor;
+  final Color cursorColor;
+  final Color fillColor;
   TextStyle? hintStyle;
   TextStyle? contentStyle;
   Widget? prefixIcon;
@@ -25,7 +24,7 @@ class DefaultTextField extends StatelessWidget {
   void Function(String)? onChangeFunction;
   double borderRadius;
 
-  DefaultTextField({
+  DefaultTextField({super.key,
     required this.context,
     required this.controller,
     required this.type,
@@ -33,8 +32,8 @@ class DefaultTextField extends StatelessWidget {
     this.isPassword = false,
     this.validation = "",
     this.fillColor = Colors.transparent,
-    this.iconColor,
-    this.cursorColor,
+    this.iconColor = Colors.blue,
+    this.cursorColor = Colors.blue,
     this.sufIconFun,
     this.onSubmitFunction,
     this.onChangeFunction,
@@ -71,7 +70,7 @@ class DefaultTextField extends StatelessWidget {
           hintStyle: hintStyle,
           prefix: prefixWidget,
           prefixIcon: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(AppSize.s8),
             child: prefixIcon ?? prefixIcon,
           ),
           suffixIcon: IconButton(

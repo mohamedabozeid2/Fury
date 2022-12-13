@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/components.dart';
+import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
@@ -14,6 +15,7 @@ import 'package:movies_application/features/fury/presentation/screens/movies_det
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/similar_movies.dart';
 
 import '../../../../../core/api/movies_dio_helper.dart';
+import '../../../../../core/utils/app_values.dart';
 import '../../../../../core/utils/helper.dart';
 import '../../../../../core/widgets/divider.dart';
 import '../../controller/home_cubit/home_cubit.dart';
@@ -40,26 +42,28 @@ class _MovieDetailsState extends State<MovieDetails> {
   @override
   void initState() {
     MoviesCubit.get(context).getMovieDetailsData(movie: widget.movie);
-    scrollController.addListener(() {
-      // print(scrollController.offset);
-      if (scrollController.position.atEdge) {
-        if (scrollController.position.pixels == 0) {
-          debugPrint('top');
-        } else {
-          if (loadMore) {
-            debugPrint('loading');
+    if (similarMovies != null) {
+      scrollController.addListener(() {
+        // print(scrollController.offset);
+        if (scrollController.position.atEdge) {
+          if (scrollController.position.pixels == 0) {
+            debugPrint('top');
           } else {
-            MoviesCubit.get(context).loadMoreMovies(
-                hasMorePages: hasNextPage,
-                isLoadingMore: isLoadingMoreRunning,
-                page: page,
-                moviesCategory: MoviesCategoryKeys.similarMovies,
-                movieID: widget.movie.id);
-            page = MoviesCubit.get(context).currentSimilarMoviesPage;
+            if (loadMore) {
+              debugPrint('loading');
+            } else {
+              MoviesCubit.get(context).loadMoreMovies(
+                  hasMorePages: hasNextPage,
+                  isLoadingMore: isLoadingMoreRunning,
+                  page: page,
+                  moviesCategory: MoviesCategoryKeys.similarMovies,
+                  movieID: widget.movie.id);
+              page = MoviesCubit.get(context).currentSimilarMoviesPage;
+            }
           }
         }
-      }
-    });
+      });
+    }
     super.initState();
   }
 
@@ -185,13 +189,34 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     paddingHorizontal: 0,
                                     paddingVertical: Helper.maxHeight * 0.02,
                                   ),
+                                  Container(
+                                    padding: EdgeInsets.all(
+                                        Helper.maxHeight * 0.005),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(AppSize.s5),
+                                        color: AppColors.mainColor),
+                                    child: Text(
+                                      'Keywords',
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Helper.maxHeight * 0.01,
+                                  ),
                                   MoviesCubit.get(context).keywords != null
                                       ? Keywords(
                                           keywordsModel:
                                               MoviesCubit.get(context)
                                                   .keywords!,
                                         )
-                                      : Container(),
+                                      : Text(
+                                          'No data available',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2,
+                                        ),
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0,

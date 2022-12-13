@@ -89,3 +89,13 @@ class GetMoviesKeywordsErrorState extends MoviesStates {
 
   GetMoviesKeywordsErrorState(this.error);
 }
+
+
+//////// Search Movies ///////
+class SearchMoviesLoadingState extends MoviesStates{}
+class SearchMoviesSuccessState extends MoviesStates{}
+class SearchMoviesErrorState extends MoviesStates{
+  final String error;
+
+  SearchMoviesErrorState(this.error);
+}

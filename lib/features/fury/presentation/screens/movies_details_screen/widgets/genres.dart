@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/Colors.dart';
-import 'package:movies_application/core/utils/border_radius.dart';
 import 'package:movies_application/core/utils/helper.dart';
-import 'package:movies_application/core/widgets/divider.dart';
+import 'package:movies_application/core/utils/strings.dart';
 
 import '../../../../../../core/utils/app_values.dart';
 
 class Genres extends StatefulWidget {
-  List<String> genres;
+  final List<String> genres;
 
-  Genres({required this.genres});
+  const Genres({super.key, required this.genres});
 
   @override
   State<Genres> createState() => _GenresState();
@@ -22,10 +21,11 @@ class _GenresState extends State<Genres> {
   void initState() {
     for (int i = 0; i < widget.genres.length; i++) {
       genresText += widget.genres[i];
-      if(i != widget.genres.length-1){
+      if (i != widget.genres.length - 1) {
         genresText += '\n';
       }
     }
+
     super.initState();
   }
 
@@ -36,13 +36,12 @@ class _GenresState extends State<Genres> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding:
-              EdgeInsets.all(Helper.maxHeight * 0.005),
+          padding: EdgeInsets.all(Helper.maxHeight * 0.005),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppSize.s5),
               color: AppColors.mainColor),
           child: Text(
-            'Genre',
+            AppStrings.genre,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
@@ -50,10 +49,15 @@ class _GenresState extends State<Genres> {
           height: Helper.maxHeight * 0.01,
         ),
         // MyDivider(color: AppColors.mainColor,paddingHorizontal: Helper.getScreenWidth(context: context)*0.25),
-        Text(
-          genresText,
-          style: Theme.of(context).textTheme.subtitle2,
-        ),
+        genresText != ""
+            ? Text(
+                genresText,
+                style: Theme.of(context).textTheme.subtitle2,
+              )
+            : Text(
+                AppStrings.noData,
+                style: Theme.of(context).textTheme.subtitle2!,
+              ),
       ],
     );
   }

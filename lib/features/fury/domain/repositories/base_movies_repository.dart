@@ -25,5 +25,10 @@ abstract class BaseMoviesRepository {
   Future<Either<Failure, Movies>> getSimilarMovie(
       {required SingleMovie movie, required int currentSimilarMoviesPage});
 
+  Future<Either<Failure, Movies>> searchMovie({
+    required int page,
+    required String searchContent,
+  });
+
   Future<Either<Failure, Genres>> getGenres();
 }

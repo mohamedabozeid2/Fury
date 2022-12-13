@@ -24,6 +24,12 @@ abstract class BaseMoviesRemoteDataSource {
       {required SingleMovie movie, required int currentSimilarMoviesPage});
 
   Future<Genres> getGenres();
+
+  Future<MoviesModel> searchMovies({
+    required String searchContent,
+    required int page,
+    bool includeAdult = true,
+  });
 }
 
 class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
@@ -145,6 +151,32 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     });
     if (response.statusCode == 200) {
       return GenresModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<MoviesModel> searchMovies({
+    required String searchContent,
+    required int page,
+    bool includeAdult = true,
+  }) async {
+    final response = await MoviesDioHelper.getData(
+      url: EndPoints.searchMovies,
+      query: {
+        "language": "en-US",
+        "api_key": MoviesDioHelper.apiKey,
+        "query": searchContent,
+        "page": "$page",
+        "include_adult": "$includeAdult",
+      },
+    );
+    if (response.statusCode == 200) {
+      return MoviesModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:

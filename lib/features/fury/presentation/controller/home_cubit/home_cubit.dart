@@ -27,6 +27,7 @@ import '../../../domain/usecases/get_top_rated_movies_data.dart';
 import '../../../domain/usecases/get_trending_movies_data.dart';
 import '../../../domain/usecases/get_upcoming_movies_data.dart';
 import '../../../../../core/keys/movies_category_keys.dart';
+import '../../../domain/usecases/search_movies.dart';
 import '../../screens/my_movies_screen/my_movies_screen.dart';
 import '../../screens/news_screen/news_screen.dart';
 import '../../screens/settings/settings_screen.dart';
@@ -40,6 +41,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
   final GetMovieKeywordUseCase getMovieKeywordUseCase;
   final GetSimilarMoviesUseCase getSimilarMoviesUseCase;
   final GetGenresUseCase getGenresUseCase;
+  final SearchMoviesUseCase searchMovieUseCase;
 
   MoviesCubit(
     this.getPopularMoviesDataUseCase,
@@ -49,6 +51,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     this.getMovieKeywordUseCase,
     this.getSimilarMoviesUseCase,
     this.getGenresUseCase,
+    this.searchMovieUseCase,
   ) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
@@ -103,7 +106,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
       if (value == true) {
         Future.wait([
           ///////// POPULAR MOVIES //////////
-          getPopularMovies().then((value){
+          getPopularMovies().then((value) {
             value.fold((l) {
               emit(GetPopularMoviesErrorState(message: l.message));
             }, (r) {
@@ -112,7 +115,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             });
           }),
           ///////// TRENDING MOVIES //////////
-          getTrendingMovies().then((value){
+          getTrendingMovies().then((value) {
             value.fold((l) {
               emit(GetTrendingMoviesErrorState(message: l.message));
             }, (r) {
@@ -121,7 +124,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             });
           }),
           ///////// TOP RATED MOVIES //////////
-          getTopRatedMovies().then((value){
+          getTopRatedMovies().then((value) {
             value.fold((l) {
               emit(GetTopRatedMoviesErrorState(message: l.message));
             }, (r) {
@@ -130,7 +133,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             });
           }),
           ///////// UPCOMING MOVIES //////////
-          getUpComingMovies().then((value){
+          getUpComingMovies().then((value) {
             value.fold((l) {
               emit(GetUpComingMoviesErrorState(message: l.message));
             }, (r) {
@@ -310,9 +313,11 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
   Future<void> fillGenresList({required List<int> movieGenresId}) async {
     genresList = [];
-    for (int i = 0; i < genresModel!.genres.length; i++) {
-      if (movieGenresId.contains(genresModel!.genres[i].id)) {
-        genresList.add(genresModel!.genres[i].name);
+    if (genresModel != null) {
+      for (int i = 0; i < genresModel!.genres.length; i++) {
+        if (movieGenresId.contains(genresModel!.genres[i].id)) {
+          genresList.add(genresModel!.genres[i].name);
+        }
       }
     }
   }
@@ -320,13 +325,15 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int currentSimilarMoviesPage = 1;
 
   void getMovieDetailsData({required SingleMovie movie}) {
+    keywords = null;
+    genresList = [];
+    similarMovies = null;
     Future.wait<void>([
       getSimilarMovies(movie: movie).then((value) {
         value.fold((l) {
           emit(GetSimilarMoviesErrorState(l.message));
         }, (r) {
           similarMovies = r;
-
         });
       }),
       getMovieKeyword(movie: movie).then((value) {
@@ -354,5 +361,22 @@ class MoviesCubit extends Cubit<MoviesStates> {
       movie: movie,
       currentSimilarMoviesPage: currentSimilarMoviesPage,
     );
+  }
+
+  Movies? searchMovies;
+
+  void searchMovie({required String searchContent, required int page}) {
+    emit(SearchMoviesLoadingState());
+    searchMovies = null;
+    final result =
+        searchMovieUseCase.execute(searchContent: searchContent, page: page);
+    result.then((value){
+      value.fold((l){
+          emit(SearchMoviesErrorState(l.message));
+      }, (r){
+        searchMovies = r;
+        emit(SearchMoviesSuccessState());
+      });
+    });
   }
 }

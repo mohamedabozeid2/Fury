@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/helper.dart';
+import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
@@ -9,10 +10,10 @@ import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import '../../../../../../core/utils/assets_manager.dart';
 
 class SimilarMovieItemBuilder extends StatefulWidget {
-  SingleMovie movie;
-  int index;
+  final SingleMovie movie;
+  final int index;
 
-  SimilarMovieItemBuilder({super.key, required this.movie, required this.index});
+  const SimilarMovieItemBuilder({super.key, required this.movie, required this.index});
 
   @override
   State<SimilarMovieItemBuilder> createState() =>
@@ -68,13 +69,13 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                       fun: () {},
                       icon: Icons.add,
                       iconSize: AppFontSize.s28,
-                      title: 'later',
+                      title: AppStrings.later,
                     ),
                     AddActionsButton(
                       fun: () {},
                       icon: Icons.favorite,
                       iconSize: AppFontSize.s28,
-                      title: 'Favorite',
+                      title: AppStrings.favorite,
                     ),
                   ],
                 ),
