@@ -52,6 +52,8 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
       page = MoviesCubit.get(context).currentUpComingPage;
     } else if (widget.category == MoviesCategoryKeys.similarMovies) {
       page = MoviesCubit.get(context).currentSimilarMoviesPage;
+    } else if (widget.category == MoviesCategoryKeys.nowPlaying){
+      page = MoviesCubit.get(context).currentNowPlayingPage;
     }
 
     return BlocConsumer<MoviesCubit, MoviesStates>(

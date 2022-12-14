@@ -123,4 +123,19 @@ class MoviesRepository extends BaseMoviesRepository {
       return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
     }
   }
+
+  @override
+  Future<Either<Failure, Movies>> getNowPlayingMoviesData(
+      {required int currentNowPlayingPage}) async {
+    final result = await baseMoviesRemoteDataSource.getNowPlayingMoviesData(
+      currentNowPlayingPage: currentNowPlayingPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(failure.moviesErrorMessageModel.statusMessage),
+      );
+    }
+  }
 }

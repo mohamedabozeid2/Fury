@@ -24,7 +24,7 @@ class MovieItemBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Components.sizeNavigateTo(context, MovieDetails(movie: movieModel));
+        Components.navigateTo(context, MovieDetails(movie: movieModel));
         // Components.navigateTo(context, SlideAnimation(page: MovieDetails(movie: movieModel), context: context));
         // Components.navigateTo(context, MovieDetails(movie: movieModel));
       },

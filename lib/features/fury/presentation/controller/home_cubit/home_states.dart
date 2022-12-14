@@ -44,6 +44,12 @@ class GetUpComingMoviesErrorState extends MoviesStates {
   GetUpComingMoviesErrorState({required this.message});
 }
 
+class GetNowPlayingMoviesErrorState extends MoviesStates {
+  final String message;
+
+  GetNowPlayingMoviesErrorState({required this.message});
+}
+
 class GetGenresErrorState extends MoviesStates {
   final String message;
 
@@ -90,11 +96,12 @@ class GetMoviesKeywordsErrorState extends MoviesStates {
   GetMoviesKeywordsErrorState(this.error);
 }
 
-
 //////// Search Movies ///////
-class SearchMoviesLoadingState extends MoviesStates{}
-class SearchMoviesSuccessState extends MoviesStates{}
-class SearchMoviesErrorState extends MoviesStates{
+class SearchMoviesLoadingState extends MoviesStates {}
+
+class SearchMoviesSuccessState extends MoviesStates {}
+
+class SearchMoviesErrorState extends MoviesStates {
   final String error;
 
   SearchMoviesErrorState(this.error);

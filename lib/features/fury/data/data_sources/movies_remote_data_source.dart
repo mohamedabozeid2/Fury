@@ -18,6 +18,9 @@ abstract class BaseMoviesRemoteDataSource {
 
   Future<MoviesModel> getTopRatedMoviesData({required int currentTopRatedPage});
 
+  Future<MoviesModel> getNowPlayingMoviesData(
+      {required int currentNowPlayingPage});
+
   Future<MovieKeywordsModel> getMovieKeyWords({required SingleMovie movie});
 
   Future<MoviesModel> getSimilarMovies(
@@ -71,8 +74,9 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
   Future<MoviesModel> getTrendingMoviesData(
       {required int currentTrendingPage}) async {
     final response =
-        await MoviesDioHelper.getData(url: EndPoints.trending, query: {
+        await MoviesDioHelper.getData(url: EndPoints.trendingMovies, query: {
       'api_key': MoviesDioHelper.apiKey,
+
       'page': currentTrendingPage,
     });
     if (response.statusCode == 200) {
@@ -181,6 +185,23 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
       throw MoviesServerException(
         moviesErrorMessageModel:
             MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<MoviesModel> getNowPlayingMoviesData(
+      {required int currentNowPlayingPage}) async {
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.nowPlaying, query: {
+      'api_key': MoviesDioHelper.apiKey,
+      'page': currentNowPlayingPage,
+    });
+    if (response.statusCode == 200) {
+      return MoviesModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel: response.data,
       );
     }
   }

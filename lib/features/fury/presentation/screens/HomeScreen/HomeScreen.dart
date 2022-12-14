@@ -100,6 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         category: MoviesCategoryKeys.popular,
                       ),
                       CategoryItemBuilder(
+                        title: AppStrings.nowPlayingMovies,
+                        movies: nowPlayingMovies!.moviesList,
+                        category: MoviesCategoryKeys.nowPlaying,
+                      ),
+                      CategoryItemBuilder(
                         title: AppStrings.topRatedMovies,
                         movies: topRatedMovies!.moviesList,
                         category: MoviesCategoryKeys.topRated,

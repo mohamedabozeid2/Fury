@@ -11,6 +11,7 @@ import 'package:movies_application/features/fury/domain/usecases/get_genres.dart
 import 'package:movies_application/features/fury/domain/usecases/get_health_news.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_movies_news.dart';
+import 'package:movies_application/features/fury/domain/usecases/get_now_playing_movies_data.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_popular_movies_data.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_science_news.dart';
 import 'package:movies_application/features/fury/domain/usecases/get_sports_news.dart';
@@ -49,6 +50,7 @@ class ServicesLocator {
           sl(),
           sl(),
           sl(),
+          sl(),
         ));
 
     /////Use Cases
@@ -67,6 +69,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetTopRatedMoviesDataUseCase(sl()));
     sl.registerLazySingleton(() => GetTrendingMoviesDataUseCase(sl()));
     sl.registerLazySingleton(() => GetUpcomingMoviesDataUseCase(sl()));
+    sl.registerLazySingleton(() => GetNowPlayingMoviesDataUseCase(sl()));
     sl.registerLazySingleton(() => GetMovieKeywordUseCase(sl()));
     sl.registerLazySingleton(() => GetSimilarMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetGenresUseCase(sl()));
