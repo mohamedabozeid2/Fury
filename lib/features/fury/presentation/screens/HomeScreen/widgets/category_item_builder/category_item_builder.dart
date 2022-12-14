@@ -67,6 +67,17 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Container(
+              //   padding:
+              //   EdgeInsets.all(Helper.maxHeight * 0.01),
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(AppSize.s5),
+              //       color: AppColors.mainColor),
+              //   child: Text(
+              //     widget.title,
+              //     style: Theme.of(context).textTheme.subtitle1,
+              //   ),
+              // ),
               Text(
                 widget.title,
                 style: Theme.of(context).textTheme.bodyText2,

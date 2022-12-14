@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_values.dart';
-import '../../../../../../core/utils/border_radius.dart';
 import '../../../../../../core/utils/helper.dart';
 
 class Description extends StatelessWidget {
-  String description;
-  Description({required this.description});
+  final String description;
+  const Description({super.key, required this.description});
 
   @override
   Widget build(BuildContext context) {
