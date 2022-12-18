@@ -49,7 +49,6 @@ class SearchScreen extends StatelessWidget {
                     context: context,
                     label: AppStrings.search,
                     onChangeFunction: (value) {
-                      print("CHANGEEEEEEEEEED");
                       MoviesCubit.get(context)
                           .searchMovie(searchContent: value, page: 1);
                     },

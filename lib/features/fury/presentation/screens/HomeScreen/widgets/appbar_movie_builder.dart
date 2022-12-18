@@ -9,13 +9,23 @@ import '../../../../../../core/utils/app_fonts.dart';
 import '../../../../../../core/utils/helper.dart';
 import '../../../../../../core/widgets/cached_image.dart';
 import '../../../../data/models/single_movie.dart';
+import '../../../../data/models/single_tv.dart';
 
 class AppBarMovieBuilder extends StatelessWidget {
   final String image;
-  bool fromMovieDetails;
-  SingleMovie? movie;
+  final bool fromMovieDetails;
+  final bool isMovie;
+  final SingleMovie? movie;
+  final SingleTV? tv;
 
-  AppBarMovieBuilder({super.key, required this.image, this.fromMovieDetails = false, this.movie});
+  const AppBarMovieBuilder({
+    super.key,
+    required this.image,
+    this.fromMovieDetails = false,
+    this.movie,
+    this.tv,
+    required this.isMovie,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +38,22 @@ class AppBarMovieBuilder extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: GestureDetector(
               onTap: () {
-                if(!fromMovieDetails){
-                  Components.navigateTo(context, MovieDetails(movie:movie!));
+                if (!fromMovieDetails) {
+                  if (isMovie) {
+                    Components.navigateTo(
+                        context,
+                        MovieDetails(
+                          movie: movie!,
+                          isMovie: isMovie,
+                        ));
+                  } else {
+                    Components.navigateTo(
+                        context,
+                        MovieDetails(
+                          tvShow: tv,
+                          isMovie: isMovie,
+                        ));
+                  }
                 }
               },
               child: CachedImage(
@@ -44,9 +68,8 @@ class AppBarMovieBuilder extends StatelessWidget {
           fromMovieDetails
               ? Container()
               : Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical:
-                          Helper.maxHeight * 0.012),
+                  padding:
+                      EdgeInsets.symmetric(vertical: Helper.maxHeight * 0.012),
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.4),
                       borderRadius: BorderRadius.only(

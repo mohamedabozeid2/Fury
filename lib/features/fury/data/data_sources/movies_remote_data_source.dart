@@ -2,12 +2,15 @@ import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/error/exception.dart';
 import 'package:movies_application/features/fury/data/models/movie_keywords_model.dart';
+import 'package:movies_application/features/fury/data/models/single_tv.dart';
 
 import '../../../../core/network/movies_error_message_model.dart';
 import '../../domain/entities/genres.dart';
 import '../models/genres_model.dart';
 import '../models/movies_model.dart';
 import '../models/single_movie.dart';
+import '../models/tv_keywords_model.dart';
+import '../models/tv_model.dart';
 
 abstract class BaseMoviesRemoteDataSource {
   Future<MoviesModel> getPopularMoviesData({required int currentPopularPage});
@@ -23,6 +26,10 @@ abstract class BaseMoviesRemoteDataSource {
 
   Future<MovieKeywordsModel> getMovieKeyWords({required SingleMovie movie});
 
+  Future<TVKeywordsModel> getTVShowKeywords({
+    required SingleTV tvShow,
+  });
+
   Future<MoviesModel> getSimilarMovies(
       {required SingleMovie movie, required int currentSimilarMoviesPage});
 
@@ -32,6 +39,15 @@ abstract class BaseMoviesRemoteDataSource {
     required String searchContent,
     required int page,
     bool includeAdult = true,
+  });
+
+  Future<TvModel> getTvAiringToday({
+    required int currentTvAiringTodayPage,
+  });
+
+  Future<TvModel> getSimilarTvShows({
+    required int currentTvAiringTodayPage,
+    required SingleTV tvShow,
   });
 }
 
@@ -76,7 +92,6 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     final response =
         await MoviesDioHelper.getData(url: EndPoints.trendingMovies, query: {
       'api_key': MoviesDioHelper.apiKey,
-
       'page': currentTrendingPage,
     });
     if (response.statusCode == 200) {
@@ -202,6 +217,59 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel: response.data,
+      );
+    }
+  }
+
+  @override
+  Future<TvModel> getTvAiringToday(
+      {required int currentTvAiringTodayPage}) async {
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.tvAiringToday, query: {
+      "api_key": MoviesDioHelper.apiKey,
+      "language": "en-US",
+      "page": currentTvAiringTodayPage,
+    });
+
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(moviesErrorMessageModel: response.data);
+    }
+  }
+
+  @override
+  Future<TvModel> getSimilarTvShows(
+      {required int currentTvAiringTodayPage, required SingleTV tvShow}) async {
+    final response = await MoviesDioHelper.getData(
+      url: '/tv/${tvShow.id}/recommendations',
+      query: {
+        "api_key": MoviesDioHelper.apiKey,
+        "language": "en-US",
+        "page": currentTvAiringTodayPage,
+      },
+    );
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(moviesErrorMessageModel: response.data);
+    }
+  }
+
+  @override
+  Future<TVKeywordsModel> getTVShowKeywords(
+      {required SingleTV tvShow}) async {
+    print("START");
+    final response =
+        await MoviesDioHelper.getData(url: '/tv/${tvShow.id}/keywords', query: {
+      "api_key": MoviesDioHelper.apiKey,
+    });
+    if (response.statusCode == 200) {
+      return TVKeywordsModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
       );
     }
   }

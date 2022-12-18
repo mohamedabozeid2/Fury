@@ -1,11 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:movies_application/core/error/exception.dart';
 import 'package:movies_application/core/error/failure.dart';
+import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/domain/entities/movie_keywards.dart';
 import 'package:movies_application/features/fury/domain/entities/movies.dart';
+import 'package:movies_application/features/fury/domain/entities/tv.dart';
 import 'package:movies_application/features/fury/domain/repositories/base_movies_repository.dart';
 
+import '../../domain/entities/tv_keywords.dart';
 import '../data_sources/movies_remote_data_source.dart';
 import '../models/single_movie.dart';
 
@@ -129,6 +132,49 @@ class MoviesRepository extends BaseMoviesRepository {
       {required int currentNowPlayingPage}) async {
     final result = await baseMoviesRemoteDataSource.getNowPlayingMoviesData(
       currentNowPlayingPage: currentNowPlayingPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(failure.moviesErrorMessageModel.statusMessage),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tv>> getAiringToday(
+      {required int currentTvAiringTodayPage}) async {
+    final result = await baseMoviesRemoteDataSource.getTvAiringToday(
+        currentTvAiringTodayPage: currentTvAiringTodayPage);
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tv>> getSimilarTVShows(
+      {required SingleTV tvShow, required int currentSimilarTvPage}) async {
+    final result = await baseMoviesRemoteDataSource.getSimilarTvShows(
+      currentTvAiringTodayPage: currentSimilarTvPage,
+      tvShow: tvShow,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(failure.moviesErrorMessageModel.statusMessage),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, TVKeywords>> getTVKeywords(
+      {required SingleTV tvShow}) async {
+    final result = await baseMoviesRemoteDataSource.getTVShowKeywords(
+      tvShow: tvShow,
     );
     try {
       return Right(result);

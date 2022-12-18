@@ -50,6 +50,12 @@ class GetNowPlayingMoviesErrorState extends MoviesStates {
   GetNowPlayingMoviesErrorState({required this.message});
 }
 
+class GetTvAiringTodayErrorState extends MoviesStates{
+  final String message;
+
+  GetTvAiringTodayErrorState({required this.message});
+}
+
 class GetGenresErrorState extends MoviesStates {
   final String message;
 

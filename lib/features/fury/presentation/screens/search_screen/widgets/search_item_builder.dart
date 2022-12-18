@@ -11,7 +11,10 @@ import 'package:movies_application/features/fury/presentation/screens/movies_det
 class SearchItemBuilder extends StatelessWidget {
   final SingleMovie movie;
 
-  SearchItemBuilder({Key? key, required this.movie}) : super(key: key);
+  SearchItemBuilder({
+    Key? key,
+    required this.movie,
+  }) : super(key: key);
   late String movieName;
 
   @override
@@ -23,7 +26,12 @@ class SearchItemBuilder extends StatelessWidget {
     }
     return GestureDetector(
       onTap: () {
-        Components.scaleNavigateTo(context, MovieDetails(movie: movie));
+        Components.scaleNavigateTo(
+            context,
+            MovieDetails(
+              movie: movie,
+              isMovie: true,
+            ));
       },
       child: Container(
         decoration: BoxDecoration(color: AppColors.greyColor.withOpacity(0.2)),

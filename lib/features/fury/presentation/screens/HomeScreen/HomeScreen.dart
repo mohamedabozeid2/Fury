@@ -8,6 +8,7 @@ import 'package:movies_application/features/fury/presentation/screens/HomeScreen
 import 'package:movies_application/core/keys/movies_category_keys.dart';
 
 import '../../../../../core/api/movies_dio_helper.dart';
+import '../../../../../core/keys/tv_category_keys.dart';
 import '../../../../../core/utils/Colors.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/helper.dart';
@@ -66,10 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
           // pinned: true,
           expandedHeight: Helper.maxHeight * 0.7,
           flexibleSpace: AppBarMovieBuilder(
+            isMovie: true,
             movie: trendingMovies!.moviesList[randomPosterNumber],
             image:
-            '${MoviesDioHelper.baseImageURL}${trendingMovies!
-                .moviesList[randomPosterNumber].posterPath}',
+                '${MoviesDioHelper.baseImageURL}${trendingMovies!.moviesList[randomPosterNumber].posterPath}',
           ),
         ),
         SliverFillRemaining(
@@ -86,29 +87,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       CategoryItemBuilder(
                         title: AppStrings.upComingMovies,
+                        isMovie: true,
                         movies: upComingMovies!.moviesList,
                         category: MoviesCategoryKeys.upComing,
                       ),
                       CategoryItemBuilder(
+                        isMovie: true,
                         title: AppStrings.trendingMovies,
                         movies: trendingMovies!.moviesList,
                         category: MoviesCategoryKeys.trending,
                       ),
                       CategoryItemBuilder(
+                        isMovie: true,
                         title: AppStrings.popularMovies,
                         movies: popularMovies!.moviesList,
                         category: MoviesCategoryKeys.popular,
                       ),
                       CategoryItemBuilder(
+                        isMovie: true,
                         title: AppStrings.nowPlayingMovies,
                         movies: nowPlayingMovies!.moviesList,
                         category: MoviesCategoryKeys.nowPlaying,
                       ),
                       CategoryItemBuilder(
+                        isMovie: true,
                         title: AppStrings.topRatedMovies,
                         movies: topRatedMovies!.moviesList,
                         category: MoviesCategoryKeys.topRated,
                       ),
+                      CategoryItemBuilder(
+                        isMovie: false,
+                        title: AppStrings.tvAiringToday,
+                        category: TVCategoryKeys.tvAiringToday,
+                        tv: tvAiringToday!.tvList,
+                      )
                     ],
                   ),
                 ),

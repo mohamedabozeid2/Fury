@@ -21,7 +21,10 @@ import 'package:movies_application/features/fury/domain/usecases/get_upcoming_mo
 import 'package:movies_application/features/fury/domain/usecases/load_more_news.dart';
 
 import '../../features/fury/domain/usecases/get_similar_movies.dart';
+import '../../features/fury/domain/usecases/get_similar_tv_shows.dart';
 import '../../features/fury/domain/usecases/get_top_rated_movies_data.dart';
+import '../../features/fury/domain/usecases/get_tv_airing_today.dart';
+import '../../features/fury/domain/usecases/get_tv_show_keywords.dart';
 import '../../features/fury/domain/usecases/search_movies.dart';
 import '../../features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import '../../features/fury/presentation/controller/news_cubit/news_cubit.dart';
@@ -51,6 +54,9 @@ class ServicesLocator {
           sl(),
           sl(),
           sl(),
+          sl(),
+          sl(),
+      sl(),
         ));
 
     /////Use Cases
@@ -63,6 +69,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetSportsNewsUseCase(sl()));
     sl.registerLazySingleton(() => GetTechnologyNewsUseCase(sl()));
     sl.registerLazySingleton(() => LoadMoreNewsUseCase(sl()));
+    sl.registerLazySingleton(() => GetSimilarTVShowsUseCase(sl()));
 
     //// Movies
     sl.registerLazySingleton(() => GetPopularMoviesDataUseCase(sl()));
@@ -74,6 +81,8 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetSimilarMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetGenresUseCase(sl()));
     sl.registerLazySingleton(() => SearchMoviesUseCase(sl()));
+    sl.registerLazySingleton(() => GetTvAiringTodayUseCase(sl()));
+    sl.registerLazySingleton(() => GetTVShowKeywordsUseCase(sl()));
 
     ///// Repository
     sl.registerLazySingleton<BaseMoviesNewsRepository>(

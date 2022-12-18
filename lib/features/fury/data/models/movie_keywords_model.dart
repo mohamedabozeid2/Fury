@@ -7,7 +7,10 @@ class MovieKeywordsModel extends MovieKeywords {
   factory MovieKeywordsModel.fromJson(Map<String, dynamic> json) {
     return MovieKeywordsModel(
       keywords: List<MovieKeywordsDataModel>.from(
-          json['keywords'].map((e) => MovieKeywordsDataModel.fromJson(e))),
+        json['keywords'].map(
+          (e) => MovieKeywordsDataModel.fromJson(e),
+        ),
+      ),
       id: json['id'],
     );
   }
