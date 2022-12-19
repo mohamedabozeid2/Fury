@@ -184,4 +184,22 @@ class MoviesRepository extends BaseMoviesRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, Tv>> loadMoreTVShows({
+    required int currentPage,
+    required String endPoint,
+  }) async {
+    final result = await baseMoviesRemoteDataSource.loadMoreTVShows(
+      currentPage: currentPage,
+      endPoint: endPoint,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(failure.moviesErrorMessageModel.statusMessage),
+      );
+    }
+  }
 }

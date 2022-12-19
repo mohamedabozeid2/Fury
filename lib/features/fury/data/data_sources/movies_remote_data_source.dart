@@ -49,6 +49,11 @@ abstract class BaseMoviesRemoteDataSource {
     required int currentTvAiringTodayPage,
     required SingleTV tvShow,
   });
+
+  Future<TvModel> loadMoreTVShows({
+    required int currentPage,
+    required String endPoint,
+  });
 }
 
 class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
@@ -257,15 +262,30 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
   }
 
   @override
-  Future<TVKeywordsModel> getTVShowKeywords(
-      {required SingleTV tvShow}) async {
-    print("START");
+  Future<TVKeywordsModel> getTVShowKeywords({required SingleTV tvShow}) async {
     final response =
         await MoviesDioHelper.getData(url: '/tv/${tvShow.id}/keywords', query: {
       "api_key": MoviesDioHelper.apiKey,
     });
     if (response.statusCode == 200) {
       return TVKeywordsModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<TvModel> loadMoreTVShows(
+      {required int currentPage, required String endPoint}) async {
+    final response = await MoviesDioHelper.getData(url: endPoint, query: {
+      "api_key": MoviesDioHelper.apiKey,
+      "page": currentPage+1,
+    });
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:

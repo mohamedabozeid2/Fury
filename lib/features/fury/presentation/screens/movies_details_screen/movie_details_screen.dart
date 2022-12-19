@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/components.dart';
-import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
@@ -55,37 +54,38 @@ class _MovieDetailsState extends State<MovieDetails> {
       title = widget.movie!.title;
       name = widget.movie!.name;
       releaseDate = widget.movie!.releaseDate;
-      // keywords = MoviesCubit.get(context).movieKeywords;
       isAdult = widget.movie!.isAdult;
     } else {
       MoviesCubit.get(context).getTvDetailsData(tvShow: widget.tvShow!);
       title = widget.tvShow!.name;
       name = widget.tvShow!.originalName;
       releaseDate = widget.tvShow!.firstAirDate;
-      // keywords = MoviesCubit.get(context).tvKeywords;
       isAdult = false;
     }
     scrollController.addListener(() {
       if (scrollController.position.atEdge) {
         if (scrollController.position.pixels == 0) {
         } else {
-          if (loadMore) {
-            debugPrint('loading');
-          } else {
-            if (similarMovies != null || similarTvShows != null) {
+          if (!loadMore) {
+            if (widget.isMovie) {
               MoviesCubit.get(context).loadMoreMovies(
                   hasMorePages: hasNextPage,
                   isLoadingMore: isLoadingMoreRunning,
                   page: page,
-                  moviesCategory: widget.isMovie
-                      ? MoviesCategoryKeys.similarMovies
-                      : TVCategoryKeys.similarTVShows,
-                  movieID:
-                      widget.isMovie ? widget.movie!.id : widget.tvShow!.id);
+                  moviesCategory: MoviesCategoryKeys.similarMovies,
+                  movieID: widget.movie!.id);
 
-              page = widget.isMovie
-                  ? MoviesCubit.get(context).currentSimilarMoviesPage
-                  : MoviesCubit.get(context).currentSimilarTVShowPage;
+              page = MoviesCubit.get(context).currentSimilarMoviesPage;
+            } else {
+              MoviesCubit.get(context).loadMoreTVShows(
+                page: page,
+                tvCategory: TVCategoryKeys.similarTVShows,
+                hasMorePages: hasNextPage,
+                isLoadingMore: isLoadingMoreRunning,
+                tvID: widget.tvShow!.id,
+              );
+              page = MoviesCubit.get(context).currentSimilarTVShowPage;
+
             }
           }
         }
@@ -101,13 +101,6 @@ class _MovieDetailsState extends State<MovieDetails> {
         : MoviesCubit.get(context).currentSimilarTVShowPage;
     return BlocConsumer<MoviesCubit, MoviesStates>(
       listener: (context, state) {
-        if (state is GetMovieDetailsSuccessState) {
-          // if (widget.isMovie) {
-          //   keywords = MoviesCubit.get(context).movieKeywords;
-          // } else {
-          //   keywords = MoviesCubit.get(context).tvKeywords;
-          // }
-        }
         if (state is LoadMoreMoviesLoadingState) {
           loadMore = true;
         } else {
@@ -318,10 +311,8 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SimilarMovies(
-                                      movieId: widget.isMovie
-                                          ? widget.movie!.id
-                                          : widget.tvShow!.id,
-                                      scrollController: scrollController),
+                                    isMovie: widget.isMovie,
+                                  ),
                                   state is LoadMoreMoviesLoadingState
                                       ? Center(
                                           child: AdaptiveIndicator(

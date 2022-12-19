@@ -6,8 +6,8 @@ class SingleTV extends Equatable {
   final dynamic posterPath;
   final String firstAirDate;
   final List<int> genresIds;
-  final String name;
-  final String originalName;
+  final String? name;
+  final String? originalName;
   final String language;
   final String description;
   final double voteAverage;

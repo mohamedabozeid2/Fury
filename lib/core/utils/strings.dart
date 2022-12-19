@@ -1,4 +1,4 @@
-class AppStrings{
+class AppStrings {
   static const String appName = 'Fury';
   static const String noInternet = 'No Internet Connection';
   static const String refresh = 'Refresh';
@@ -34,5 +34,10 @@ class AppStrings{
   static const String noData = "No data available";
   static const String later = "Later";
   static const String favorite = "Favorite";
-  static const String noSimilarMovies = "Sorry, There are no similar movies available for this movie";
+  static const String similarMovies = "Similar Movies";
+  static const String similarTVShows = "Similar TV Shows";
+  static const String noSimilarMovies =
+      "Sorry, There are no similar movies available for this movie";
+  static const String noSimilarTVShows =
+      "Sorry, There are no similar TV shows available for this movie";
 }

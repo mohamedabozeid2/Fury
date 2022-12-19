@@ -110,15 +110,23 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                                 if (state is LoadMoreMoviesLoadingState) {
                                   debugPrint('loading');
                                 } else {
-                                  MoviesCubit.get(context).loadMoreMovies(
-                                      hasMorePages: hasNextPage,
-                                      // isFirstLoad: false,
-                                      isLoadingMore: isLoadingMoreRunning,
-                                      page: page,
-                                      moviesCategory: widget.category,
-                                      movieID: widget.fromSimilarMovies
-                                          ? widget.movieID
-                                          : 0);
+                                  if (widget.isMovie) {
+                                    MoviesCubit.get(context).loadMoreMovies(
+                                        hasMorePages: hasNextPage,
+                                        // isFirstLoad: false,
+                                        isLoadingMore: isLoadingMoreRunning,
+                                        page: page,
+                                        moviesCategory: widget.category,
+                                        movieID: widget.fromSimilarMovies
+                                            ? widget.movieID
+                                            : 0);
+                                  } else {
+                                    MoviesCubit.get(context).loadMoreTVShows(
+                                        page: page,
+                                        tvCategory: widget.category,
+                                        hasMorePages: hasNextPage,
+                                        isLoadingMore: isLoadingMoreRunning);
+                                  }
                                 }
                               }
                               return true;

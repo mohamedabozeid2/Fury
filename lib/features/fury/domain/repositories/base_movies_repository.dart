@@ -46,8 +46,9 @@ abstract class BaseMoviesRepository {
 
   Future<Either<Failure, Genres>> getGenres();
 
-  Future<Either<Failure, Tv>> getAiringToday(
-      {required int currentTvAiringTodayPage});
+  Future<Either<Failure, Tv>> getAiringToday({
+    required int currentTvAiringTodayPage,
+  });
 
   Future<Either<Failure, Tv>> getSimilarTVShows({
     required SingleTV tvShow,
@@ -56,5 +57,10 @@ abstract class BaseMoviesRepository {
 
   Future<Either<Failure, TVKeywords>> getTVKeywords({
     required SingleTV tvShow,
+  });
+
+  Future<Either<Failure, Tv>> loadMoreTVShows({
+    required int currentPage,
+    required String endPoint,
   });
 }

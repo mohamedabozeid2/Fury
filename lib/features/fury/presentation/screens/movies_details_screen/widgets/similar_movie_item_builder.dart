@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
+import 'package:movies_application/features/fury/data/models/single_tv.dart';
 
 import '../../../../../../core/utils/assets_manager.dart';
 
 class SimilarMovieItemBuilder extends StatefulWidget {
-  final SingleMovie movie;
+  final SingleMovie? movie;
+  final SingleTV? tvShow;
+  final bool isMovie;
   final int index;
 
-  const SimilarMovieItemBuilder({super.key, required this.movie, required this.index});
+  const SimilarMovieItemBuilder({
+    super.key,
+    this.movie,
+    this.tvShow,
+    required this.isMovie,
+    required this.index,
+  });
 
   @override
   State<SimilarMovieItemBuilder> createState() =>
@@ -21,13 +31,36 @@ class SimilarMovieItemBuilder extends StatefulWidget {
 }
 
 class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
+  String title = '';
+  dynamic posterPath;
+
+  @override
+  void initState() {
+    if (widget.isMovie) {
+      if (widget.movie!.name != null) {
+        title += widget.movie!.name!;
+      } else {
+        title += widget.movie!.title!;
+      }
+      posterPath = widget.movie!.posterPath;
+    } else {
+      if (widget.tvShow!.name != null) {
+        title += widget.tvShow!.name!;
+      } else {
+        title += widget.tvShow!.originalName!;
+      }
+      posterPath = widget.tvShow!.posterPath;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        widget.movie.posterPath == null
+        posterPath == null
             ? Image.asset(
                 ImageAssets.emptyMovie,
                 height: Helper.maxHeight * 0.3,
@@ -35,32 +68,33 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                 fit: BoxFit.cover,
               )
             : CachedImage(
-                image: '${MoviesDioHelper.baseImageURL}${widget.movie.posterPath}',
+                image: '${MoviesDioHelper.baseImageURL}$posterPath',
                 height: Helper.maxHeight * 0.3,
+                circularColor: AppColors.mainColor,
                 width: Helper.maxWidth * 0.4),
         Expanded(
           child: Padding(
-            padding:
-                EdgeInsets.all(Helper.maxWidth * 0.03),
+            padding: EdgeInsets.all(Helper.maxWidth * 0.03),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.index + 1}. ${widget.movie.name ?? widget.movie.title}',
+                  '${widget.index + 1}. $title',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
-                SizedBox(
-                    height: Helper.maxHeight * 0.005),
+                SizedBox(height: Helper.maxHeight * 0.005),
                 Text(
-                  widget.movie.description,
+                  widget.isMovie
+                      ? widget.movie!.description
+                      : widget.tvShow!.description,
                   textAlign: TextAlign.start,
                   maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 SizedBox(
-                  height: Helper.maxHeight*0.025,
+                  height: Helper.maxHeight * 0.025,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

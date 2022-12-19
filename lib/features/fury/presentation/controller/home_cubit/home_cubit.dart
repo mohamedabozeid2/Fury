@@ -15,6 +15,7 @@ import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import 'package:movies_application/features/fury/presentation/screens/HomeScreen/HomeScreen.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/no_internet_screen.dart';
 
+import '../../../../../core/keys/tv_category_keys.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../data/models/movies_model.dart';
 import '../../../domain/entities/movie_keywards.dart';
@@ -34,6 +35,7 @@ import '../../../domain/usecases/get_tv_airing_today.dart';
 import '../../../domain/usecases/get_tv_show_keywords.dart';
 import '../../../domain/usecases/get_upcoming_movies_data.dart';
 import '../../../../../core/keys/movies_category_keys.dart';
+import '../../../domain/usecases/load_more_tv_shows.dart';
 import '../../../domain/usecases/search_movies.dart';
 import '../../screens/my_movies_screen/my_movies_screen.dart';
 import '../../screens/news_screen/news_screen.dart';
@@ -53,6 +55,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
   final GetTvAiringTodayUseCase getTvAiringTodayUseCase;
   final GetSimilarTVShowsUseCase getSimilarTVShowsUseCase;
   final GetTVShowKeywordsUseCase getTVShowKeywordsUseCase;
+  final LoadMoreTVShowsUseCase loadMoreTVShowsUseCase;
 
   MoviesCubit(
     this.getPopularMoviesDataUseCase,
@@ -67,6 +70,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     this.getTvAiringTodayUseCase,
     this.getSimilarTVShowsUseCase,
     this.getTVShowKeywordsUseCase,
+    this.loadMoreTVShowsUseCase,
   ) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
@@ -263,18 +267,101 @@ class MoviesCubit extends Cubit<MoviesStates> {
     );
   }
 
+//
+//   Future<void> loadMoreTVShowsExecute({
+//     required int page,
+//     required String tvCategory,
+//     required bool hasMorePages,
+//     required bool isLoadingMore,
+//     required String endPoint,
+//     int? tvID,
+// })async{
+//     List<SingleTV> more = [];
+//     return await loadMoreTVShowsUseCase
+//         .execute(currentPage: page, endPoint: endPoint)
+//         .then((value) {
+//       if (tvCategory == TVCategoryKeys.similarTVShows) {
+//         value.fold((l) {
+//           emit(LoadMoreTvShowsErrorState());
+//         }, (r) {
+//           moreSimilarTvShows = r;
+//           if (moreSimilarTvShows!.tvList.isNotEmpty) {
+//             more.addAll(moreSimilarTvShows!.tvList);
+//             similarTvShows!.loadMoreMovies(tv: more);
+//           } else {
+//             hasNextPage = false;
+//           }
+//         });
+//       } else if (tvCategory == TVCategoryKeys.tvAiringToday) {
+//         value.fold((l) {
+//           emit(LoadMoreTvShowsErrorState());
+//         }, (r) {
+//           moreTvAiringToday = r;
+//           if (moreTvAiringToday!.tvList.isNotEmpty) {
+//             more.addAll(moreTvAiringToday!.tvList);
+//             tvAiringToday!.loadMoreMovies(tv: more);
+//           } else {
+//             hasNextPage = false;
+//           }
+//         });
+//       }
+//     });
+//   }
+
   void loadMoreTVShows({
     required int page,
     required String tvCategory,
     required bool hasMorePages,
     required bool isLoadingMore,
+
+    ///// For similar TV Shows ////////
     int? tvID,
   }) {
     emit(LoadMoreMoviesLoadingState());
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
     late String endPoint;
-    List<SingleMovie> more = [];
+    List<SingleTV> more = [];
+    if (hasNextPage && !isLoadingMoreRunning) {
+      isLoadingMoreRunning = true;
+      more = [];
+      if (tvCategory == TVCategoryKeys.similarTVShows) {
+        currentSimilarTVShowPage++;
+        endPoint = '/tv/$tvID/recommendations';
+      } else if (tvCategory == TVCategoryKeys.tvAiringToday) {
+        currentTvAiringTodayPage++;
+        endPoint = EndPoints.tvAiringToday;
+      }
+      loadMoreTVShowsUseCase
+          .execute(currentPage: page, endPoint: endPoint)
+          .then((value) {
+        value.fold((l) {
+          emit(LoadMoreTvShowsErrorState());
+        }, (r) {
+          if (tvCategory == TVCategoryKeys.similarTVShows) {
+            moreSimilarTvShows = r;
+            if (moreSimilarTvShows!.tvList.isNotEmpty) {
+              more.addAll(moreSimilarTvShows!.tvList);
+              similarTvShows!.loadMoreMovies(tv: more);
+            } else {
+              hasNextPage = false;
+            }
+          } else if (tvCategory == TVCategoryKeys.tvAiringToday) {
+            moreTvAiringToday = r;
+            if (moreTvAiringToday!.tvList.isNotEmpty) {
+              more.addAll(moreTvAiringToday!.tvList);
+              tvAiringToday!.loadMoreMovies(tv: more);
+            } else {
+              hasNextPage = false;
+            }
+          }
+          emit(LoadMoreTvShowsSuccessState());
+        });
+      }).catchError((error) {
+        emit(LoadMoreTvShowsErrorState());
+      });
+      isLoadingMoreRunning = false;
+    }
   }
 
   void loadMoreMovies({
@@ -284,7 +371,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     required bool isLoadingMore,
     int? movieID,
   }) {
-    emit(LoadMoreMoviesLoadingState());
+    emit(LoadMoreTvShowsLoadingState());
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
     late String endPoint;
@@ -312,14 +399,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
         currentNowPlayingPage++;
         endPoint = EndPoints.nowPlaying;
       }
-      // else if (moviesCategory == TVCategoryKeys.tvAiringToday) {
-      //   currentTvAiringTodayPage++;
-      //   endPoint = EndPoints.tvAiringToday;
-      // }
-      // else if (moviesCategory == TVCategoryKeys.similarTVShows) {
-      //   currentSimilarTVShowPage++;
-      //   endPoint = '/tv/$movieID/recommendations';
-      // }
       MoviesDioHelper.getData(
               url: endPoint,
               query: {'api_key': MoviesDioHelper.apiKey, 'page': page + 1})
@@ -417,8 +496,10 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
   void getTvDetailsData({required SingleTV tvShow}) {
     tvKeywords = null;
+    movieKeywords = null;
     genresList = [];
     similarTvShows = null;
+    similarMovies = null;
     Future.wait([
       getSimilarTvShow(tvShow: tvShow).then((value) {
         value.fold((l) {
@@ -444,8 +525,10 @@ class MoviesCubit extends Cubit<MoviesStates> {
   void getMovieDetailsData({required SingleMovie movie}) {
     emit(GetMovieDetailsLoadingState());
     movieKeywords = null;
+    tvKeywords = null;
     genresList = [];
     similarMovies = null;
+    similarTvShows = null;
     Future.wait<void>([
       getSimilarMovies(movie: movie).then((value) {
         value.fold((l) {

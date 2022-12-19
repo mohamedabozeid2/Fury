@@ -12,11 +12,12 @@ import '../../../controller/home_cubit/home_cubit.dart';
 import '../../../controller/home_cubit/home_states.dart';
 
 class SimilarMovies extends StatefulWidget {
-  final int movieId;
-  final ScrollController scrollController;
+  final bool isMovie;
 
-  const SimilarMovies(
-      {super.key, required this.movieId, required this.scrollController});
+  const SimilarMovies({
+    required this.isMovie,
+    super.key,
+  });
 
   @override
   State<SimilarMovies> createState() => _SimilarMoviesState();
@@ -25,12 +26,42 @@ class SimilarMovies extends StatefulWidget {
 class _SimilarMoviesState extends State<SimilarMovies> {
   late bool hasNextPage = true;
   bool isLoadingMoreRunning = false;
-  late int page = MoviesCubit.get(context).currentSimilarMoviesPage;
+  late int page;
+  late bool haveSimilarData;
+  late int similarDataLength;
+
+  @override
+  void initState() {
+    if (widget.isMovie) {
+      page = MoviesCubit.get(context).currentSimilarMoviesPage;
+      if (similarMovies!.moviesList.isNotEmpty) {
+        haveSimilarData = true;
+      } else {
+        haveSimilarData = false;
+      }
+      similarDataLength = similarMovies!.moviesList.length;
+    } else {
+      page = MoviesCubit.get(context).currentSimilarTVShowPage;
+      if (similarTvShows!.tvList.isNotEmpty) {
+        haveSimilarData = true;
+      } else {
+        haveSimilarData = false;
+      }
+      similarDataLength = similarTvShows!.tvList.length;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MoviesCubit, MoviesStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is LoadMoreMoviesSuccessState) {
+          similarDataLength = similarMovies!.moviesList.length;
+        } else if (state is LoadMoreTvShowsSuccessState) {
+          similarDataLength = similarTvShows!.tvList.length;
+        }
+      },
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,24 +72,32 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                   borderRadius: BorderRadius.circular(AppSize.s5),
                   color: AppColors.mainColor),
               child: Text(
-                'Similar Movies',
+                widget.isMovie
+                    ? AppStrings.similarMovies
+                    : AppStrings.similarTVShows,
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
-            similarMovies != null
+            similarMovies != null || similarTvShows != null
                 ? Column(
                     children: [
                       SizedBox(
                         height: Helper.maxHeight * 0.01,
                       ),
-                      similarMovies!.moviesList.isNotEmpty
+                      haveSimilarData
                           ? ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return SimilarMovieItemBuilder(
+                                  isMovie: widget.isMovie,
                                   index: index,
-                                  movie: similarMovies!.moviesList[index],
+                                  movie: widget.isMovie
+                                      ? similarMovies!.moviesList[index]
+                                      : null,
+                                  tvShow: widget.isMovie == false
+                                      ? similarTvShows!.tvList[index]
+                                      : null,
                                 );
                               },
                               separatorBuilder: (context, index) {
@@ -67,10 +106,12 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                                   paddingHorizontal: 0,
                                 );
                               },
-                              itemCount: similarMovies!.moviesList.length,
+                              itemCount: similarDataLength,
                             )
                           : Text(
-                              AppStrings.noSimilarMovies,
+                              widget.isMovie
+                                  ? AppStrings.noSimilarMovies
+                                  : AppStrings.noSimilarTVShows,
                               style: Theme.of(context).textTheme.subtitle2,
                             )
                     ],
@@ -81,7 +122,9 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                         height: Helper.maxHeight * 0.01,
                       ),
                       Text(
-                        AppStrings.noSimilarMovies,
+                        widget.isMovie
+                            ? AppStrings.noSimilarMovies
+                            : AppStrings.noSimilarTVShows,
                         style: Theme.of(context).textTheme.subtitle2,
                       ),
                     ],

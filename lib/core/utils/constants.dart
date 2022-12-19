@@ -11,7 +11,6 @@ Movies? topRatedMovies;
 Movies? upComingMovies;
 Movies? nowPlayingMovies;
 Movies? similarMovies;
-Tv? similarTvShows;
 Movies? latestMovie;
 Movies? moreUpComingMovies;
 Movies? morePopularMovies;
@@ -20,6 +19,10 @@ Movies? moreTopRatedMovies;
 Movies? moreTrendingMovies;
 Movies? moreSimilarMovies;
 Tv? tvAiringToday;
+Tv? moreTvAiringToday;
+Tv? similarTvShows;
+Tv? moreSimilarTvShows;
+
 
 
 dynamic uId = "";

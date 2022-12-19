@@ -64,22 +64,18 @@ class GetGenresErrorState extends MoviesStates {
 
 //// pagination (Load More)
 class LoadMoreMoviesLoadingState extends MoviesStates {}
-
 class LoadMoreMoviesSuccessState extends MoviesStates {}
-
 class LoadMoreMoviesErrorState extends MoviesStates {}
-
-class LoadMorePopularMoviesSuccessState extends MoviesStates {}
 
 class LoadMorePopularMoviesErrorState extends MoviesStates {}
 
-class LoadMoreTrendingMoviesSuccessState extends MoviesStates {}
-
 class LoadMoreTrendingMoviesErrorState extends MoviesStates {}
 
-class LoadMoreTopRatedMoviesSuccessState extends MoviesStates {}
-
 class LoadMoreTopRatedMoviesErrorState extends MoviesStates {}
+
+class LoadMoreTvShowsLoadingState extends MoviesStates{}
+class LoadMoreTvShowsSuccessState extends MoviesStates{}
+class LoadMoreTvShowsErrorState extends MoviesStates{}
 
 //////
 
