@@ -7,14 +7,14 @@ import '../../../../../core/error/failure.dart';
 import '../../../../../core/keys/news_category_keys.dart';
 import '../../../data/models/single_news_model.dart';
 import '../../../domain/entities/news_item.dart';
-import '../../../domain/usecases/get_business_news.dart';
-import '../../../domain/usecases/get_general_news.dart';
-import '../../../domain/usecases/get_health_news.dart';
-import '../../../domain/usecases/get_movies_news.dart';
-import '../../../domain/usecases/get_science_news.dart';
-import '../../../domain/usecases/get_sports_news.dart';
-import '../../../domain/usecases/get_technology_news.dart';
-import '../../../domain/usecases/load_more_news.dart';
+import '../../../domain/use_cases/get_business_news.dart';
+import '../../../domain/use_cases/get_general_news.dart';
+import '../../../domain/use_cases/get_health_news.dart';
+import '../../../domain/use_cases/get_movies_news.dart';
+import '../../../domain/use_cases/get_science_news.dart';
+import '../../../domain/use_cases/get_sports_news.dart';
+import '../../../domain/use_cases/get_technology_news.dart';
+import '../../../domain/use_cases/load_more_news.dart';
 import 'news_states.dart';
 
 class NewsCubit extends Cubit<NewsStates> {

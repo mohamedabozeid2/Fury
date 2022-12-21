@@ -16,6 +16,8 @@ class AppStrings {
   static const String upComingMovies = "Up Coming Movies";
   static const String topRatedMovies = "Top Rated Movies";
   static const String tvAiringToday = "TV Airing Today";
+  static const String popularTv = "Popular TV";
+  static const String topRatedTv = "Top Rated TV";
   static const String trendingMovies = "Trending Movies";
   static const String home = " Home";
   static const String movies = " My Movies";

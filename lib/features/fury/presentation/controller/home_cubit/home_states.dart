@@ -56,6 +56,18 @@ class GetTvAiringTodayErrorState extends MoviesStates{
   GetTvAiringTodayErrorState({required this.message});
 }
 
+class GetPopularTvErrorState extends MoviesStates{
+  final String message;
+
+  GetPopularTvErrorState({required this.message});
+}
+
+class GetTopRatedTvErrorState extends MoviesStates{
+  final String message;
+
+  GetTopRatedTvErrorState({required this.message});
+}
+
 class GetGenresErrorState extends MoviesStates {
   final String message;
 

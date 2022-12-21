@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
+import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
 
 import '../../../../../../core/utils/assets_manager.dart';
 
@@ -56,68 +58,79 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        posterPath == null
-            ? Image.asset(
-                ImageAssets.emptyMovie,
-                height: Helper.maxHeight * 0.3,
-                width: Helper.maxWidth * 0.4,
-                fit: BoxFit.cover,
-              )
-            : CachedImage(
-                image: '${MoviesDioHelper.baseImageURL}$posterPath',
-                height: Helper.maxHeight * 0.3,
-                circularColor: AppColors.mainColor,
-                width: Helper.maxWidth * 0.4),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(Helper.maxWidth * 0.03),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${widget.index + 1}. $title',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                SizedBox(height: Helper.maxHeight * 0.005),
-                Text(
-                  widget.isMovie
-                      ? widget.movie!.description
-                      : widget.tvShow!.description,
-                  textAlign: TextAlign.start,
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
-                SizedBox(
-                  height: Helper.maxHeight * 0.025,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    AddActionsButton(
-                      fun: () {},
-                      icon: Icons.add,
-                      iconSize: AppFontSize.s28,
-                      title: AppStrings.later,
-                    ),
-                    AddActionsButton(
-                      fun: () {},
-                      icon: Icons.favorite,
-                      iconSize: AppFontSize.s28,
-                      title: AppStrings.favorite,
-                    ),
-                  ],
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Components.navigateTo(
+            context,
+            MovieDetails(
+              isMovie: widget.isMovie,
+              tvShow: widget.isMovie ? null : widget.tvShow,
+              movie: widget.isMovie ? widget.movie : null,
+            ));
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          posterPath == null
+              ? Image.asset(
+                  ImageAssets.emptyMovie,
+                  height: Helper.maxHeight * 0.3,
+                  width: Helper.maxWidth * 0.4,
+                  fit: BoxFit.cover,
+                )
+              : CachedImage(
+                  image: '${MoviesDioHelper.baseImageURL}$posterPath',
+                  height: Helper.maxHeight * 0.3,
+                  circularColor: AppColors.mainColor,
+                  width: Helper.maxWidth * 0.4),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(Helper.maxWidth * 0.03),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${widget.index + 1}. $title',
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  SizedBox(height: Helper.maxHeight * 0.005),
+                  Text(
+                    widget.isMovie
+                        ? widget.movie!.description
+                        : widget.tvShow!.description,
+                    textAlign: TextAlign.start,
+                    maxLines: 5,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                  SizedBox(
+                    height: Helper.maxHeight * 0.025,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      AddActionsButton(
+                        fun: () {},
+                        icon: Icons.add,
+                        iconSize: AppFontSize.s28,
+                        title: AppStrings.later,
+                      ),
+                      AddActionsButton(
+                        fun: () {},
+                        icon: Icons.favorite,
+                        iconSize: AppFontSize.s28,
+                        title: AppStrings.favorite,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

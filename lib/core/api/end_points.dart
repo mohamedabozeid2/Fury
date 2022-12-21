@@ -1,7 +1,7 @@
 class EndPoints {
 
   ///// Movies //////
-  static String popular = '/movie/popular';
+  static String popularMovies = '/movie/popular';
   static String trendingMovies = '/trending/movie/day';
   static String trendingTV = '/trending/tv/day';
   static String topRated = '/movie/top_rated';
@@ -18,6 +18,8 @@ class EndPoints {
   ////// TV //////////
 
   static String tvAiringToday = '/tv/airing_today';
+  static String popularTv = '/tv/popular';
+  static String topRatedTv = '/tv/top_rated';
 
 
 

@@ -19,7 +19,11 @@ Movies? moreTopRatedMovies;
 Movies? moreTrendingMovies;
 Movies? moreSimilarMovies;
 Tv? tvAiringToday;
+Tv? popularTv;
+Tv? topRatedTv;
 Tv? moreTvAiringToday;
+Tv? morePopularTv;
+Tv? moreTopRatedTv;
 Tv? similarTvShows;
 Tv? moreSimilarTvShows;
 

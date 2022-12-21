@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/features/fury/domain/entities/tv_keywords.dart';
 
 import '../../../../../../core/utils/helper.dart';
-import '../../../../domain/entities/movie_keywards.dart';
+import '../../../../domain/entities/movie_keywords.dart';
 
 class Keywords extends StatefulWidget {
   final bool isMovie;

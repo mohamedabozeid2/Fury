@@ -1,5 +1,5 @@
 import 'package:movies_application/features/fury/data/models/movie_keywords_data_model.dart';
-import 'package:movies_application/features/fury/domain/entities/movie_keywards.dart';
+import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
 
 class MovieKeywordsModel extends MovieKeywords {
   const MovieKeywordsModel({required super.keywords, required super.id});

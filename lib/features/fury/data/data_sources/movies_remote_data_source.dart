@@ -45,12 +45,25 @@ abstract class BaseMoviesRemoteDataSource {
     required int currentTvAiringTodayPage,
   });
 
+  Future<TvModel> getPopularTv({
+    required int currentPopularTvPage,
+  });
+
+  Future<TvModel> getTopRatedTv({
+    required int currentTopRateTvPage,
+  });
+
   Future<TvModel> getSimilarTvShows({
     required int currentTvAiringTodayPage,
     required SingleTV tvShow,
   });
 
   Future<TvModel> loadMoreTVShows({
+    required int currentPage,
+    required String endPoint,
+  });
+
+  Future<MoviesModel> loadMoreMovies({
     required int currentPage,
     required String endPoint,
   });
@@ -61,7 +74,7 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
   Future<MoviesModel> getPopularMoviesData(
       {required int currentPopularPage}) async {
     final response = await MoviesDioHelper.getData(
-        url: EndPoints.popular,
+        url: EndPoints.popularMovies,
         query: {'api_key': MoviesDioHelper.apiKey, 'page': currentPopularPage});
     if (response.statusCode == 200) {
       return MoviesModel.fromJson(response.data);
@@ -244,6 +257,21 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
   }
 
   @override
+  Future<TvModel> getPopularTv({required int currentPopularTvPage}) async {
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.popularTv, query: {
+      'api_key': MoviesDioHelper.apiKey,
+      'language': 'en-US',
+      'page': currentPopularTvPage,
+    });
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(moviesErrorMessageModel: response.data);
+    }
+  }
+
+  @override
   Future<TvModel> getSimilarTvShows(
       {required int currentTvAiringTodayPage, required SingleTV tvShow}) async {
     final response = await MoviesDioHelper.getData(
@@ -282,7 +310,42 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
       {required int currentPage, required String endPoint}) async {
     final response = await MoviesDioHelper.getData(url: endPoint, query: {
       "api_key": MoviesDioHelper.apiKey,
-      "page": currentPage+1,
+      "page": currentPage + 1,
+    });
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<MoviesModel> loadMoreMovies(
+      {required int currentPage, required String endPoint}) async {
+    final response = await MoviesDioHelper.getData(url: endPoint, query: {
+      "api_key": MoviesDioHelper.apiKey,
+      "page": currentPage + 1,
+    });
+    if (response.statusCode == 200) {
+      return MoviesModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<TvModel> getTopRatedTv({required int currentTopRateTvPage}) async {
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.topRatedTv, query: {
+      'api_key': MoviesDioHelper.apiKey,
+      'language': 'en-US',
+      'page': currentTopRateTvPage,
     });
     if (response.statusCode == 200) {
       return TvModel.fromJson(response.data);

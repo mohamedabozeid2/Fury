@@ -3,7 +3,7 @@ import 'package:movies_application/core/error/exception.dart';
 import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
-import 'package:movies_application/features/fury/domain/entities/movie_keywards.dart';
+import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/entities/movies.dart';
 import 'package:movies_application/features/fury/domain/entities/tv.dart';
 import 'package:movies_application/features/fury/domain/repositories/base_movies_repository.dart';
@@ -199,6 +199,56 @@ class MoviesRepository extends BaseMoviesRepository {
     } on MoviesServerException catch (failure) {
       return Left(
         ServerFailure(failure.moviesErrorMessageModel.statusMessage),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Movies>> loadMoreMovies(
+      {required int currentPage, required String endPoint}) async {
+    final result = await baseMoviesRemoteDataSource.loadMoreMovies(
+      currentPage: currentPage,
+      endPoint: endPoint,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(ServerFailure(
+        failure.moviesErrorMessageModel.statusMessage,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tv>> getPopularTv(
+      {required int currentPopularTvPage}) async {
+    final result = await baseMoviesRemoteDataSource.getPopularTv(
+      currentPopularTvPage: currentPopularTvPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tv>> getTopRatedTv(
+      {required int currentTopRateTvPage}) async {
+    final result = await baseMoviesRemoteDataSource.getTopRatedTv(
+      currentTopRateTvPage: currentTopRateTvPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
       );
     }
   }

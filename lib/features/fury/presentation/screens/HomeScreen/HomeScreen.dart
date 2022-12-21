@@ -120,7 +120,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: AppStrings.tvAiringToday,
                         category: TVCategoryKeys.tvAiringToday,
                         tv: tvAiringToday!.tvList,
-                      )
+                      ),
+                      CategoryItemBuilder(
+                        isMovie: false,
+                        title: AppStrings.popularTv,
+                        category: TVCategoryKeys.popularTv,
+                        tv: popularTv!.tvList,
+                      ),
+                      CategoryItemBuilder(
+                        isMovie: false,
+                        title: AppStrings.topRatedTv,
+                        category: TVCategoryKeys.topRatedTv,
+                        tv: topRatedTv!.tvList,
+                      ),
                     ],
                   ),
                 ),

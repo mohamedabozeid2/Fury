@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/core/network/network.dart';
@@ -17,26 +16,28 @@ import 'package:movies_application/features/fury/presentation/screens/internet_c
 
 import '../../../../../core/keys/tv_category_keys.dart';
 import '../../../../../core/utils/constants.dart';
-import '../../../data/models/movies_model.dart';
-import '../../../domain/entities/movie_keywards.dart';
+import '../../../domain/entities/movie_keywords.dart';
 import '../../../domain/entities/movies.dart';
 import '../../../domain/entities/tv.dart';
 import '../../../domain/entities/tv_keywords.dart';
 import '../../../domain/entities/user_data.dart';
-import '../../../domain/usecases/get_genres.dart';
-import '../../../domain/usecases/get_movie_keywords.dart';
-import '../../../domain/usecases/get_now_playing_movies_data.dart';
-import '../../../domain/usecases/get_popular_movies_data.dart';
-import '../../../domain/usecases/get_similar_movies.dart';
-import '../../../domain/usecases/get_similar_tv_shows.dart';
-import '../../../domain/usecases/get_top_rated_movies_data.dart';
-import '../../../domain/usecases/get_trending_movies_data.dart';
-import '../../../domain/usecases/get_tv_airing_today.dart';
-import '../../../domain/usecases/get_tv_show_keywords.dart';
-import '../../../domain/usecases/get_upcoming_movies_data.dart';
+import '../../../domain/use_cases/get_genres.dart';
+import '../../../domain/use_cases/get_movie_keywords.dart';
+import '../../../domain/use_cases/get_now_playing_movies_data.dart';
+import '../../../domain/use_cases/get_popular_movies_data.dart';
+import '../../../domain/use_cases/get_similar_movies.dart';
+import '../../../domain/use_cases/get_similar_tv_shows.dart';
+import '../../../domain/use_cases/get_top_rated_movies_data.dart';
+import '../../../domain/use_cases/get_top_rated_tv.dart';
+import '../../../domain/use_cases/get_trending_movies_data.dart';
+import '../../../domain/use_cases/get_tv_airing_today.dart';
+import '../../../domain/use_cases/get_popular_tv.dart';
+import '../../../domain/use_cases/get_tv_show_keywords.dart';
+import '../../../domain/use_cases/get_upcoming_movies_data.dart';
 import '../../../../../core/keys/movies_category_keys.dart';
-import '../../../domain/usecases/load_more_tv_shows.dart';
-import '../../../domain/usecases/search_movies.dart';
+import '../../../domain/use_cases/load_more_movies.dart';
+import '../../../domain/use_cases/load_more_tv_shows.dart';
+import '../../../domain/use_cases/search_movies.dart';
 import '../../screens/my_movies_screen/my_movies_screen.dart';
 import '../../screens/news_screen/news_screen.dart';
 import '../../screens/settings/settings_screen.dart';
@@ -53,9 +54,12 @@ class MoviesCubit extends Cubit<MoviesStates> {
   final SearchMoviesUseCase searchMovieUseCase;
   final GetNowPlayingMoviesDataUseCase getNowPlayingMoviesDataUseCase;
   final GetTvAiringTodayUseCase getTvAiringTodayUseCase;
+  final GetPopularTvUseCase getPopularTvUseCase;
   final GetSimilarTVShowsUseCase getSimilarTVShowsUseCase;
   final GetTVShowKeywordsUseCase getTVShowKeywordsUseCase;
   final LoadMoreTVShowsUseCase loadMoreTVShowsUseCase;
+  final LoadMoreMoviesUseCase loadMoreMoviesUseCase;
+  final GetTopRatedTvUseCase getTopRatedTvUseCase;
 
   MoviesCubit(
     this.getPopularMoviesDataUseCase,
@@ -71,6 +75,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
     this.getSimilarTVShowsUseCase,
     this.getTVShowKeywordsUseCase,
     this.loadMoreTVShowsUseCase,
+    this.loadMoreMoviesUseCase,
+    this.getPopularTvUseCase,
+    this.getTopRatedTvUseCase,
   ) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
@@ -160,6 +167,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
               isFirstUpComingLoadRunning = false;
             });
           }),
+          ///////// NOW PLAYING MOVIES //////////
 
           getNowPlayingMovies().then((value) {
             value.fold((l) {
@@ -169,12 +177,34 @@ class MoviesCubit extends Cubit<MoviesStates> {
               isFirstNowPlayingLoadRunning = false;
             });
           }),
+
+          ///////// TV SHOWS MOVIES //////////
+
           getTvAiringToday().then((value) {
             value.fold((l) {
               emit(GetTvAiringTodayErrorState(message: l.message));
             }, (r) {
               isFirstTvAiringTodayLoadRunning = false;
               tvAiringToday = r;
+            });
+          }),
+
+          getPopularTv().then((value) {
+            value.fold((l) {
+              emit(GetPopularTvErrorState(
+                message: l.message,
+              ));
+            }, (r) {
+              isFirstPopularTvLoadRunning = false;
+              popularTv = r;
+            });
+          }),
+          getTopRatedTv().then((value){
+            value.fold((l){
+              emit(GetTopRatedTvErrorState(message: l.message));
+            }, (r){
+              isFirstTopRatedTvLoadingRunning = false;
+              topRatedTv = r;
             });
           })
         ]).then((value) {
@@ -267,46 +297,27 @@ class MoviesCubit extends Cubit<MoviesStates> {
     );
   }
 
-//
-//   Future<void> loadMoreTVShowsExecute({
-//     required int page,
-//     required String tvCategory,
-//     required bool hasMorePages,
-//     required bool isLoadingMore,
-//     required String endPoint,
-//     int? tvID,
-// })async{
-//     List<SingleTV> more = [];
-//     return await loadMoreTVShowsUseCase
-//         .execute(currentPage: page, endPoint: endPoint)
-//         .then((value) {
-//       if (tvCategory == TVCategoryKeys.similarTVShows) {
-//         value.fold((l) {
-//           emit(LoadMoreTvShowsErrorState());
-//         }, (r) {
-//           moreSimilarTvShows = r;
-//           if (moreSimilarTvShows!.tvList.isNotEmpty) {
-//             more.addAll(moreSimilarTvShows!.tvList);
-//             similarTvShows!.loadMoreMovies(tv: more);
-//           } else {
-//             hasNextPage = false;
-//           }
-//         });
-//       } else if (tvCategory == TVCategoryKeys.tvAiringToday) {
-//         value.fold((l) {
-//           emit(LoadMoreTvShowsErrorState());
-//         }, (r) {
-//           moreTvAiringToday = r;
-//           if (moreTvAiringToday!.tvList.isNotEmpty) {
-//             more.addAll(moreTvAiringToday!.tvList);
-//             tvAiringToday!.loadMoreMovies(tv: more);
-//           } else {
-//             hasNextPage = false;
-//           }
-//         });
-//       }
-//     });
-//   }
+  /////// POPULAR TV /////////
+  bool isFirstPopularTvLoadRunning = false;
+  int currentPopularTvPage = 1;
+
+  Future<Either<Failure, Tv>> getPopularTv() async {
+    isFirstPopularTvLoadRunning = true;
+    return await getPopularTvUseCase.execute(
+      currentPopularTvPage: currentPopularTvPage,
+    );
+  }
+
+  ////// Top Rated TV ///////
+  bool isFirstTopRatedTvLoadingRunning = false;
+  int currentTopRatedTvPage = 1;
+
+  Future<Either<Failure, Tv>> getTopRatedTv() async {
+    isFirstTopRatedTvLoadingRunning = true;
+    return await getTopRatedTvUseCase.execute(
+      currentTopRatedTvPage: currentTopRatedTvPage,
+    );
+  }
 
   void loadMoreTVShows({
     required int page,
@@ -321,16 +332,20 @@ class MoviesCubit extends Cubit<MoviesStates> {
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
     late String endPoint;
-    List<SingleTV> more = [];
     if (hasNextPage && !isLoadingMoreRunning) {
       isLoadingMoreRunning = true;
-      more = [];
       if (tvCategory == TVCategoryKeys.similarTVShows) {
         currentSimilarTVShowPage++;
         endPoint = '/tv/$tvID/recommendations';
       } else if (tvCategory == TVCategoryKeys.tvAiringToday) {
         currentTvAiringTodayPage++;
         endPoint = EndPoints.tvAiringToday;
+      } else if (tvCategory == TVCategoryKeys.popularTv) {
+        currentPopularTvPage++;
+        endPoint = EndPoints.popularTv;
+      } else if(tvCategory == TVCategoryKeys.topRatedTv){
+        currentTopRatedPage++;
+        endPoint = EndPoints.topRatedTv;
       }
       loadMoreTVShowsUseCase
           .execute(currentPage: page, endPoint: endPoint)
@@ -341,23 +356,37 @@ class MoviesCubit extends Cubit<MoviesStates> {
           if (tvCategory == TVCategoryKeys.similarTVShows) {
             moreSimilarTvShows = r;
             if (moreSimilarTvShows!.tvList.isNotEmpty) {
-              more.addAll(moreSimilarTvShows!.tvList);
-              similarTvShows!.loadMoreMovies(tv: more);
+              similarTvShows!.loadMoreMovies(tv: moreSimilarTvShows!.tvList);
             } else {
               hasNextPage = false;
             }
           } else if (tvCategory == TVCategoryKeys.tvAiringToday) {
             moreTvAiringToday = r;
             if (moreTvAiringToday!.tvList.isNotEmpty) {
-              more.addAll(moreTvAiringToday!.tvList);
-              tvAiringToday!.loadMoreMovies(tv: more);
+              tvAiringToday!.loadMoreMovies(tv: moreTvAiringToday!.tvList);
             } else {
+              hasNextPage = false;
+            }
+          } else if (tvCategory == TVCategoryKeys.popularTv) {
+            morePopularTv = r;
+            if (morePopularTv!.tvList.isNotEmpty) {
+              popularTv!.loadMoreMovies(tv: morePopularTv!.tvList);
+            } else {
+              hasNextPage = false;
+            }
+          }else if (tvCategory == TVCategoryKeys.topRatedTv){
+            moreTopRatedTv = r;
+            if(moreTopRatedTv!.tvList.isNotEmpty){
+              topRatedTv!.loadMoreMovies(tv: moreTopRatedTv!.tvList);
+            }else{
               hasNextPage = false;
             }
           }
           emit(LoadMoreTvShowsSuccessState());
         });
       }).catchError((error) {
+        debugPrint("Error in load more tv shows ===> ${error.toString()}");
+
         emit(LoadMoreTvShowsErrorState());
       });
       isLoadingMoreRunning = false;
@@ -375,14 +404,12 @@ class MoviesCubit extends Cubit<MoviesStates> {
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
     late String endPoint;
-    List<SingleMovie> more = [];
 
-    if (hasNextPage && !isLoadingMoreRunning /*&& !isFirstLoadRunning*/) {
+    if (hasNextPage && !isLoadingMoreRunning) {
       isLoadingMoreRunning = true;
-      more = [];
       if (moviesCategory == MoviesCategoryKeys.popular) {
         currentPopularPage++;
-        endPoint = EndPoints.popular;
+        endPoint = EndPoints.popularMovies;
       } else if (moviesCategory == MoviesCategoryKeys.trending) {
         currentTrendingPage++;
         endPoint = EndPoints.trendingMovies;
@@ -399,66 +426,70 @@ class MoviesCubit extends Cubit<MoviesStates> {
         currentNowPlayingPage++;
         endPoint = EndPoints.nowPlaying;
       }
-      MoviesDioHelper.getData(
-              url: endPoint,
-              query: {'api_key': MoviesDioHelper.apiKey, 'page': page + 1})
+      loadMoreMoviesUseCase
+          .execute(currentPage: page, endPoint: endPoint)
           .then((value) {
-        if (moviesCategory == MoviesCategoryKeys.popular) {
-          morePopularMovies = MoviesModel.fromJson(value.data);
-          if (morePopularMovies!.moviesList.isNotEmpty) {
-            more.addAll(morePopularMovies!.moviesList);
-            popularMovies!.loadMoreMovies(movies: more);
-          } else {
-            hasNextPage = false;
+        value.fold((l) {
+          emit(LoadMoreMoviesErrorState());
+        }, (r) {
+          if (moviesCategory == MoviesCategoryKeys.popular) {
+            morePopularMovies = r;
+            if (morePopularMovies!.moviesList.isNotEmpty) {
+              popularMovies!
+                  .loadMoreMovies(movies: morePopularMovies!.moviesList);
+            } else {
+              hasNextPage = false;
+            }
+          } else if (moviesCategory == MoviesCategoryKeys.trending) {
+            moreTrendingMovies = r;
+            if (moreTrendingMovies!.moviesList.isNotEmpty) {
+              trendingMovies!
+                  .loadMoreMovies(movies: moreTrendingMovies!.moviesList);
+            } else {
+              hasNextPage = false;
+            }
+          } else if (moviesCategory == MoviesCategoryKeys.topRated) {
+            moreTopRatedMovies = r;
+            if (moreTopRatedMovies!.moviesList.isNotEmpty) {
+              topRatedMovies!
+                  .loadMoreMovies(movies: moreTopRatedMovies!.moviesList);
+            } else {
+              hasNextPage = false;
+            }
+          } else if (moviesCategory == MoviesCategoryKeys.upComing) {
+            moreUpComingMovies = r;
+            if (moreUpComingMovies!.moviesList.isNotEmpty) {
+              upComingMovies!
+                  .loadMoreMovies(movies: moreUpComingMovies!.moviesList);
+            } else {
+              hasNextPage = false;
+            }
+          } else if (moviesCategory == MoviesCategoryKeys.nowPlaying) {
+            moreNowPlayingMovies = r;
+            if (moreNowPlayingMovies!.moviesList.isNotEmpty) {
+              nowPlayingMovies!
+                  .loadMoreMovies(movies: moreNowPlayingMovies!.moviesList);
+            } else {
+              hasNextPage = false;
+            }
+          } else if (moviesCategory == MoviesCategoryKeys.similarMovies) {
+            moreSimilarMovies = r;
+            if (moreSimilarMovies!.moviesList.isNotEmpty) {
+              similarMovies!
+                  .loadMoreMovies(movies: moreSimilarMovies!.moviesList);
+            } else {
+              hasNextPage = false;
+              debugPrint('no more');
+            }
           }
-        } else if (moviesCategory == MoviesCategoryKeys.trending) {
-          moreTrendingMovies = MoviesModel.fromJson(value.data);
-          if (moreTrendingMovies!.moviesList.isNotEmpty) {
-            more.addAll(moreTrendingMovies!.moviesList);
-            trendingMovies!.loadMoreMovies(movies: more);
-          } else {
-            hasNextPage = false;
-          }
-        } else if (moviesCategory == MoviesCategoryKeys.topRated) {
-          moreTopRatedMovies = MoviesModel.fromJson(value.data);
-          if (moreTopRatedMovies!.moviesList.isNotEmpty) {
-            more.addAll(moreTopRatedMovies!.moviesList);
-            topRatedMovies!.loadMoreMovies(movies: more);
-          } else {
-            hasNextPage = false;
-          }
-        } else if (moviesCategory == MoviesCategoryKeys.upComing) {
-          moreUpComingMovies = MoviesModel.fromJson(value.data);
-          if (moreUpComingMovies!.moviesList.isNotEmpty) {
-            more.addAll(moreUpComingMovies!.moviesList);
-            upComingMovies!.loadMoreMovies(movies: more);
-          } else {
-            hasNextPage = false;
-          }
-        } else if (moviesCategory == MoviesCategoryKeys.nowPlaying) {
-          moreNowPlayingMovies = MoviesModel.fromJson(value.data);
-          if (moreNowPlayingMovies!.moviesList.isNotEmpty) {
-            more.addAll(moreNowPlayingMovies!.moviesList);
-            nowPlayingMovies!.loadMoreMovies(movies: more);
-          } else {
-            hasNextPage = false;
-          }
-        } else if (moviesCategory == MoviesCategoryKeys.similarMovies) {
-          moreSimilarMovies = MoviesModel.fromJson(value.data);
-          if (moreSimilarMovies!.moviesList.isNotEmpty) {
-            more.addAll(moreSimilarMovies!.moviesList);
-            similarMovies!.loadMoreMovies(movies: more);
-          } else {
-            hasNextPage = false;
-            debugPrint('no more');
-          }
-        }
+        });
+      }).then((value) {
         emit(LoadMoreMoviesSuccessState());
       }).catchError((error) {
         debugPrint('Error from load more movies ===> ${error.toString()}');
+        isLoadingMoreRunning = false;
         emit(LoadMoreMoviesErrorState());
       });
-      isLoadingMoreRunning = false;
     }
   }
 

@@ -6,6 +6,7 @@ import '../../../../../../core/utils/helper.dart';
 
 class Description extends StatelessWidget {
   final String description;
+
   const Description({super.key, required this.description});
 
   @override
@@ -14,8 +15,7 @@ class Description extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding:
-              EdgeInsets.all(Helper.maxHeight * 0.005),
+          padding: EdgeInsets.all(Helper.maxHeight * 0.005),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppSize.s5),
               color: AppColors.mainColor),
@@ -27,7 +27,15 @@ class Description extends StatelessWidget {
         SizedBox(
           height: Helper.maxHeight * 0.01,
         ),
-        Text(description, style: Theme.of(context).textTheme.subtitle2,)
+        description.isNotEmpty
+            ? Text(
+                description,
+                style: Theme.of(context).textTheme.subtitle2,
+              )
+            : Text(
+                'There is no description available for this movie',
+                style: Theme.of(context).textTheme.subtitle2,
+              )
       ],
     );
   }
