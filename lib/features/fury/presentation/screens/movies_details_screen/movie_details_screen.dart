@@ -224,6 +224,16 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     paddingHorizontal: 0,
                                     paddingVertical: Helper.maxHeight * 0.02,
                                   ),
+                                  Description(
+                                    description: widget.isMovie
+                                        ? widget.movie!.description
+                                        : widget.tvShow!.description,
+                                  ),
+                                  MyDivider(
+                                    color: AppColors.dividerColor,
+                                    paddingHorizontal: 0,
+                                    paddingVertical: Helper.maxHeight * 0.02,
+                                  ),
                                   Genres(
                                       genres:
                                           MoviesCubit.get(context).genresList),
@@ -277,16 +287,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                 .textTheme
                                                 .subtitle2,
                                           ),
-                                  MyDivider(
-                                    color: AppColors.dividerColor,
-                                    paddingHorizontal: 0,
-                                    paddingVertical: Helper.maxHeight * 0.02,
-                                  ),
-                                  Description(
-                                    description: widget.isMovie
-                                        ? widget.movie!.description
-                                        : widget.tvShow!.description,
-                                  ),
+
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0,

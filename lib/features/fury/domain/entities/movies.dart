@@ -4,24 +4,20 @@ import 'package:movies_application/features/fury/data/models/single_movie.dart';
 class Movies extends Equatable {
   final num page;
   final List<SingleMovie> moviesList;
-  final num? totalPages;
-  final num? totalResult;
 
-  const Movies(
-      {required this.page,
-      required this.moviesList,
-      required this.totalPages,
-      required this.totalResult});
+  const Movies({
+    required this.page,
+    required this.moviesList,
+  });
 
   @override
   // TODO: implement props
   List<Object?> get props => [
         page,
         moviesList,
-        totalPages,
-        totalResult,
       ];
-  void loadMoreMovies({required List<SingleMovie> movies}){
+
+  void loadMoreMovies({required List<SingleMovie> movies}) {
     moviesList.addAll(movies);
   }
 }

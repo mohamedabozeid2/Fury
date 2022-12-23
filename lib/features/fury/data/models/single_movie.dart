@@ -43,21 +43,6 @@ class SingleMovie extends Equatable {
     );
   }
 
-  // SingleMovie.fromJson(Map<String, dynamic> json) {
-  //   name = json['original_title'];
-  //   id = json['id'];
-  //   language = json['original_language'];
-  //   description = json['overview'];
-  //   rate = json['vote_average'];
-  //   json['genre_ids'].forEach((element) {
-  //     genresIds.add(element);
-  //   });
-  //   backDropPath = json['backdrop_path'];
-  //   posterPath = json['poster_path'];
-  //   isAdult = json['adult'];
-  //   releaseDate = json['release_date'];
-  // }
-
   String posterURL() {
     return '${MoviesDioHelper.baseImageURL}$posterPath';
   }
