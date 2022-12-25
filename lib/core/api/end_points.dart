@@ -1,4 +1,9 @@
 class EndPoints {
+  //// Login /////
+  static String requestToken = '/authentication/token/new';
+  static String createSessionWithLogin =
+      '/authentication/token/validate_with_login';
+  static String createSession = '/authentication/session/new';
 
   ///// Movies //////
   static String popularMovies = '/movie/popular';
@@ -7,8 +12,8 @@ class EndPoints {
   static String topRated = '/movie/top_rated';
   static String upComing = '/movie/upcoming';
   static String nowPlaying = '/movie/now_playing';
-  static String latest =  '/movie/latest';
-  static String genres =  '/genre/movie/list';
+  static String latest = '/movie/latest';
+  static String genres = '/genre/movie/list';
   static String searchMovies = '/search/movie';
 
   ///////// news ////////
@@ -20,7 +25,4 @@ class EndPoints {
   static String tvAiringToday = '/tv/airing_today';
   static String popularTv = '/tv/popular';
   static String topRatedTv = '/tv/top_rated';
-
-
-
 }

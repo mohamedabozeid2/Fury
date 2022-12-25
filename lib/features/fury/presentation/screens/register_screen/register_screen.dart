@@ -40,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (state is RegisterSuccessState) {
           Get.snackbar('Fury', 'Registered Successfully',
               colorText: Colors.white, backgroundColor: Colors.greenAccent);
-          CacheHelper.saveData(key: 'uId', value: state.uId);
+          // CacheHelper.saveData(key: 'uId', value: state.uId);
           uId = state.uId;
           Components.navigateAndFinish(
               context: context, widget: const Layout());

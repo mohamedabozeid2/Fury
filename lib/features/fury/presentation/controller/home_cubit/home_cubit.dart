@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,27 +102,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
     const GButton(icon: Icons.settings, text: AppStrings.settings),
   ];
 
-  void getUserData({
-    required String userID,
-    bool fromHomeScreen = false,
-  }) {
-    if (!fromHomeScreen) {
-      emit(GetUserDataLoadingState());
-    }
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(userID)
-        .get()
-        .then((value) {
-      userModel = UserData.fromJson(value.data()!);
-      if (!fromHomeScreen) {
-        emit(GetUserDataSuccessState());
-      }
-    }).catchError((error) {
-      debugPrint("Error ===> ${error.toString()}");
-      emit(GetUserDataErrorState());
-    });
-  }
 
   void getAllMovies({required BuildContext context}) {
     emit(GetAllMoviesLoadingState());

@@ -5,6 +5,8 @@ import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/entities/movies.dart';
+import 'package:movies_application/features/fury/domain/entities/request_token.dart';
+import 'package:movies_application/features/fury/domain/entities/session_id.dart';
 import 'package:movies_application/features/fury/domain/entities/tv.dart';
 import 'package:movies_application/features/fury/domain/repositories/base_movies_repository.dart';
 
@@ -16,6 +18,18 @@ class MoviesRepository extends BaseMoviesRepository {
   final BaseMoviesRemoteDataSource baseMoviesRemoteDataSource;
 
   MoviesRepository(this.baseMoviesRemoteDataSource);
+
+  @override
+  Future<Either<Failure, RequestToken>> getRequestToken() async {
+    final result = await baseMoviesRemoteDataSource.requestToken();
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(failure.moviesErrorMessageModel.statusMessage),
+      );
+    }
+  }
 
   @override
   Future<Either<Failure, Movies>> getPopularMoviesData(
@@ -241,6 +255,44 @@ class MoviesRepository extends BaseMoviesRepository {
       {required int currentTopRateTvPage}) async {
     final result = await baseMoviesRemoteDataSource.getTopRatedTv(
       currentTopRateTvPage: currentTopRateTvPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, RequestToken>> createSessionWithLogin(
+      {required String userName,
+      required String password,
+      required String requestToken}) async {
+    final result = await baseMoviesRemoteDataSource.createSessionWithLogin(
+      userName: userName,
+      password: password,
+      requestToken: requestToken,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, SessionId>> createNewSession(
+      {required String requestToken}) async {
+    final result = await baseMoviesRemoteDataSource.createNewSession(
+      requestToken: requestToken,
     );
     try {
       return Right(result);

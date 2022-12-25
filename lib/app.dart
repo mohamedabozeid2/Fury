@@ -44,7 +44,12 @@ class MoviesApp extends StatelessWidget {
                       sl(),
                       sl(),
                     )),
-            BlocProvider(create: (BuildContext context) => LoginCubit()),
+            BlocProvider(
+                create: (BuildContext context) => LoginCubit(
+                      sl(),
+                      sl(),
+                      sl(),
+                    )),
             BlocProvider(create: (BuildContext context) => RegisterCubit()),
             BlocProvider(
                 create: (BuildContext context) => NewsCubit(

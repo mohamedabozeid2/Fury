@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
-import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/features/fury/presentation/controller/news_cubit/news_cubit.dart';
 import 'package:movies_application/features/fury/presentation/screens/Layout/widgets/bottom_nav_bar.dart';
@@ -23,7 +22,6 @@ class _LayoutState extends State<Layout> {
   void initState() {
     MoviesCubit.get(context).getAllMovies(context: context);
     NewsCubit.get(context).getAllNews();
-    MoviesCubit.get(context).getUserData(userID: uId, fromHomeScreen: true);
     super.initState();
   }
 

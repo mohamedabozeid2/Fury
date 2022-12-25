@@ -3,7 +3,7 @@ const String imagePath = 'assets/images';
 class ImageAssets{
  static String splashScreen = '$imagePath/logo.png';
  static String emptyMovie = '$imagePath/empty_movie.png';
- static String loginWallpaper = '$imagePath/loginWallpaper.png';
+ static String loginWallpaper = '$imagePath/loginWallpaper.jpg';
  static String technologyImage = '$imagePath/technology2.jpg';
  static String generalEarth = '$imagePath/general.jpg';
  static String business = '$imagePath/business.jpg';

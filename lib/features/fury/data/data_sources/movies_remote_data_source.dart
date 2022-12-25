@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/error/exception.dart';
 import 'package:movies_application/features/fury/data/models/movie_keywords_model.dart';
+import 'package:movies_application/features/fury/data/models/request_token.dart';
+import 'package:movies_application/features/fury/data/models/session_id_model.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 
 import '../../../../core/network/movies_error_message_model.dart';
@@ -13,6 +16,18 @@ import '../models/tv_keywords_model.dart';
 import '../models/tv_model.dart';
 
 abstract class BaseMoviesRemoteDataSource {
+  Future<RequestTokenModel> requestToken();
+
+  Future<RequestTokenModel> createSessionWithLogin({
+    required String userName,
+    required String password,
+    required String requestToken,
+  });
+
+  Future<SessionIdModel> createNewSession({
+    required String requestToken,
+  });
+
   Future<MoviesModel> getPopularMoviesData({required int currentPopularPage});
 
   Future<MoviesModel> getUpComingMoviesData({required int currentUpComingPage});
@@ -349,6 +364,73 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     });
     if (response.statusCode == 200) {
       return TvModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<RequestTokenModel> requestToken() async {
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.requestToken, query: {
+      'api_key': MoviesDioHelper.apiKey,
+    });
+    if (response.statusCode == 200) {
+      return RequestTokenModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<RequestTokenModel> createSessionWithLogin({
+    required String userName,
+    required String password,
+    required String requestToken,
+  }) async {
+    final Response response = await MoviesDioHelper.postData(
+      url: EndPoints.createSessionWithLogin,
+      data: {
+        'username': userName,
+        'password': password,
+        'request_token': requestToken,
+      },
+      query: {
+        'api_key': MoviesDioHelper.apiKey,
+      },
+    );
+    if (response.statusCode == 200) {
+      print("YES");
+      return RequestTokenModel.fromJson(response.data);
+    } else {
+      print("NO");
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<SessionIdModel> createNewSession(
+      {required String requestToken}) async {
+    final response = await MoviesDioHelper.postData(
+      url: EndPoints.createSession,
+      data: {
+        'request_token': requestToken,
+      },
+      query: {
+        'api_key': MoviesDioHelper.apiKey,
+      },
+    );
+    if (response.statusCode == 200) {
+      return SessionIdModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:

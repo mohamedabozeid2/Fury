@@ -3,13 +3,27 @@ import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
+import 'package:movies_application/features/fury/domain/entities/session_id.dart';
 import 'package:movies_application/features/fury/domain/entities/tv.dart';
 
 import '../../data/models/single_movie.dart';
 import '../entities/movies.dart';
+import '../entities/request_token.dart';
 import '../entities/tv_keywords.dart';
 
 abstract class BaseMoviesRepository {
+  Future<Either<Failure, RequestToken>> getRequestToken();
+
+  Future<Either<Failure, RequestToken>> createSessionWithLogin({
+    required String userName,
+    required String password,
+    required String requestToken,
+  });
+
+  Future<Either<Failure, SessionId>> createNewSession({
+    required String requestToken,
+  });
+
   Future<Either<Failure, Movies>> getPopularMoviesData({
     required int currentPopularPage,
   });

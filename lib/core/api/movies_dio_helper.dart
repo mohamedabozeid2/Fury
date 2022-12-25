@@ -24,12 +24,13 @@ class MoviesDioHelper{
       'Content-Type':'application/json',
       'lang':lang,
     };
-    return await dio!.get(url,queryParameters: query??null);
+    return await dio!.get(url,queryParameters: query);
   }
 
   static Future<Response> postData({
-    required String? url,
-    required Map<String,dynamic>? data,
+    required String url,
+    required Map<String,dynamic> data,
+    Map<String,dynamic>? query,
     String? lang='en-US',
   })async{
     dio!.options.headers={
@@ -37,7 +38,7 @@ class MoviesDioHelper{
       'lang':lang,
     };
 
-    return await dio!.post(url!,data: data!);
+    return await dio!.post(url,data: data,queryParameters: query?? null);
   }
 
   static Future<Response> putData({

@@ -9,4 +9,5 @@ class AppColors{
   static Color goldStarColor = Colors.yellowAccent;
   static Color lightBlack = Colors.black54;
   static Color textWhiteColor = Colors.white54;
+  static Color redErrorColor = Colors.redAccent;
 }
