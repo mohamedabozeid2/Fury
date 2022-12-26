@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:movies_application/core/error/exception.dart';
 import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
+import 'package:movies_application/features/fury/domain/entities/account_details.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/entities/movies.dart';
@@ -294,6 +295,22 @@ class MoviesRepository extends BaseMoviesRepository {
     final result = await baseMoviesRemoteDataSource.createNewSession(
       requestToken: requestToken,
     );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, AccountDetails>> getAccountDetails(
+      {required String sessionId}) async {
+    final result = await baseMoviesRemoteDataSource.getAccountDetails(
+        sessionId: sessionId);
     try {
       return Right(result);
     } on MoviesServerException catch (failure) {

@@ -9,6 +9,7 @@ import 'package:movies_application/features/fury/data/models/single_tv.dart';
 
 import '../../../../core/network/movies_error_message_model.dart';
 import '../../domain/entities/genres.dart';
+import '../models/account_details_model.dart';
 import '../models/genres_model.dart';
 import '../models/movies_model.dart';
 import '../models/single_movie.dart';
@@ -16,6 +17,10 @@ import '../models/tv_keywords_model.dart';
 import '../models/tv_model.dart';
 
 abstract class BaseMoviesRemoteDataSource {
+  Future<AccountDetailsModel> getAccountDetails({
+    required String sessionId,
+  });
+
   Future<RequestTokenModel> requestToken();
 
   Future<RequestTokenModel> createSessionWithLogin({
@@ -431,6 +436,24 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     );
     if (response.statusCode == 200) {
       return SessionIdModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<AccountDetailsModel> getAccountDetails(
+      {required String sessionId}) async {
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.getAccountDetails, query: {
+      'api_key': MoviesDioHelper.apiKey,
+      'session_id': sessionId,
+    });
+    if (response.statusCode == 200) {
+      return AccountDetailsModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:

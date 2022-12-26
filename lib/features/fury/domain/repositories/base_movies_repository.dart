@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
+import 'package:movies_application/features/fury/domain/entities/account_details.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/entities/session_id.dart';
@@ -12,6 +13,8 @@ import '../entities/request_token.dart';
 import '../entities/tv_keywords.dart';
 
 abstract class BaseMoviesRepository {
+  Future<Either<Failure, AccountDetails>> getAccountDetails({required String sessionId});
+
   Future<Either<Failure, RequestToken>> getRequestToken();
 
   Future<Either<Failure, RequestToken>> createSessionWithLogin({

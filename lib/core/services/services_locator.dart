@@ -1,40 +1,41 @@
 import 'package:get_it/get_it.dart';
-import 'package:movies_application/features/fury/data/data_sources/movies_news_remote_data_source.dart';
-import 'package:movies_application/features/fury/data/data_sources/movies_remote_data_source.dart';
-import 'package:movies_application/features/fury/data/repositories/movies_repository.dart';
-import 'package:movies_application/features/fury/data/repositories/news_repository.dart';
-import 'package:movies_application/features/fury/domain/repositories/base_movies_news_repository.dart';
-import 'package:movies_application/features/fury/domain/repositories/base_movies_repository.dart';
-import 'package:movies_application/features/fury/domain/use_cases/create_new_session.dart';
-import 'package:movies_application/features/fury/domain/use_cases/create_session_with_login.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_business_news.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_general_news.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_genres.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_health_news.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_movie_keywords.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_movies_news.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_now_playing_movies_data.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_popular_movies_data.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_science_news.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_sports_news.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_technology_news.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_top_rated_tv.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_trending_movies_data.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_upcoming_movies_data.dart';
-import 'package:movies_application/features/fury/domain/use_cases/load_more_movies.dart';
-import 'package:movies_application/features/fury/domain/use_cases/load_more_news.dart';
-import 'package:movies_application/features/fury/presentation/controller/login_cubit/login_cubit.dart';
 
+import '../../features/fury/data/data_sources/movies_news_remote_data_source.dart';
+import '../../features/fury/data/data_sources/movies_remote_data_source.dart';
+import '../../features/fury/data/repositories/movies_repository.dart';
+import '../../features/fury/data/repositories/news_repository.dart';
+import '../../features/fury/domain/repositories/base_movies_news_repository.dart';
+import '../../features/fury/domain/repositories/base_movies_repository.dart';
+import '../../features/fury/domain/use_cases/create_new_session.dart';
+import '../../features/fury/domain/use_cases/create_session_with_login.dart';
+import '../../features/fury/domain/use_cases/get_account_details.dart';
+import '../../features/fury/domain/use_cases/get_business_news.dart';
+import '../../features/fury/domain/use_cases/get_general_news.dart';
+import '../../features/fury/domain/use_cases/get_genres.dart';
+import '../../features/fury/domain/use_cases/get_health_news.dart';
+import '../../features/fury/domain/use_cases/get_movie_keywords.dart';
+import '../../features/fury/domain/use_cases/get_movies_news.dart';
+import '../../features/fury/domain/use_cases/get_now_playing_movies_data.dart';
+import '../../features/fury/domain/use_cases/get_popular_movies_data.dart';
+import '../../features/fury/domain/use_cases/get_science_news.dart';
 import '../../features/fury/domain/use_cases/get_similar_movies.dart';
 import '../../features/fury/domain/use_cases/get_similar_tv_shows.dart';
+import '../../features/fury/domain/use_cases/get_sports_news.dart';
+import '../../features/fury/domain/use_cases/get_technology_news.dart';
 import '../../features/fury/domain/use_cases/get_top_rated_movies_data.dart';
+import '../../features/fury/domain/use_cases/get_top_rated_tv.dart';
+import '../../features/fury/domain/use_cases/get_trending_movies_data.dart';
 import '../../features/fury/domain/use_cases/get_tv_airing_today.dart';
 import '../../features/fury/domain/use_cases/get_popular_tv.dart';
 import '../../features/fury/domain/use_cases/get_tv_show_keywords.dart';
+import '../../features/fury/domain/use_cases/get_upcoming_movies_data.dart';
+import '../../features/fury/domain/use_cases/load_more_movies.dart';
+import '../../features/fury/domain/use_cases/load_more_news.dart';
 import '../../features/fury/domain/use_cases/load_more_tv_shows.dart';
 import '../../features/fury/domain/use_cases/request_token_for_login.dart';
 import '../../features/fury/domain/use_cases/search_movies.dart';
 import '../../features/fury/presentation/controller/home_cubit/home_cubit.dart';
+import '../../features/fury/presentation/controller/login_cubit/login_cubit.dart';
 import '../../features/fury/presentation/controller/news_cubit/news_cubit.dart';
 
 final sl = GetIt.instance;
@@ -45,6 +46,7 @@ class ServicesLocator {
 
     sl.registerFactory(
       () => LoginCubit(
+        sl(),
         sl(),
         sl(),
         sl(),
@@ -87,6 +89,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => RequestTokenUseCase(sl()));
     sl.registerLazySingleton(() => CreateNewSessionUseCase(sl()));
     sl.registerLazySingleton(() => CreateSessionWithLoginUseCase(sl()));
+    sl.registerLazySingleton(() => GetAccountDetailsUseCase(sl()));
 
     //// News
     sl.registerLazySingleton(() => GetMoviesNewsUseCase(sl()));

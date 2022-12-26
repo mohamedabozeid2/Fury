@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/features/fury/presentation/controller/register_cubit/register_states.dart';
 
-import '../../../domain/entities/user_data.dart';
 
 
 

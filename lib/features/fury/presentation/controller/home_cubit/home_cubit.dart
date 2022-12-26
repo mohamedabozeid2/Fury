@@ -19,7 +19,6 @@ import '../../../domain/entities/movie_keywords.dart';
 import '../../../domain/entities/movies.dart';
 import '../../../domain/entities/tv.dart';
 import '../../../domain/entities/tv_keywords.dart';
-import '../../../domain/entities/user_data.dart';
 import '../../../domain/use_cases/get_genres.dart';
 import '../../../domain/use_cases/get_movie_keywords.dart';
 import '../../../domain/use_cases/get_now_playing_movies_data.dart';
@@ -92,7 +91,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     const HomeScreen(),
     MyMoviesScreen(),
     const NewsScreen(),
-    SettingsScreen(),
+    const SettingsScreen(),
   ];
 
   List<GButton> bottomNavItems = [

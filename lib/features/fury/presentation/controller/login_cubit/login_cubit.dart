@@ -5,10 +5,11 @@ import 'package:movies_application/core/hive/hive_keys.dart';
 import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/features/fury/domain/entities/request_token.dart';
-import 'package:movies_application/features/fury/domain/entities/session_id.dart';
 
+import '../../../domain/entities/session_id.dart';
 import '../../../domain/use_cases/create_new_session.dart';
 import '../../../domain/use_cases/create_session_with_login.dart';
+import '../../../domain/use_cases/get_account_details.dart';
 import '../../../domain/use_cases/request_token_for_login.dart';
 import 'login_states.dart';
 
@@ -16,11 +17,13 @@ class LoginCubit extends Cubit<LoginStates> {
   final RequestTokenUseCase requestTokenUseCase;
   final CreateSessionWithLoginUseCase createSessionWithLoginUseCase;
   final CreateNewSessionUseCase createNewSessionUseCase;
+  final GetAccountDetailsUseCase getAccountDetailsUseCase;
 
   LoginCubit(
     this.requestTokenUseCase,
     this.createSessionWithLoginUseCase,
     this.createNewSessionUseCase,
+    this.getAccountDetailsUseCase,
   ) : super(LoginInitialState());
 
   static LoginCubit get(context) => BlocProvider.of(context);
@@ -57,7 +60,11 @@ class LoginCubit extends Cubit<LoginStates> {
           ).then((value) async {
             await createNewSession(
               requestToken: token!.requestToken,
-            ).then((value) {});
+            ).then((value) {
+              getAccountDetails(sessionId: sessionId!.sessionId).then((value) {
+                emit(UserLoginSuccessState());
+              });
+            });
           }).catchError((error) {});
         }).catchError((error) {});
       }
@@ -111,10 +118,28 @@ class LoginCubit extends Cubit<LoginStates> {
           key: HiveKeys.userId,
           data: sessionId!.sessionId,
         );
-        emit(UserLoginSuccessState());
       });
     }).catchError((error) {
       emit(CreateNewSessionErrorState(error.toString()));
+    });
+  }
+
+  Future<void> getAccountDetails({
+    required String sessionId,
+  }) async {
+    await getAccountDetailsUseCase
+        .execute(
+      sessionId: sessionId,
+    )
+        .then((value) {
+      value.fold((l) {
+        emit(GetAccountDetailsErrorState());
+      }, (r) {
+        accountDetails = r;
+        // HiveHelper.putInBox(box: box, key: key, data: data)
+      });
+    }).catchError((error) {
+      emit(GetAccountDetailsErrorState());
     });
   }
 }

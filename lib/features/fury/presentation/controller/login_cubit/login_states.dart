@@ -25,3 +25,6 @@ class CreateNewSessionErrorState extends LoginStates{
 
   CreateNewSessionErrorState(this.error);
 }
+
+class GetAccountDetailsErrorState extends LoginStates{}
+

@@ -5,6 +5,8 @@ class EndPoints {
       '/authentication/token/validate_with_login';
   static String createSession = '/authentication/session/new';
 
+  static String getAccountDetails = '/account';
+
   ///// Movies //////
   static String popularMovies = '/movie/popular';
   static String trendingMovies = '/trending/movie/day';
