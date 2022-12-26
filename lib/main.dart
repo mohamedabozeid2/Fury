@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/app.dart';
-import 'package:movies_application/core/hive/hive_keys.dart';
 import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/services/services_locator.dart';
 import 'package:movies_application/core/utils/constants.dart';
@@ -21,12 +20,12 @@ void main() async {
 
   ServicesLocator().init();
   Widget startWidget;
-  uId = HiveHelper.getBoxData(box: HiveHelper.userId, key: HiveKeys.userId);
-
-  if (uId != '') {
-    startWidget = const Layout();
-  } else {
+  // uId = HiveHelper.getBoxData(box: HiveHelper.userId, key: HiveKeys.userId);
+  accountDetails = HiveHelper.getAccountDetailsBox();
+  if (accountDetails == null) {
     startWidget = const LoginScreen();
+  } else {
+    startWidget = const Layout();
   }
 
   // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -39,7 +38,6 @@ void main() async {
   await CheckConnection.checkConnection().then((value) {
     internetConnection = value;
   });
-
 
   MoviesDioHelper.init();
   NewsDioHelper.init();

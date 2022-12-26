@@ -13,6 +13,8 @@ class HiveHelper {
 
     //// Register Adapter
 
+    Hive.registerAdapter(AccountDetailsAdapter());
+
     //// Open Boxes
     userId = await Hive.openBox<String>(HiveKeys.userId);
     accountDetailsBox =
@@ -21,10 +23,16 @@ class HiveHelper {
 
   static Future<void> putInAccountDetails({
     required AccountDetails data,
-  }) async{
+  }) async {
     return await accountDetailsBox.put(HiveKeys.accountDetails, data);
   }
 
+  static AccountDetails? getAccountDetailsBox() {
+    return accountDetailsBox.get(HiveKeys.accountDetails);
+  }
+  static void deleteAccountDetails(){
+    accountDetailsBox.clear();
+  }
 
   static Future<void> putInBox({
     required Box box,

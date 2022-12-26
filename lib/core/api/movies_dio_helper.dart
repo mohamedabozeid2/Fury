@@ -38,7 +38,7 @@ class MoviesDioHelper{
       'lang':lang,
     };
 
-    return await dio!.post(url,data: data,queryParameters: query?? null);
+    return await dio!.post(url,data: data,queryParameters: query);
   }
 
   static Future<Response> putData({

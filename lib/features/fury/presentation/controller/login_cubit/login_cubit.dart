@@ -136,6 +136,7 @@ class LoginCubit extends Cubit<LoginStates> {
         emit(GetAccountDetailsErrorState());
       }, (r) {
         accountDetails = r;
+        HiveHelper.putInAccountDetails(data: r);
         // HiveHelper.putInBox(box: box, key: key, data: data)
       });
     }).catchError((error) {

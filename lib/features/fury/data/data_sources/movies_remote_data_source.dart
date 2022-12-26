@@ -411,10 +411,8 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
       },
     );
     if (response.statusCode == 200) {
-      print("YES");
       return RequestTokenModel.fromJson(response.data);
     } else {
-      print("NO");
       throw MoviesServerException(
         moviesErrorMessageModel:
             MoviesErrorMessageModel.fromJson(response.data),

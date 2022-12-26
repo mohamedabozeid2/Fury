@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/strings.dart';
 
 import '../../../../../core/hive/hive_helper.dart';
-import '../../../../../core/hive/hive_keys.dart';
 import '../../../../../core/utils/components.dart';
 import '../../../../../core/widgets/button.dart';
 import '../login_screen/login_screen.dart';
@@ -33,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void signOut() {
-    HiveHelper.removeData(box: HiveHelper.userId, key: HiveKeys.userId);
+    HiveHelper.deleteAccountDetails();
     Components.navigateTo(context, const LoginScreen());
   }
 }

@@ -5,6 +5,7 @@ import 'package:movies_application/core/utils/app_fonts.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/assets_manager.dart';
 import 'package:movies_application/core/utils/components.dart';
+import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
@@ -172,6 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     passwordController.text,
                                               );
                                             } else {
+                                              print(accountDetails);
                                               Components.showSnackBar(
                                                   title: AppStrings.appName,
                                                   message: AppStrings
