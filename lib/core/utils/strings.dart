@@ -41,6 +41,7 @@ class AppStrings {
   static const String later = "Later";
   static const String favorite = "Favorite";
   static const String addedToFavorite = "Added To Favorite";
+  static const String addedToWatchList = "Added To Watch List";
   static const String similarMovies = "Similar Movies";
   static const String similarTVShows = "Similar TV Shows";
   static const String noSimilarMovies =

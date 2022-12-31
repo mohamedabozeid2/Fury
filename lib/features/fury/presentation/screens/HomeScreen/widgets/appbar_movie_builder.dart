@@ -80,7 +80,13 @@ class AppBarMovieBuilder extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       AddActionsButton(
-                        fun: () {},
+                        fun: () {
+                          MoviesCubit.get(context).addToWatchList(
+                            mediaId: isMovie ? movie!.id : tv!.id,
+                            isMovie: isMovie,
+                            watchList: true,
+                          );
+                        },
                         icon: Icons.add,
                         iconSize: AppFontSize.s22,
                         title: 'Later',
@@ -98,7 +104,9 @@ class AppBarMovieBuilder extends StatelessWidget {
                         title: 'Favorite',
                       ),
                       AddActionsButton(
-                        fun: () {},
+                        fun: () {
+
+                        },
                         icon: Icons.info,
                         iconSize: AppFontSize.s22,
                         title: 'Info',

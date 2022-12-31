@@ -157,7 +157,16 @@ class _MovieDetailsState extends State<MovieDetails> {
                                               : widget.tvShow!.voteAverage),
                                       const Spacer(),
                                       AddActionsButton(
-                                          fun: () {},
+                                          fun: () {
+                                            MoviesCubit.get(context)
+                                                .addToWatchList(
+                                              mediaId: widget.isMovie
+                                                  ? widget.movie!.id
+                                                  : widget.tvShow!.id,
+                                              isMovie: widget.isMovie,
+                                              watchList: true,
+                                            );
+                                          },
                                           icon: Icons.add,
                                           iconSize: AppFontSize.s26),
                                       state is AddToFavoriteLoadingState
