@@ -85,7 +85,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                 tvID: widget.tvShow!.id,
               );
               page = MoviesCubit.get(context).currentSimilarTVShowPage;
-
             }
           }
         }
@@ -161,10 +160,24 @@ class _MovieDetailsState extends State<MovieDetails> {
                                           fun: () {},
                                           icon: Icons.add,
                                           iconSize: AppFontSize.s26),
-                                      AddActionsButton(
-                                          fun: () {},
-                                          icon: Icons.favorite,
-                                          iconSize: AppFontSize.s26),
+                                      state is AddToFavoriteLoadingState
+                                          ? AdaptiveIndicator(
+                                              os: Components.getOS(),
+                                              color: AppColors.mainColor,
+                                            )
+                                          : AddActionsButton(
+                                              fun: () {
+                                                MoviesCubit.get(context)
+                                                    .markAsFavorite(
+                                                  isMovie: widget.isMovie,
+                                                  mediaId: widget.isMovie
+                                                      ? widget.movie!.id
+                                                      : widget.tvShow!.id,
+                                                  favorite: true,
+                                                );
+                                              },
+                                              icon: Icons.favorite,
+                                              iconSize: AppFontSize.s26),
                                     ],
                                   ),
                                   SizedBox(
@@ -287,7 +300,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                 .textTheme
                                                 .subtitle2,
                                           ),
-
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0,

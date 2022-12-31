@@ -167,6 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 passwordController
                                                     .text.isNotEmpty) {
                                               LoginCubit.get(context).userLogin(
+                                                context: context,
                                                 userName:
                                                     userNameController.text,
                                                 password:

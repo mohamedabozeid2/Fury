@@ -10,4 +10,5 @@ class AppColors{
   static Color lightBlack = Colors.black54;
   static Color textWhiteColor = Colors.white54;
   static Color redErrorColor = Colors.redAccent;
+  static Color greenSuccessColor = Colors.lightGreen;
 }

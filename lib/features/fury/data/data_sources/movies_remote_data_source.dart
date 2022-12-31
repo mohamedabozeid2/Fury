@@ -637,11 +637,12 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
           'media_id': mediaId,
           'favorite': favorite,
         },
+        contentType: 'application/json;charset=utf-8',
         query: {
           'session_id': sessionId,
           'api_key': MoviesDioHelper.apiKey,
         });
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return FavoriteDataModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
