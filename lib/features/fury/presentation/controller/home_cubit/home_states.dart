@@ -68,6 +68,42 @@ class GetTopRatedTvErrorState extends MoviesStates{
   GetTopRatedTvErrorState({required this.message});
 }
 
+class GetFavoriteTvErrorState extends MoviesStates{
+  final String message;
+
+  GetFavoriteTvErrorState({required this.message});
+}
+class GetTvWatchListErrorState extends MoviesStates{
+  final String message;
+
+  GetTvWatchListErrorState({required this.message});
+}
+class GetFavoriteMoviesErrorState extends MoviesStates{
+  final String message;
+
+  GetFavoriteMoviesErrorState({required this.message});
+}
+class GetMoviesWatchListErrorState extends MoviesStates{
+  final String message;
+
+  GetMoviesWatchListErrorState({required this.message});
+}
+
+class AddToFavoriteLoadingState extends MoviesStates{}
+class AddToFavoriteSuccessState extends MoviesStates{}
+class AddToFavoriteErrorState extends MoviesStates{
+  final String message;
+
+  AddToFavoriteErrorState({required this.message});
+}
+
+class AddToWatchListLoadingState extends MoviesStates{}
+class AddToWatchListSuccessState extends MoviesStates{}
+class AddToWatchListErrorState extends MoviesStates{
+  final String message;
+  AddToWatchListErrorState({required this.message});
+}
+
 class GetGenresErrorState extends MoviesStates {
   final String message;
 

@@ -33,6 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void signOut() {
     HiveHelper.deleteAccountDetails();
+    HiveHelper.deleteSessionId();
     Components.navigateTo(context, const LoginScreen());
   }
 }

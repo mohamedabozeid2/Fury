@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/domain/entities/account_details.dart';
+import 'package:movies_application/features/fury/domain/entities/favorite_data.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/entities/session_id.dart';
@@ -13,7 +14,8 @@ import '../entities/request_token.dart';
 import '../entities/tv_keywords.dart';
 
 abstract class BaseMoviesRepository {
-  Future<Either<Failure, AccountDetails>> getAccountDetails({required String sessionId});
+  Future<Either<Failure, AccountDetails>> getAccountDetails(
+      {required String sessionId});
 
   Future<Either<Failure, RequestToken>> getRequestToken();
 
@@ -92,5 +94,45 @@ abstract class BaseMoviesRepository {
   Future<Either<Failure, Movies>> loadMoreMovies({
     required int currentPage,
     required String endPoint,
+  });
+
+  Future<Either<Failure, Movies>> getFavoriteMovies({
+    required String accountId,
+    required String sessionId,
+    required int currentFavoriteMoviesPage,
+  });
+
+  Future<Either<Failure, Tv>> getFavoriteTvShows({
+    required String accountId,
+    required String sessionId,
+    required int currentFavoriteTvShowsPage,
+  });
+
+  Future<Either<Failure, FavoriteData>> markAsFavorite({
+    required String accountId,
+    required String sessionId,
+    required String mediaType,
+    required int mediaId,
+    required bool favorite,
+  });
+
+  Future<Either<Failure, FavoriteData>> addToWatchList({
+    required String accountId,
+    required String sessionId,
+    required String mediaType,
+    required int mediaId,
+    required bool watchList,
+  });
+
+  Future<Either<Failure, Movies>> getMoviesWatchList({
+    required String accountId,
+    required String sessionId,
+    required int currentMoviesWatchListPage,
+  });
+
+  Future<Either<Failure, Tv>> getTvShowsWatchList({
+    required String accountId,
+    required String sessionId,
+    required int currentTvShowsWatchListPage,
   });
 }

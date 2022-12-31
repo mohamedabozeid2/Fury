@@ -20,7 +20,8 @@ void main() async {
 
   ServicesLocator().init();
   Widget startWidget;
-  // uId = HiveHelper.getBoxData(box: HiveHelper.userId, key: HiveKeys.userId);
+
+  sessionId = HiveHelper.getSessionIdBox();
   accountDetails = HiveHelper.getAccountDetailsBox();
   if (accountDetails == null) {
     startWidget = const LoginScreen();

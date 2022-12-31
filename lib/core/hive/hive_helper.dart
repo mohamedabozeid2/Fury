@@ -1,9 +1,10 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:movies_application/core/hive/hive_keys.dart';
 import 'package:movies_application/features/fury/domain/entities/account_details.dart';
+import 'package:movies_application/features/fury/domain/entities/session_id.dart';
 
 class HiveHelper {
-  static late Box<String> userId;
+  static late Box<SessionId> sessionId;
   static late Box<AccountDetails> accountDetailsBox;
 
   static Future<void> init({
@@ -14,9 +15,10 @@ class HiveHelper {
     //// Register Adapter
 
     Hive.registerAdapter(AccountDetailsAdapter());
+    Hive.registerAdapter(SessionIdAdapter());
 
     //// Open Boxes
-    userId = await Hive.openBox<String>(HiveKeys.userId);
+    sessionId = await Hive.openBox<SessionId>(HiveKeys.sessionId);
     accountDetailsBox =
         await Hive.openBox<AccountDetails>(HiveKeys.accountDetails);
   }
@@ -30,8 +32,21 @@ class HiveHelper {
   static AccountDetails? getAccountDetailsBox() {
     return accountDetailsBox.get(HiveKeys.accountDetails);
   }
-  static void deleteAccountDetails(){
+
+  static void deleteAccountDetails() {
     accountDetailsBox.clear();
+  }
+
+  static Future<void> putInSessionId({
+    required SessionId data,
+  }) async {
+    return await sessionId.put(HiveKeys.sessionId, data);
+  }
+  static SessionId? getSessionIdBox(){
+    return sessionId.get(HiveKeys.sessionId);
+  }
+  static void deleteSessionId(){
+    sessionId.clear();
   }
 
   static Future<void> putInBox({

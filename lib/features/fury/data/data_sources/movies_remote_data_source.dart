@@ -10,6 +10,7 @@ import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import '../../../../core/network/movies_error_message_model.dart';
 import '../../domain/entities/genres.dart';
 import '../models/account_details_model.dart';
+import '../models/favorite_data_model.dart';
 import '../models/genres_model.dart';
 import '../models/movies_model.dart';
 import '../models/single_movie.dart';
@@ -86,6 +87,45 @@ abstract class BaseMoviesRemoteDataSource {
   Future<MoviesModel> loadMoreMovies({
     required int currentPage,
     required String endPoint,
+  });
+
+  Future<MoviesModel> getFavoriteMovies(
+      {required String accountId,
+      required String sessionId,
+      required int currentFavoriteMoviesPage});
+
+  Future<TvModel> getFavoriteTvShows({
+    required String accountId,
+    required String sessionId,
+    required int currentFavoriteTvShowsPage,
+  });
+
+  Future<MoviesModel> getMoviesWatchList({
+    required String accountId,
+    required String sessionId,
+    required int currentMoviesWatchListPage,
+  });
+
+  Future<TvModel> getTvShowsWatchList({
+    required String accountId,
+    required String sessionId,
+    required int currentTvShowsWatchListPage,
+  });
+
+  Future<FavoriteDataModel> markAsFavorite({
+    required String accountId,
+    required String sessionId,
+    required String mediaType,
+    required int mediaId,
+    required bool favorite,
+  });
+
+  Future<FavoriteDataModel> addToWatchList({
+    required String accountId,
+    required String sessionId,
+    required String mediaType,
+    required int mediaId,
+    required bool watchList,
   });
 }
 
@@ -443,8 +483,9 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
   }
 
   @override
-  Future<AccountDetailsModel> getAccountDetails(
-      {required String sessionId}) async {
+  Future<AccountDetailsModel> getAccountDetails({
+    required String sessionId,
+  }) async {
     final response =
         await MoviesDioHelper.getData(url: EndPoints.getAccountDetails, query: {
       'api_key': MoviesDioHelper.apiKey,
@@ -452,6 +493,156 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     });
     if (response.statusCode == 200) {
       return AccountDetailsModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<FavoriteDataModel> addToWatchList({
+    required String accountId,
+    required String sessionId,
+    required String mediaType,
+    required int mediaId,
+    required bool watchList,
+  }) async {
+    final response = await MoviesDioHelper.postData(
+        url: '/account/$accountId/watchlist',
+        data: {
+          'media_type': mediaType,
+          'media_id': mediaId,
+          'watchlist': watchList,
+        },
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+        });
+    if (response.statusCode == 200) {
+      return FavoriteDataModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<MoviesModel> getFavoriteMovies({
+    required String accountId,
+    required String sessionId,
+    required int currentFavoriteMoviesPage,
+  }) async {
+    final response = await MoviesDioHelper.getData(
+        url: '/account/$accountId/favorite/movies',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+          'page': currentFavoriteMoviesPage,
+        });
+    if (response.statusCode == 200) {
+      return MoviesModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<TvModel> getFavoriteTvShows({
+    required String accountId,
+    required String sessionId,
+    required int currentFavoriteTvShowsPage,
+  }) async {
+    final response = await MoviesDioHelper.getData(
+        url: '/account/$accountId/favorite/tv',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+          'page': currentFavoriteTvShowsPage,
+        });
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<MoviesModel> getMoviesWatchList({
+    required String accountId,
+    required String sessionId,
+    required int currentMoviesWatchListPage,
+  }) async {
+    final response = await MoviesDioHelper.getData(
+        url: '/account/$accountId/watchlist/movies',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+          'page': currentMoviesWatchListPage,
+        });
+    if (response.statusCode == 200) {
+      return MoviesModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<TvModel> getTvShowsWatchList({
+    required String accountId,
+    required String sessionId,
+    required int currentTvShowsWatchListPage,
+  }) async {
+    final response = await MoviesDioHelper.getData(
+        url: '/account/$accountId/watchlist/tv',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+          'page': currentTvShowsWatchListPage,
+        });
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+            MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<FavoriteDataModel> markAsFavorite({
+    required String accountId,
+    required String sessionId,
+    required String mediaType,
+    required int mediaId,
+    required bool favorite,
+  }) async {
+    final response = await MoviesDioHelper.postData(
+        url: '/account/$accountId/favorite',
+        data: {
+          'media_type': mediaType,
+          'media_id': mediaId,
+          'favorite': favorite,
+        },
+        query: {
+          'session_id': sessionId,
+          'api_key': MoviesDioHelper.apiKey,
+        });
+    if (response.statusCode == 200) {
+      return FavoriteDataModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:

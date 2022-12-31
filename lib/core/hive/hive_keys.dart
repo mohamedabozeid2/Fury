@@ -1,4 +1,4 @@
 class HiveKeys{
-  static const String userId = 'userId';
+  static const String sessionId = 'sessionId';
   static const String accountDetails = 'accountDetails';
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/hive/hive_helper.dart';
-import 'package:movies_application/core/hive/hive_keys.dart';
 import 'package:movies_application/core/network/network.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/features/fury/domain/entities/request_token.dart';
 
-import '../../../domain/entities/session_id.dart';
 import '../../../domain/use_cases/create_new_session.dart';
 import '../../../domain/use_cases/create_session_with_login.dart';
 import '../../../domain/use_cases/get_account_details.dart';
@@ -18,6 +16,7 @@ class LoginCubit extends Cubit<LoginStates> {
   final CreateSessionWithLoginUseCase createSessionWithLoginUseCase;
   final CreateNewSessionUseCase createNewSessionUseCase;
   final GetAccountDetailsUseCase getAccountDetailsUseCase;
+
 
   LoginCubit(
     this.requestTokenUseCase,
@@ -42,7 +41,6 @@ class LoginCubit extends Cubit<LoginStates> {
   }
 
   RequestToken? token;
-  SessionId? sessionId;
 
   void userLogin({
     required String userName,
@@ -113,11 +111,7 @@ class LoginCubit extends Cubit<LoginStates> {
         emit(CreateNewSessionErrorState(l.message));
       }, (r) {
         sessionId = r;
-        HiveHelper.putInBox(
-          box: HiveHelper.userId,
-          key: HiveKeys.userId,
-          data: sessionId!.sessionId,
-        );
+        HiveHelper.putInSessionId(data: r);
       });
     }).catchError((error) {
       emit(CreateNewSessionErrorState(error.toString()));
@@ -137,7 +131,6 @@ class LoginCubit extends Cubit<LoginStates> {
       }, (r) {
         accountDetails = r;
         HiveHelper.putInAccountDetails(data: r);
-        // HiveHelper.putInBox(box: box, key: key, data: data)
       });
     }).catchError((error) {
       emit(GetAccountDetailsErrorState());

@@ -1,4 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:movies_application/features/fury/domain/use_cases/add_to_watch_list.dart';
+import 'package:movies_application/features/fury/domain/use_cases/get_favorite_movies.dart';
+import 'package:movies_application/features/fury/domain/use_cases/get_favorite_tv_shows.dart';
+import 'package:movies_application/features/fury/domain/use_cases/get_movies_watch_list.dart';
+import 'package:movies_application/features/fury/domain/use_cases/mark_as_favorite.dart';
 
 import '../../features/fury/data/data_sources/movies_news_remote_data_source.dart';
 import '../../features/fury/data/data_sources/movies_remote_data_source.dart';
@@ -28,6 +33,7 @@ import '../../features/fury/domain/use_cases/get_trending_movies_data.dart';
 import '../../features/fury/domain/use_cases/get_tv_airing_today.dart';
 import '../../features/fury/domain/use_cases/get_popular_tv.dart';
 import '../../features/fury/domain/use_cases/get_tv_show_keywords.dart';
+import '../../features/fury/domain/use_cases/get_tv_shows_watch_list.dart';
 import '../../features/fury/domain/use_cases/get_upcoming_movies_data.dart';
 import '../../features/fury/domain/use_cases/load_more_movies.dart';
 import '../../features/fury/domain/use_cases/load_more_news.dart';
@@ -81,6 +87,12 @@ class ServicesLocator {
           sl(),
           sl(),
           sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
+          sl(),
         ));
 
     /////Use Cases
@@ -118,6 +130,13 @@ class ServicesLocator {
     sl.registerLazySingleton(() => LoadMoreMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetPopularTvUseCase(sl()));
     sl.registerLazySingleton(() => GetTopRatedTvUseCase(sl()));
+    sl.registerLazySingleton(() => GetFavoriteMoviesUseCase(sl()));
+    sl.registerLazySingleton(() => GetFavoriteTvShowsUseCase(sl()));
+    sl.registerLazySingleton(() => MarkAsFavoriteUseCase(sl()));
+    sl.registerLazySingleton(() => GetMoviesWatchList(sl()));
+    sl.registerLazySingleton(() => GetTvShowWatchListUseCase(sl()));
+    sl.registerLazySingleton(() => AddToWatchListUseCase(sl()));
+
     ///// Repository
     sl.registerLazySingleton<BaseMoviesNewsRepository>(
       () => MoviesNewsRepository(sl()),

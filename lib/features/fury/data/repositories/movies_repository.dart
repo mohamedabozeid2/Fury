@@ -3,6 +3,7 @@ import 'package:movies_application/core/error/exception.dart';
 import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/domain/entities/account_details.dart';
+import 'package:movies_application/features/fury/domain/entities/favorite_data.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/domain/entities/movie_keywords.dart';
 import 'package:movies_application/features/fury/domain/entities/movies.dart';
@@ -311,6 +312,140 @@ class MoviesRepository extends BaseMoviesRepository {
       {required String sessionId}) async {
     final result = await baseMoviesRemoteDataSource.getAccountDetails(
         sessionId: sessionId);
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, FavoriteData>> addToWatchList(
+      {required String accountId,
+      required String sessionId,
+      required String mediaType,
+      required int mediaId,
+      required bool watchList}) async {
+    final result = await baseMoviesRemoteDataSource.addToWatchList(
+      accountId: accountId,
+      sessionId: sessionId,
+      mediaType: mediaType,
+      mediaId: mediaId,
+      watchList: watchList,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Movies>> getFavoriteMovies(
+      {required String accountId,
+      required String sessionId,
+      required int currentFavoriteMoviesPage}) async {
+    final result = await baseMoviesRemoteDataSource.getFavoriteMovies(
+      accountId: accountId,
+      sessionId: sessionId,
+      currentFavoriteMoviesPage: currentFavoriteMoviesPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tv>> getFavoriteTvShows(
+      {required String accountId,
+      required String sessionId,
+      required int currentFavoriteTvShowsPage}) async {
+    final result = await baseMoviesRemoteDataSource.getFavoriteTvShows(
+      accountId: accountId,
+      sessionId: sessionId,
+      currentFavoriteTvShowsPage: currentFavoriteTvShowsPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Movies>> getMoviesWatchList(
+      {required String accountId,
+      required String sessionId,
+      required int currentMoviesWatchListPage}) async {
+    final result = await baseMoviesRemoteDataSource.getMoviesWatchList(
+      accountId: accountId,
+      sessionId: sessionId,
+      currentMoviesWatchListPage: currentMoviesWatchListPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tv>> getTvShowsWatchList(
+      {required String accountId,
+      required String sessionId,
+      required int currentTvShowsWatchListPage}) async {
+    final result = await baseMoviesRemoteDataSource.getTvShowsWatchList(
+      accountId: accountId,
+      sessionId: sessionId,
+      currentTvShowsWatchListPage: currentTvShowsWatchListPage,
+    );
+    try {
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, FavoriteData>> markAsFavorite(
+      {required String accountId,
+      required String sessionId,
+      required String mediaType,
+      required int mediaId,
+      required bool favorite}) async {
+    final result = await baseMoviesRemoteDataSource.markAsFavorite(
+      accountId: accountId,
+      sessionId: sessionId,
+      mediaType: mediaType,
+      mediaId: mediaId,
+      favorite: favorite,
+    );
     try {
       return Right(result);
     } on MoviesServerException catch (failure) {

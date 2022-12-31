@@ -19,8 +19,12 @@ import '../../../domain/entities/movie_keywords.dart';
 import '../../../domain/entities/movies.dart';
 import '../../../domain/entities/tv.dart';
 import '../../../domain/entities/tv_keywords.dart';
+import '../../../domain/use_cases/add_to_watch_list.dart';
+import '../../../domain/use_cases/get_favorite_movies.dart';
+import '../../../domain/use_cases/get_favorite_tv_shows.dart';
 import '../../../domain/use_cases/get_genres.dart';
 import '../../../domain/use_cases/get_movie_keywords.dart';
+import '../../../domain/use_cases/get_movies_watch_list.dart';
 import '../../../domain/use_cases/get_now_playing_movies_data.dart';
 import '../../../domain/use_cases/get_popular_movies_data.dart';
 import '../../../domain/use_cases/get_similar_movies.dart';
@@ -31,10 +35,12 @@ import '../../../domain/use_cases/get_trending_movies_data.dart';
 import '../../../domain/use_cases/get_tv_airing_today.dart';
 import '../../../domain/use_cases/get_popular_tv.dart';
 import '../../../domain/use_cases/get_tv_show_keywords.dart';
+import '../../../domain/use_cases/get_tv_shows_watch_list.dart';
 import '../../../domain/use_cases/get_upcoming_movies_data.dart';
 import '../../../../../core/keys/movies_category_keys.dart';
 import '../../../domain/use_cases/load_more_movies.dart';
 import '../../../domain/use_cases/load_more_tv_shows.dart';
+import '../../../domain/use_cases/mark_as_favorite.dart';
 import '../../../domain/use_cases/search_movies.dart';
 import '../../screens/my_movies_screen/my_movies_screen.dart';
 import '../../screens/news_screen/news_screen.dart';
@@ -58,6 +64,12 @@ class MoviesCubit extends Cubit<MoviesStates> {
   final LoadMoreTVShowsUseCase loadMoreTVShowsUseCase;
   final LoadMoreMoviesUseCase loadMoreMoviesUseCase;
   final GetTopRatedTvUseCase getTopRatedTvUseCase;
+  final AddToWatchListUseCase addToWatchListUseCase;
+  final GetFavoriteMoviesUseCase getFavoriteMoviesUseCase;
+  final GetFavoriteTvShowsUseCase getFavoriteTvShowsUseCase;
+  final GetMoviesWatchList getMoviesWatchList;
+  final GetTvShowWatchListUseCase getTvShowWatchListUseCase;
+  final MarkAsFavoriteUseCase markAsFavoriteUseCase;
 
   MoviesCubit(
     this.getPopularMoviesDataUseCase,
@@ -76,6 +88,12 @@ class MoviesCubit extends Cubit<MoviesStates> {
     this.loadMoreMoviesUseCase,
     this.getPopularTvUseCase,
     this.getTopRatedTvUseCase,
+    this.markAsFavoriteUseCase,
+    this.addToWatchListUseCase,
+    this.getFavoriteTvShowsUseCase,
+    this.getFavoriteMoviesUseCase,
+    this.getTvShowWatchListUseCase,
+    this.getMoviesWatchList,
   ) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
@@ -101,14 +119,13 @@ class MoviesCubit extends Cubit<MoviesStates> {
     const GButton(icon: Icons.settings, text: AppStrings.settings),
   ];
 
-
   void getAllMovies({required BuildContext context}) {
     emit(GetAllMoviesLoadingState());
     CheckConnection.checkConnection().then((value) {
       internetConnection = value;
       if (value == true) {
         Future.wait([
-          ///////// POPULAR MOVIES //////////
+          /// POPULAR MOVIES //////////
           getPopularMovies().then((value) {
             value.fold((l) {
               emit(GetPopularMoviesErrorState(message: l.message));
@@ -117,7 +134,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
               isFirstPopularLoadRunning = false;
             });
           }),
-          ///////// TRENDING MOVIES //////////
+
+          /// TRENDING MOVIES //////////
           getTrendingMovies().then((value) {
             value.fold((l) {
               emit(GetTrendingMoviesErrorState(message: l.message));
@@ -126,7 +144,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
               trendingMovies = r;
             });
           }),
-          ///////// TOP RATED MOVIES //////////
+
+          /// TOP RATED MOVIES //////////
           getTopRatedMovies().then((value) {
             value.fold((l) {
               emit(GetTopRatedMoviesErrorState(message: l.message));
@@ -135,7 +154,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
               isFirstTopRatedLoadRunning = false;
             });
           }),
-          ///////// UPCOMING MOVIES //////////
+
+          /// UPCOMING MOVIES //////////
           getUpComingMovies().then((value) {
             value.fold((l) {
               emit(GetUpComingMoviesErrorState(message: l.message));
@@ -144,7 +164,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
               isFirstUpComingLoadRunning = false;
             });
           }),
-          ///////// NOW PLAYING MOVIES //////////
+
+          /// NOW PLAYING MOVIES //////////
 
           getNowPlayingMovies().then((value) {
             value.fold((l) {
@@ -157,6 +178,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
           ///////// TV SHOWS MOVIES //////////
 
+          /// TV Airing Today
           getTvAiringToday().then((value) {
             value.fold((l) {
               emit(GetTvAiringTodayErrorState(message: l.message));
@@ -166,6 +188,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             });
           }),
 
+          /// Popular Tv Shows
           getPopularTv().then((value) {
             value.fold((l) {
               emit(GetPopularTvErrorState(
@@ -176,12 +199,22 @@ class MoviesCubit extends Cubit<MoviesStates> {
               popularTv = r;
             });
           }),
-          getTopRatedTv().then((value){
-            value.fold((l){
+
+          /// Top Rated Tv Shows
+          getTopRatedTv().then((value) {
+            value.fold((l) {
               emit(GetTopRatedTvErrorState(message: l.message));
-            }, (r){
+            }, (r) {
               isFirstTopRatedTvLoadingRunning = false;
               topRatedTv = r;
+            });
+          }),
+          getFavoriteMovies().then((value){
+            value.fold((l){
+              emit(GetFavoriteMoviesErrorState(message: l.message));
+            }, (r){
+              isFirstFavoriteMoviesLoadingRunning = false;
+              favoriteMovies = r;
             });
           })
         ]).then((value) {
@@ -212,7 +245,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     });
   }
 
-  /////////// Popular Movies ////////////
+  /// Popular Movies ////////////
   int currentPopularPage = 1;
   bool isFirstPopularLoadRunning = false;
 
@@ -222,7 +255,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
         currentPopularPage: currentPopularPage);
   }
 
-  ///////////// Top Rated Movies ////////////
+  /// Top Rated Movies ////////////
   int currentTopRatedPage = 1;
   bool isFirstTopRatedLoadRunning = false;
 
@@ -232,7 +265,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
         currentTopRatedPage: currentTopRatedPage);
   }
 
-  ///////////// Trending Movies ////////////
+  /// Trending Movies ////////////
   int currentTrendingPage = 1;
   bool isFirstTrendingLoadRunning = false;
 
@@ -242,7 +275,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
         currentTrendingPage: currentTrendingPage);
   }
 
-  ///////////// Up Coming Movies ////////////
+  /// Up Coming Movies ////////////
   int currentUpComingPage = 1;
   bool isFirstUpComingLoadRunning = false;
 
@@ -252,7 +285,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
         currentUpComingPage: currentUpComingPage);
   }
 
-  /////// Now PLaying Movies ////////////
+  /// Now PLaying Movies ////////////
   int currentNowPlayingPage = 1;
   bool isFirstNowPlayingLoadRunning = false;
 
@@ -263,7 +296,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     );
   }
 
-  /////// TV Airing Today ///////////
+  /// TV Airing Today ///////////
   bool isFirstTvAiringTodayLoadRunning = false;
   int currentTvAiringTodayPage = 1;
 
@@ -274,7 +307,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     );
   }
 
-  /////// POPULAR TV /////////
+  /// POPULAR TV /////////
   bool isFirstPopularTvLoadRunning = false;
   int currentPopularTvPage = 1;
 
@@ -285,7 +318,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     );
   }
 
-  ////// Top Rated TV ///////
+  /// Top Rated TV ///////
   bool isFirstTopRatedTvLoadingRunning = false;
   int currentTopRatedTvPage = 1;
 
@@ -320,7 +353,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
       } else if (tvCategory == TVCategoryKeys.popularTv) {
         currentPopularTvPage++;
         endPoint = EndPoints.popularTv;
-      } else if(tvCategory == TVCategoryKeys.topRatedTv){
+      } else if (tvCategory == TVCategoryKeys.topRatedTv) {
         currentTopRatedPage++;
         endPoint = EndPoints.topRatedTv;
       }
@@ -351,11 +384,11 @@ class MoviesCubit extends Cubit<MoviesStates> {
             } else {
               hasNextPage = false;
             }
-          }else if (tvCategory == TVCategoryKeys.topRatedTv){
+          } else if (tvCategory == TVCategoryKeys.topRatedTv) {
             moreTopRatedTv = r;
-            if(moreTopRatedTv!.tvList.isNotEmpty){
+            if (moreTopRatedTv!.tvList.isNotEmpty) {
               topRatedTv!.loadMoreMovies(tv: moreTopRatedTv!.tvList);
-            }else{
+            } else {
               hasNextPage = false;
             }
           }
@@ -542,6 +575,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
         value.fold((l) {
           emit(GetSimilarMoviesErrorState(l.message));
         }, (r) {
+          isFirstSimilarMoviesLoadingRunning = false;
           similarMovies = r;
         });
       }),
@@ -563,9 +597,11 @@ class MoviesCubit extends Cubit<MoviesStates> {
   }
 
   int currentSimilarMoviesPage = 1;
+  bool isFirstSimilarMoviesLoadingRunning = false;
 
   Future<Either<Failure, Movies>> getSimilarMovies(
       {required SingleMovie movie}) async {
+    isFirstSimilarMoviesLoadingRunning = true;
     currentSimilarMoviesPage = 1;
     return await getSimilarMoviesUseCase.execute(
       movie: movie,
@@ -574,11 +610,13 @@ class MoviesCubit extends Cubit<MoviesStates> {
   }
 
   int currentSimilarTVShowPage = 1;
+  bool isFirstSimilarTvShowsLoadingRunning = false;
 
   Future<Either<Failure, Tv>> getSimilarTvShow(
       {required SingleTV tvShow}) async {
     emit(GetMovieDetailsLoadingState());
     currentSimilarTVShowPage = 1;
+    isFirstSimilarTvShowsLoadingRunning = true;
     return await getSimilarTVShowsUseCase.execute(
       tvShow: tvShow,
       currentSimilarTvPage: currentSimilarTVShowPage,
@@ -600,5 +638,17 @@ class MoviesCubit extends Cubit<MoviesStates> {
         emit(SearchMoviesSuccessState());
       });
     });
+  }
+
+  int currentFavoriteMoviesPage = 1;
+  bool isFirstFavoriteMoviesLoadingRunning = false;
+
+  Future<Either<Failure, Movies>> getFavoriteMovies() async {
+    isFirstFavoriteMoviesLoadingRunning = true;
+    return await getFavoriteMoviesUseCase.execute(
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+      currentFavoriteMoviesPage: currentFavoriteMoviesPage,
+    );
   }
 }
