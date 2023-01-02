@@ -83,6 +83,7 @@ class GetFavoriteMoviesErrorState extends MoviesStates{
 
   GetFavoriteMoviesErrorState({required this.message});
 }
+
 class GetMoviesWatchListErrorState extends MoviesStates{
   final String message;
 

@@ -5,6 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:movies_application/core/api/end_points.dart';
 import 'package:movies_application/core/error/failure.dart';
 import 'package:movies_application/core/network/network.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
@@ -67,34 +68,32 @@ class MoviesCubit extends Cubit<MoviesStates> {
   final AddToWatchListUseCase addToWatchListUseCase;
   final GetFavoriteMoviesUseCase getFavoriteMoviesUseCase;
   final GetFavoriteTvShowsUseCase getFavoriteTvShowsUseCase;
-  final GetMoviesWatchList getMoviesWatchList;
+  final GetMoviesWatchListUseCase getMoviesWatchListUseCase;
   final GetTvShowWatchListUseCase getTvShowWatchListUseCase;
   final MarkAsFavoriteUseCase markAsFavoriteUseCase;
 
-  MoviesCubit(
-    this.getPopularMoviesDataUseCase,
-    this.getTopRatedMoviesDataUseCase,
-    this.getUpcomingMoviesDataUseCase,
-    this.getTrendingMoviesDataUseCase,
-    this.getMovieKeywordUseCase,
-    this.getSimilarMoviesUseCase,
-    this.getGenresUseCase,
-    this.searchMovieUseCase,
-    this.getNowPlayingMoviesDataUseCase,
-    this.getTvAiringTodayUseCase,
-    this.getSimilarTVShowsUseCase,
-    this.getTVShowKeywordsUseCase,
-    this.loadMoreTVShowsUseCase,
-    this.loadMoreMoviesUseCase,
-    this.getPopularTvUseCase,
-    this.getTopRatedTvUseCase,
-    this.markAsFavoriteUseCase,
-    this.addToWatchListUseCase,
-    this.getFavoriteTvShowsUseCase,
-    this.getFavoriteMoviesUseCase,
-    this.getTvShowWatchListUseCase,
-    this.getMoviesWatchList,
-  ) : super(MoviesInitialState());
+  MoviesCubit(this.getPopularMoviesDataUseCase,
+      this.getTopRatedMoviesDataUseCase,
+      this.getUpcomingMoviesDataUseCase,
+      this.getTrendingMoviesDataUseCase,
+      this.getMovieKeywordUseCase,
+      this.getSimilarMoviesUseCase,
+      this.getGenresUseCase,
+      this.searchMovieUseCase,
+      this.getNowPlayingMoviesDataUseCase,
+      this.getTvAiringTodayUseCase,
+      this.getSimilarTVShowsUseCase,
+      this.getTVShowKeywordsUseCase,
+      this.loadMoreTVShowsUseCase,
+      this.loadMoreMoviesUseCase,
+      this.getPopularTvUseCase,
+      this.getTopRatedTvUseCase,
+      this.markAsFavoriteUseCase,
+      this.addToWatchListUseCase,
+      this.getFavoriteTvShowsUseCase,
+      this.getFavoriteMoviesUseCase,
+      this.getTvShowWatchListUseCase,
+      this.getMoviesWatchListUseCase,) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
 
@@ -125,6 +124,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
       internetConnection = value;
       if (value == true) {
         Future.wait([
+
           /// POPULAR MOVIES //////////
           getPopularMovies().then((value) {
             value.fold((l) {
@@ -216,7 +216,37 @@ class MoviesCubit extends Cubit<MoviesStates> {
               isFirstFavoriteMoviesLoadingRunning = false;
               favoriteMovies = r;
             });
-          })
+          }),
+          getFavoriteTvShows().then((value) {
+            value.fold((l) {
+              emit(GetFavoriteTvErrorState(
+                message: l.message,
+              ));
+            }, (r) {
+              isFirstFavoriteTvShowsLoadingRunning = false;
+              favoriteTvShows = r;
+            });
+          }),
+          getMoviesWatchList().then((value) {
+            value.fold((l) {
+              emit(GetMoviesWatchListErrorState(
+                message: l.message,
+              ));
+            }, (r) {
+              isFirstMoviesWatchListLoadingRunning = false;
+              moviesWatchList = r;
+            });
+          }),
+          getTvShowsWatchList().then((value) {
+            value.fold((l) {
+              emit(GetTvWatchListErrorState(
+                message: l.message,
+              ));
+            }, (r) {
+              isFirstTvShowsWatchListLoadingRunning = false;
+              tvShowsWatchList = r;
+            });
+          }),
         ]).then((value) {
           getMovieGenres().then((value) {
             value.fold((l) {
@@ -228,14 +258,20 @@ class MoviesCubit extends Cubit<MoviesStates> {
           });
         }).catchError((error) {
           Components.navigateAndFinish(
-              context: context, widget: NoInternetScreen());
+              context: context,
+              widget: const NoInternetScreen(
+                fromLogin: false,
+              ));
           debugPrint('error ======================> ${error.toString()}');
           emit(GetAllMoviesErrorState());
         });
       } else {
         debugPrint('No Internet');
         Components.navigateAndFinish(
-            context: context, widget: NoInternetScreen());
+            context: context,
+            widget: const NoInternetScreen(
+              fromLogin: false,
+            ));
         Components.showSnackBar(
             title: AppStrings.appName,
             message: AppStrings.noInternet,
@@ -629,7 +665,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     emit(SearchMoviesLoadingState());
     searchMovies = null;
     final result =
-        searchMovieUseCase.execute(searchContent: searchContent, page: page);
+    searchMovieUseCase.execute(searchContent: searchContent, page: page);
     result.then((value) {
       value.fold((l) {
         emit(SearchMoviesErrorState(l.message));
@@ -650,5 +686,146 @@ class MoviesCubit extends Cubit<MoviesStates> {
       sessionId: sessionId!.sessionId,
       currentFavoriteMoviesPage: currentFavoriteMoviesPage,
     );
+  }
+
+  int currentFavoriteTvShowsPage = 1;
+  bool isFirstFavoriteTvShowsLoadingRunning = false;
+
+  Future<Either<Failure, Tv>> getFavoriteTvShows() async {
+    isFirstFavoriteTvShowsLoadingRunning = true;
+    return await getFavoriteTvShowsUseCase.execute(
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+      currentFavoriteTvShowsPage: currentFavoriteTvShowsPage,
+    );
+  }
+
+  int currentMoviesWatchListPage = 1;
+  bool isFirstMoviesWatchListLoadingRunning = false;
+
+  Future<Either<Failure, Movies>> getMoviesWatchList() async {
+    isFirstMoviesWatchListLoadingRunning = true;
+    return await getMoviesWatchListUseCase.execute(
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+      currentMoviesWatchListPage: currentMoviesWatchListPage,
+    );
+  }
+
+  int currentTvShowsWatchListPage = 1;
+  bool isFirstTvShowsWatchListLoadingRunning = false;
+
+  Future<Either<Failure, Tv>> getTvShowsWatchList() async {
+    isFirstTvShowsWatchListLoadingRunning = true;
+    return await getTvShowWatchListUseCase.execute(
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+      currentTvShowsWatchListPage: currentTvShowsWatchListPage,
+    );
+  }
+
+  Future<void> markAsFavorite({required bool isMovie,
+    required int mediaId,
+    required bool favorite}) async {
+    emit(AddToFavoriteLoadingState());
+    return await markAsFavoriteUseCase
+        .execute(
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+      mediaType: isMovie ? 'movie' : 'tv',
+      mediaId: mediaId,
+      favorite: favorite,
+    )
+        .then((value) {
+      value.fold((l) {
+        emit(AddToFavoriteErrorState(message: l.message));
+      }, (r) {
+        if(isMovie){
+          getFavoriteMovies().then((favoriteMoviesValue) {
+            favoriteMoviesValue.fold((l) {
+              emit(GetFavoriteMoviesErrorState(message: l.message));
+            }, (r) {
+              isFirstFavoriteMoviesLoadingRunning = false;
+              favoriteMovies = r;
+              Components.showSnackBar(
+                title: AppStrings.appName,
+                message: AppStrings.addedToFavorite,
+                backgroundColor: AppColors.greenSuccessColor,
+                textColor: Colors.white,
+              );
+              emit(AddToFavoriteSuccessState());
+            });
+          });
+        }else{
+          getFavoriteTvShows().then((favoriteTvShowsValue){
+            favoriteTvShowsValue.fold((l){
+              emit(GetFavoriteTvErrorState(message: l.message));
+            }, (r){
+              isFirstFavoriteTvShowsLoadingRunning = false;
+              favoriteTvShows = r;
+              Components.showSnackBar(
+                title: AppStrings.appName,
+                message: AppStrings.addedToFavorite,
+                backgroundColor: AppColors.greenSuccessColor,
+                textColor: Colors.white,
+              );
+              emit(AddToFavoriteSuccessState());
+            });
+          });
+        }
+      });
+    });
+  }
+
+  Future<void> addToWatchList({
+  required int mediaId,
+    required bool isMovie,
+    required bool watchList,
+}) async {
+    emit(AddToWatchListLoadingState());
+    return await addToWatchListUseCase.execute(
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+      mediaType: isMovie ? 'movie' : 'tv',
+      mediaId: mediaId,
+      watchList: watchList,).then((value){
+        value.fold((l){
+          emit(AddToWatchListErrorState(message: l.message));
+        }, (r){
+          if(isMovie){
+            getMoviesWatchList().then((moviesWatchListValue) {
+              moviesWatchListValue.fold((l) {
+                emit(GetMoviesWatchListErrorState(message: l.message));
+              }, (r) {
+                isFirstMoviesWatchListLoadingRunning = false;
+                moviesWatchList = r;
+                Components.showSnackBar(
+                  title: AppStrings.appName,
+                  message: AppStrings.addedToWatchList,
+                  backgroundColor: AppColors.greenSuccessColor,
+                  textColor: Colors.white,
+                );
+                emit(AddToWatchListSuccessState());
+              });
+            });
+          }else{
+            getTvShowsWatchList().then((tvShowsWatchListValue){
+              tvShowsWatchListValue.fold((l){
+                emit(GetTvWatchListErrorState(message: l.message));
+              }, (r){
+               isFirstTvShowsWatchListLoadingRunning = false;
+               tvShowsWatchList = r;
+               Components.showSnackBar(
+                 title: AppStrings.appName,
+                 message: AppStrings.addedToWatchList,
+                 backgroundColor: AppColors.greenSuccessColor,
+                 textColor: Colors.white,
+               );
+               emit(AddToWatchListSuccessState());
+              });
+            });
+          }
+        });
+    });
   }
 }

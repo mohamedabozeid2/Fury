@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
+import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
 
 import '../../../../../../core/utils/Colors.dart';
@@ -79,19 +80,33 @@ class AppBarMovieBuilder extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       AddActionsButton(
-                        fun: () {},
+                        fun: () {
+                          MoviesCubit.get(context).addToWatchList(
+                            mediaId: isMovie ? movie!.id : tv!.id,
+                            isMovie: isMovie,
+                            watchList: true,
+                          );
+                        },
                         icon: Icons.add,
                         iconSize: AppFontSize.s22,
                         title: 'Later',
                       ),
                       AddActionsButton(
-                        fun: () {},
+                        fun: () {
+                          MoviesCubit.get(context).markAsFavorite(
+                            isMovie: isMovie,
+                            mediaId: isMovie ? movie!.id : tv!.id,
+                            favorite: true,
+                          );
+                        },
                         icon: Icons.favorite,
                         iconSize: AppFontSize.s22,
                         title: 'Favorite',
                       ),
                       AddActionsButton(
-                        fun: () {},
+                        fun: () {
+
+                        },
                         icon: Icons.info,
                         iconSize: AppFontSize.s22,
                         title: 'Info',

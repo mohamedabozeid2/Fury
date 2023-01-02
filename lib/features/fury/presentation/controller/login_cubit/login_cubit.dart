@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/hive/hive_helper.dart';
 import 'package:movies_application/core/network/network.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/features/fury/domain/entities/request_token.dart';
 
+import '../../../../../core/utils/components.dart';
+import '../../../../../core/utils/strings.dart';
 import '../../../domain/use_cases/create_new_session.dart';
 import '../../../domain/use_cases/create_session_with_login.dart';
 import '../../../domain/use_cases/get_account_details.dart';
 import '../../../domain/use_cases/request_token_for_login.dart';
+import '../../screens/internet_connection/no_internet_screen.dart';
 import 'login_states.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
@@ -45,6 +49,7 @@ class LoginCubit extends Cubit<LoginStates> {
   void userLogin({
     required String userName,
     required String password,
+    required BuildContext context,
   }) {
     emit(UserLoginLoadingState());
     CheckConnection.checkConnection().then((value) {
@@ -65,6 +70,15 @@ class LoginCubit extends Cubit<LoginStates> {
             });
           }).catchError((error) {});
         }).catchError((error) {});
+      }else{
+        debugPrint('No Internet');
+        Components.navigateAndFinish(
+            context: context, widget: const NoInternetScreen(fromLogin: true,));
+        Components.showSnackBar(
+            title: AppStrings.appName,
+            message: AppStrings.noInternet,
+            backgroundColor: AppColors.redErrorColor,
+            textColor: Colors.white);
       }
     });
   }

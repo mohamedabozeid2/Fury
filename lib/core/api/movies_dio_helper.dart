@@ -31,15 +31,17 @@ class MoviesDioHelper{
     required String url,
     required Map<String,dynamic> data,
     Map<String,dynamic>? query,
+    String? contentType = 'application/json',
     String? lang='en-US',
   })async{
     dio!.options.headers={
-      'Content-Type':'application/json',
+      'Content-Type':contentType,
       'lang':lang,
     };
 
     return await dio!.post(url,data: data,queryParameters: query);
   }
+
 
   static Future<Response> putData({
     required String? url,

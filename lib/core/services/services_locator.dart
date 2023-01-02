@@ -133,7 +133,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetFavoriteMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetFavoriteTvShowsUseCase(sl()));
     sl.registerLazySingleton(() => MarkAsFavoriteUseCase(sl()));
-    sl.registerLazySingleton(() => GetMoviesWatchList(sl()));
+    sl.registerLazySingleton(() => GetMoviesWatchListUseCase(sl()));
     sl.registerLazySingleton(() => GetTvShowWatchListUseCase(sl()));
     sl.registerLazySingleton(() => AddToWatchListUseCase(sl()));
 
