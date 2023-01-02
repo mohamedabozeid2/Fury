@@ -115,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         movies: nowPlayingMovies!.moviesList,
                         category: MoviesCategoryKeys.nowPlaying,
                       ),
-
                       CategoryItemBuilder(
                         isMovie: false,
                         title: AppStrings.topRatedTv,
@@ -124,17 +123,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CategoryItemBuilder(
                         isMovie: false,
-                        title: AppStrings.tvAiringToday,
-                        category: TVCategoryKeys.tvAiringToday,
-                        tv: tvAiringToday!.tvList,
-                      ),
-                      CategoryItemBuilder(
-                        isMovie: false,
                         title: AppStrings.popularTv,
                         category: TVCategoryKeys.popularTv,
                         tv: popularTv!.tvList,
                       ),
-
+                      CategoryItemBuilder(
+                        isMovie: false,
+                        title: AppStrings.tvAiringToday,
+                        category: TVCategoryKeys.tvAiringToday,
+                        tv: tvAiringToday!.tvList,
+                      ),
                     ],
                   ),
                 ),

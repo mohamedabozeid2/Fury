@@ -209,10 +209,10 @@ class MoviesCubit extends Cubit<MoviesStates> {
               topRatedTv = r;
             });
           }),
-          getFavoriteMovies().then((value){
-            value.fold((l){
+          getFavoriteMovies().then((value) {
+            value.fold((l) {
               emit(GetFavoriteMoviesErrorState(message: l.message));
-            }, (r){
+            }, (r) {
               isFirstFavoriteMoviesLoadingRunning = false;
               favoriteMovies = r;
             });

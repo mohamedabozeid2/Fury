@@ -9,7 +9,6 @@ import 'package:movies_application/core/utils/strings.dart';
 import 'features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import 'features/fury/presentation/controller/login_cubit/login_cubit.dart';
 import 'features/fury/presentation/controller/news_cubit/news_cubit.dart';
-import 'features/fury/presentation/controller/register_cubit/register_cubit.dart';
 
 class MoviesApp extends StatelessWidget {
   final Widget startWidget;
@@ -52,7 +51,6 @@ class MoviesApp extends StatelessWidget {
             BlocProvider(
                 create: (BuildContext context) =>
                     LoginCubit(sl(), sl(), sl(), sl())),
-            BlocProvider(create: (BuildContext context) => RegisterCubit()),
             BlocProvider(
                 create: (BuildContext context) =>
                     NewsCubit(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl())),
