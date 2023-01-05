@@ -90,7 +90,11 @@ class GetMoviesWatchListErrorState extends MoviesStates{
   GetMoviesWatchListErrorState({required this.message});
 }
 
-class AddToFavoriteLoadingState extends MoviesStates{}
+class AddToFavoriteLoadingState extends MoviesStates{
+  final int index;
+
+  AddToFavoriteLoadingState(this.index);
+}
 class AddToFavoriteSuccessState extends MoviesStates{}
 class AddToFavoriteErrorState extends MoviesStates{
   final String message;

@@ -6,8 +6,8 @@ class WatchLaterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        Center(child: Text('Watch Later Screen'))
+      children: [
+        Text('Watch Later')
       ],
     );
   }

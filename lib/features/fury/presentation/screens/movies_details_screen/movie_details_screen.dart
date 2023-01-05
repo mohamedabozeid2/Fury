@@ -99,6 +99,7 @@ class _MovieDetailsState extends State<MovieDetails> {
         ? MoviesCubit.get(context).currentSimilarMoviesPage
         : MoviesCubit.get(context).currentSimilarTVShowPage;
     return BlocConsumer<MoviesCubit, MoviesStates>(
+      buildWhen: (previous, current) => current is GetMovieDetailsSuccessState,
       listener: (context, state) {
         if (state is LoadMoreMoviesLoadingState) {
           loadMore = true;
@@ -156,37 +157,65 @@ class _MovieDetailsState extends State<MovieDetails> {
                                               ? widget.movie!.rate
                                               : widget.tvShow!.voteAverage),
                                       const Spacer(),
-                                      AddActionsButton(
-                                          fun: () {
-                                            MoviesCubit.get(context)
-                                                .addToWatchList(
-                                              mediaId: widget.isMovie
-                                                  ? widget.movie!.id
-                                                  : widget.tvShow!.id,
-                                              isMovie: widget.isMovie,
-                                              watchList: true,
-                                            );
+                                      BlocConsumer<MoviesCubit, MoviesStates>(
+                                        buildWhen: (previous, current) =>
+                                            current
+                                                is AddToWatchListLoadingState ||
+                                            current
+                                                is AddToWatchListSuccessState,
+                                        listener: (context, state) {},
+                                        builder: (context, state) {
+                                          return state
+                                                  is AddToWatchListLoadingState
+                                              ? AdaptiveIndicator(
+                                                  os: Components.getOS(),
+                                                  color: AppColors.mainColor,
+                                                )
+                                              : AddActionsButton(
+                                                  fun: () {
+                                                    MoviesCubit.get(context)
+                                                        .addToWatchList(
+                                                      context: context,
+                                                      mediaId: widget.isMovie
+                                                          ? widget.movie!.id
+                                                          : widget.tvShow!.id,
+                                                      isMovie: widget.isMovie,
+                                                      watchList: true,
+                                                    );
+                                                  },
+                                                  icon: Icons.add,
+                                                  iconSize: AppFontSize.s26);
+                                        },
+                                      ),
+                                      BlocConsumer<MoviesCubit, MoviesStates>(
+                                          buildWhen: (previous, current) =>
+                                              current
+                                                  is AddToFavoriteLoadingState ||
+                                              current
+                                                  is AddToFavoriteSuccessState,
+                                          builder: (context, state) {
+                                            return state
+                                                    is AddToFavoriteLoadingState
+                                                ? AdaptiveIndicator(
+                                                    os: Components.getOS(),
+                                                    color: AppColors.mainColor,
+                                                  )
+                                                : AddActionsButton(
+                                                    fun: () {
+                                                      MoviesCubit.get(context)
+                                                          .markAsFavorite(
+                                                        isMovie: widget.isMovie,
+                                                        context: context,
+                                                        mediaId: widget.isMovie
+                                                            ? widget.movie!.id
+                                                            : widget.tvShow!.id,
+                                                        favorite: true,
+                                                      );
+                                                    },
+                                                    icon: Icons.favorite,
+                                                    iconSize: AppFontSize.s26);
                                           },
-                                          icon: Icons.add,
-                                          iconSize: AppFontSize.s26),
-                                      state is AddToFavoriteLoadingState
-                                          ? AdaptiveIndicator(
-                                              os: Components.getOS(),
-                                              color: AppColors.mainColor,
-                                            )
-                                          : AddActionsButton(
-                                              fun: () {
-                                                MoviesCubit.get(context)
-                                                    .markAsFavorite(
-                                                  isMovie: widget.isMovie,
-                                                  mediaId: widget.isMovie
-                                                      ? widget.movie!.id
-                                                      : widget.tvShow!.id,
-                                                  favorite: true,
-                                                );
-                                              },
-                                              icon: Icons.favorite,
-                                              iconSize: AppFontSize.s26),
+                                          listener: (context, state) {}),
                                     ],
                                   ),
                                   SizedBox(

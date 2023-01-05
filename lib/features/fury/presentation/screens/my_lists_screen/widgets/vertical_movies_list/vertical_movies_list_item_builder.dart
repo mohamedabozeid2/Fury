@@ -1,46 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies_application/core/api/movies_dio_helper.dart';
-import 'package:movies_application/core/utils/Colors.dart';
-import 'package:movies_application/core/utils/app_fonts.dart';
-import 'package:movies_application/core/utils/components.dart';
-import 'package:movies_application/core/utils/helper.dart';
-import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
-import 'package:movies_application/core/widgets/add_actions_button.dart';
-import 'package:movies_application/core/widgets/cached_image.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_states.dart';
-import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
 
-import '../../../../../../core/utils/assets_manager.dart';
+import '../../../../../../../core/api/movies_dio_helper.dart';
+import '../../../../../../../core/utils/Colors.dart';
+import '../../../../../../../core/utils/app_fonts.dart';
+import '../../../../../../../core/utils/assets_manager.dart';
+import '../../../../../../../core/utils/components.dart';
+import '../../../../../../../core/utils/helper.dart';
+import '../../../../../../../core/utils/strings.dart';
+import '../../../../../../../core/widgets/add_actions_button.dart';
+import '../../../../../../../core/widgets/cached_image.dart';
+import '../../../movies_details_screen/movie_details_screen.dart';
 
-class SimilarMovieItemBuilder extends StatefulWidget {
-  final SingleMovie? movie;
-  final SingleTV? tvShow;
+class VerticalMoviesItemBuilder extends StatefulWidget {
   final bool isMovie;
-  final int index;
+  final int moviesCounter;
+  final SingleMovie? movie;
+  final SingleTV? tv;
 
-  const SimilarMovieItemBuilder({
-    super.key,
-    this.movie,
-    this.tvShow,
+  const VerticalMoviesItemBuilder({
+    Key? key,
     required this.isMovie,
-    required this.index,
-  });
+    required this.moviesCounter,
+    this.tv,
+    this.movie,
+  }) : super(key: key);
 
   @override
-  State<SimilarMovieItemBuilder> createState() =>
-      _SimilarMovieItemBuilderState();
+  State<VerticalMoviesItemBuilder> createState() =>
+      _VerticalMoviesItemBuilderState();
 }
 
-class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
+class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
   String title = '';
   dynamic posterPath;
-
-  late int watchListButtonId;
   late int favoriteButtonId;
 
   @override
@@ -53,12 +51,12 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
       }
       posterPath = widget.movie!.posterPath;
     } else {
-      if (widget.tvShow!.name != null) {
-        title += widget.tvShow!.name!;
+      if (widget.tv!.name != null) {
+        title += widget.tv!.name!;
       } else {
-        title += widget.tvShow!.originalName!;
+        title += widget.tv!.originalName!;
       }
-      posterPath = widget.tvShow!.posterPath;
+      posterPath = widget.tv!.posterPath;
     }
     super.initState();
   }
@@ -66,14 +64,13 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
   @override
   Widget build(BuildContext context) {
     favoriteButtonId = -1;
-    watchListButtonId = -1;
     return GestureDetector(
       onTap: () {
         Components.navigateTo(
             context,
             MovieDetails(
               isMovie: widget.isMovie,
-              tvShow: widget.isMovie ? null : widget.tvShow,
+              tvShow: widget.isMovie ? null : widget.tv,
               movie: widget.isMovie ? widget.movie : null,
             ));
       },
@@ -92,8 +89,7 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                   image: '${MoviesDioHelper.baseImageURL}$posterPath',
                   height: Helper.maxHeight * 0.3,
                   circularColor: AppColors.mainColor,
-                  width: Helper.maxWidth * 0.4,
-                ),
+                  width: Helper.maxWidth * 0.4),
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(Helper.maxWidth * 0.03),
@@ -102,14 +98,14 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${widget.index + 1}. $title',
+                    '${widget.moviesCounter}. $title',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                   SizedBox(height: Helper.maxHeight * 0.005),
                   Text(
                     widget.isMovie
                         ? widget.movie!.description
-                        : widget.tvShow!.description,
+                        : widget.tv!.description,
                     textAlign: TextAlign.start,
                     maxLines: 5,
                     overflow: TextOverflow.ellipsis,
@@ -123,70 +119,38 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                     children: [
                       BlocConsumer<MoviesCubit, MoviesStates>(
                         buildWhen: (previous, current) =>
-                            (current is AddToWatchListLoadingState ||
-                                current is AddToWatchListSuccessState) &&
-                            watchListButtonId == widget.index,
-                        builder: (context, state) {
-                          if (state is AddToWatchListSuccessState) {
-                            watchListButtonId = -1;
-                          }
-                          return state is AddToWatchListLoadingState &&
-                                  watchListButtonId == widget.index
-                              ? AdaptiveIndicator(
-                                  os: Components.getOS(),
-                                  color: AppColors.mainColor,
-                                )
-                              : AddActionsButton(
-                                  fun: () {
-                                    watchListButtonId = widget.index;
-                                    MoviesCubit.get(context).addToWatchList(
-                                      context: context,
-                                      mediaId: widget.isMovie
-                                          ? widget.movie!.id
-                                          : widget.tvShow!.id,
-                                      isMovie: widget.isMovie,
-                                      watchList: true,
-                                    );
-                                  },
-                                  icon: Icons.add,
-                                  iconSize: AppFontSize.s28,
-                                  title: AppStrings.later,
-                                );
-                        },
+                            (current is AddToFavoriteLoadingState ||
+                                current is AddToFavoriteSuccessState) &&
+                            favoriteButtonId == widget.moviesCounter,
                         listener: (context, state) {},
-                      ),
-                      BlocConsumer<MoviesCubit, MoviesStates>(
-                        buildWhen: (previous, current) =>
-                            (current is AddToFavoriteSuccessState ||
-                                current is AddToFavoriteLoadingState) &&
-                            favoriteButtonId == widget.index,
                         builder: (context, state) {
-                          if(state is AddToFavoriteSuccessState){
+                          if (state is AddToFavoriteSuccessState) {
                             favoriteButtonId = -1;
                           }
-                          return state is AddToFavoriteLoadingState
+                          return state is AddToFavoriteLoadingState &&
+                                  favoriteButtonId == widget.moviesCounter
                               ? AdaptiveIndicator(
                                   os: Components.getOS(),
                                   color: AppColors.mainColor,
                                 )
                               : AddActionsButton(
                                   fun: () {
-                                    favoriteButtonId = widget.index;
+                                    favoriteButtonId = widget.moviesCounter;
                                     MoviesCubit.get(context).markAsFavorite(
                                       isMovie: widget.isMovie,
                                       context: context,
+                                      fromFavoriteScreen: true,
                                       mediaId: widget.isMovie
                                           ? widget.movie!.id
-                                          : widget.tvShow!.id,
-                                      favorite: true,
+                                          : widget.tv!.id,
+                                      favorite: false,
                                     );
                                   },
                                   icon: Icons.favorite,
                                   iconSize: AppFontSize.s28,
-                                  title: AppStrings.favorite,
+                                  title: AppStrings.unFavorite,
                                 );
                         },
-                        listener: (context, state) {},
                       ),
                     ],
                   ),

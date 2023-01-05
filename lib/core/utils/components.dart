@@ -27,7 +27,7 @@ class Components {
         fontSize: fontSize);
   }
 
-  static String getOS(){
+  static String getOS() {
     return Platform.operatingSystem;
   }
 
@@ -35,9 +35,16 @@ class Components {
     required String title,
     required String message,
     required Color backgroundColor,
+    int durationWithMilliSeconds = 1000,
     required Color textColor,
-}){
-    Get.snackbar(title, message,backgroundColor: backgroundColor, colorText: textColor);
+  }) {
+    Get.snackbar(title, message,
+        backgroundColor: backgroundColor,
+        colorText: textColor,
+        animationDuration: const Duration(
+          milliseconds: 500,
+        ),
+        duration: Duration(milliseconds: durationWithMilliSeconds));
   }
 
   static navigateAndFinish({required context, required widget}) {
@@ -50,23 +57,26 @@ class Components {
       return widget;
     }));
   }
-  
-  static slideNavigateTo(context, page){
+
+  static slideNavigateTo(context, page) {
     Navigator.of(context).push(SlideAnimationNav(page: page, context: context));
   }
 
-  static scaleNavigateTo(context, page){
+  static scaleNavigateTo(context, page) {
     Navigator.of(context).push(ScaleAnimationNav(page: page, context: context));
   }
 
-  static rotationNavigateTo(context, page){
-    Navigator.of(context).push(RotationAnimationNav(page: page, context: context));
+  static rotationNavigateTo(context, page) {
+    Navigator.of(context)
+        .push(RotationAnimationNav(page: page, context: context));
   }
-  static sizeNavigateTo(context, page){
+
+  static sizeNavigateTo(context, page) {
     Navigator.of(context).push(SizeAnimationNav(page: page, context: context));
   }
 
-  static opacityNavigateTo(context, page){
-    Navigator.of(context).push(OpacityAnimationNav(page: page, context: context));
+  static opacityNavigateTo(context, page) {
+    Navigator.of(context)
+        .push(OpacityAnimationNav(page: page, context: context));
   }
 }

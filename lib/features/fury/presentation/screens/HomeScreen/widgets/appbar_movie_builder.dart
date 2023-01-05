@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/components.dart';
+import 'package:movies_application/core/utils/strings.dart';
+import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_cubit.dart';
+import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_states.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
 
 import '../../../../../../core/utils/Colors.dart';
@@ -79,37 +83,72 @@ class AppBarMovieBuilder extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      AddActionsButton(
-                        fun: () {
-                          MoviesCubit.get(context).addToWatchList(
-                            mediaId: isMovie ? movie!.id : tv!.id,
-                            isMovie: isMovie,
-                            watchList: true,
-                          );
+                      BlocConsumer<MoviesCubit, MoviesStates>(
+                        buildWhen: (previous, current) =>
+                            current is AddToWatchListLoadingState ||
+                            current is AddToWatchListSuccessState,
+                        listener: (context, state) {},
+                        builder: (context, state) {
+                          return state is AddToWatchListLoadingState
+                              ? AdaptiveIndicator(
+                                  os: Components.getOS(),
+                                  color: AppColors.mainColor,
+                                )
+                              : AddActionsButton(
+                                  fun: () {
+                                    MoviesCubit.get(context).addToWatchList(
+                                      context: context,
+                                      mediaId: isMovie ? movie!.id : tv!.id,
+                                      isMovie: isMovie,
+                                      watchList: true,
+                                    );
+                                  },
+                                  icon: Icons.add,
+                                  iconSize: AppFontSize.s22,
+                                  title: AppStrings.later,
+                                );
                         },
-                        icon: Icons.add,
-                        iconSize: AppFontSize.s22,
-                        title: 'Later',
+                      ),
+                      BlocConsumer<MoviesCubit, MoviesStates>(
+                        buildWhen: (previous, current) =>
+                            current is AddToFavoriteLoadingState ||
+                            current is AddToFavoriteSuccessState,
+                        listener: (context, state) {},
+                        builder: (context, state) {
+                          return state is AddToFavoriteLoadingState
+                              ? AdaptiveIndicator(
+                                  os: Components.getOS(),
+                                  color: AppColors.mainColor,
+                                )
+                              : AddActionsButton(
+                                  fun: () {
+                                    MoviesCubit.get(context).markAsFavorite(
+                                      isMovie: isMovie,
+                                      context: context,
+                                      mediaId: isMovie ? movie!.id : tv!.id,
+                                      favorite: true,
+                                    );
+                                  },
+                                  icon: Icons.favorite,
+                                  iconSize: AppFontSize.s22,
+                                  title: AppStrings.favorite,
+                                );
+                        },
                       ),
                       AddActionsButton(
                         fun: () {
-                          MoviesCubit.get(context).markAsFavorite(
-                            isMovie: isMovie,
-                            mediaId: isMovie ? movie!.id : tv!.id,
-                            favorite: true,
+                          Components.navigateTo(
+                            context,
+                            MovieDetails(
+                              isMovie: isMovie,
+                              movie: movie,
+                              tvShow: tv,
+                            ),
                           );
-                        },
-                        icon: Icons.favorite,
-                        iconSize: AppFontSize.s22,
-                        title: 'Favorite',
-                      ),
-                      AddActionsButton(
-                        fun: () {
-
                         },
                         icon: Icons.info,
                         iconSize: AppFontSize.s22,
-                        title: 'Info',
+                        title: AppStrings.info,
                       ),
                     ],
                   ),

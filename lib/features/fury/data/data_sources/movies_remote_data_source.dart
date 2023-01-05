@@ -643,7 +643,7 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
           'session_id': sessionId,
           'api_key': MoviesDioHelper.apiKey,
         });
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       return FavoriteDataModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
