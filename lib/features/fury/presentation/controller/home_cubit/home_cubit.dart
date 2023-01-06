@@ -44,6 +44,7 @@ import '../../../domain/use_cases/load_more_movies.dart';
 import '../../../domain/use_cases/load_more_tv_shows.dart';
 import '../../../domain/use_cases/mark_as_favorite.dart';
 import '../../../domain/use_cases/search_movies.dart';
+import '../../screens/Layout/Layout.dart';
 import '../../screens/news_screen/news_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 import 'home_states.dart';
@@ -770,7 +771,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 textColor: Colors.white,
               );
               if(fromFavoriteScreen){
-                Components.navigateTo(context, const MyListsScreen());
+                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
               }
               emit(AddToFavoriteSuccessState());
             });
@@ -791,7 +792,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 textColor: Colors.white,
               );
               if(fromFavoriteScreen){
-                Components.navigateTo(context, const MyListsScreen());
+                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
 
               }
               emit(AddToFavoriteSuccessState());
@@ -844,7 +845,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 textColor: Colors.white,
               );
               if(fromFavoriteScreen){
-                Components.navigateTo(context, const MyListsScreen());
+                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
               }
               emit(AddToWatchListSuccessState());
             });
@@ -863,7 +864,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 textColor: Colors.white,
               );
               if(fromFavoriteScreen){
-                Components.navigateTo(context, const MyListsScreen());
+                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
               }
               emit(AddToWatchListSuccessState());
             });

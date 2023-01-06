@@ -11,7 +11,8 @@ import '../../controller/home_cubit/home_cubit.dart';
 import '../../controller/home_cubit/home_states.dart';
 
 class Layout extends StatefulWidget {
-  const Layout({super.key});
+  const Layout({super.key, this.fromFavoriteScreen = false});
+  final bool fromFavoriteScreen;
 
   @override
   State<Layout> createState() => _LayoutState();
@@ -20,8 +21,10 @@ class Layout extends StatefulWidget {
 class _LayoutState extends State<Layout> {
   @override
   void initState() {
-    MoviesCubit.get(context).getAllMovies(context: context);
-    NewsCubit.get(context).getAllNews();
+    if(widget.fromFavoriteScreen == false){
+      MoviesCubit.get(context).getAllMovies(context: context);
+      NewsCubit.get(context).getAllNews();
+    }
     super.initState();
   }
 
