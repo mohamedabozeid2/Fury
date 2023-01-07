@@ -44,6 +44,9 @@ class _HorizontalNewsItemBuilderState extends State<HorizontalNewsItemBuilder> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<NewsCubit, NewsStates>(
+      buildWhen: (previous, current) =>
+          current is LoadMoreNewsSuccessState ||
+          current is LoadMoreNewsLoadingState,
       listener: (context, state) {},
       builder: (context, state) {
         return SizedBox(
@@ -55,19 +58,19 @@ class _HorizontalNewsItemBuilderState extends State<HorizontalNewsItemBuilder> {
                   onNotification: (value) {
                     setState(() {});
                     if (scrollController.position.atEdge &&
-                          scrollController.position.pixels != 0) {
-                        if (state is LoadMoreNewsLoadingState) {
-                          debugPrint('Loading');
-                        } else {
-                          NewsCubit.get(context).loadMoreNews(
-                            hasMorePage: true,
-                            isLoadingMore: false,
-                            category: NewsCategoryKeys.movies,
-                            page: NewsCubit.get(context).currentMoviesPage,
-                          );
-                        }
-                        return true;
-                      }else{
+                        scrollController.position.pixels != 0) {
+                      if (state is LoadMoreNewsLoadingState) {
+                        debugPrint('Loading');
+                      } else {
+                        NewsCubit.get(context).loadMoreNews(
+                          hasMorePage: true,
+                          isLoadingMore: false,
+                          category: NewsCategoryKeys.movies,
+                          page: NewsCubit.get(context).currentMoviesPage,
+                        );
+                      }
+                      return true;
+                    } else {
                       return false;
                     }
                   },

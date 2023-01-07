@@ -12,6 +12,7 @@ import '../../controller/home_cubit/home_states.dart';
 
 class Layout extends StatefulWidget {
   const Layout({super.key, this.fromFavoriteScreen = false});
+
   final bool fromFavoriteScreen;
 
   @override
@@ -21,7 +22,7 @@ class Layout extends StatefulWidget {
 class _LayoutState extends State<Layout> {
   @override
   void initState() {
-    if(widget.fromFavoriteScreen == false){
+    if (widget.fromFavoriteScreen == false) {
       MoviesCubit.get(context).getAllMovies(context: context);
       NewsCubit.get(context).getAllNews();
     }
@@ -31,8 +32,11 @@ class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MoviesCubit, MoviesStates>(
-      listener: (context, state) {
-      },
+      buildWhen: (previous, current) =>
+          current is GetAllMoviesSuccessState ||
+          current is GetAllMoviesLoadingState ||
+          current is ChangeBotNavBarState,
+      listener: (context, state) {},
       builder: (context, state) {
         return state is GetAllMoviesLoadingState
             ? Center(
@@ -41,7 +45,7 @@ class _LayoutState extends State<Layout> {
                 color: AppColors.mainColor,
               ))
             : Scaffold(
-                bottomNavigationBar: BottomNavBar(),
+                bottomNavigationBar: const BottomNavBar(),
                 body: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     Helper.maxWidth = constraints.maxWidth;

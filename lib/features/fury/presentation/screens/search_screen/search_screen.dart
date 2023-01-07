@@ -70,13 +70,26 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
           BlocConsumer<MoviesCubit, MoviesStates>(
+            buildWhen: (previous, current) =>
+                current is SearchMoviesLoadingState ||
+                current is SearchMoviesSuccessState,
             listener: (context, state) {},
             builder: (context, state) {
               return state is SearchMoviesLoadingState
-                  ? AdaptiveIndicator(
-                      os: Components.getOS(),
-                      color: AppColors.mainColor,
-                    )
+                  ? Expanded(
+                    child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+
+                            AdaptiveIndicator(
+                              os: Components.getOS(),
+                              color: AppColors.mainColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                  )
                   : Expanded(
                       child: MoviesCubit.get(context).searchMovies != null
                           ? Column(

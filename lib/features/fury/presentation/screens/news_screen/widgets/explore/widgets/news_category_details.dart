@@ -63,6 +63,9 @@ class _NewsCategoryDetailsState extends State<NewsCategoryDetails> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<NewsCubit, NewsStates>(
+      buildWhen: (previous, current) =>
+          current is LoadMoreNewsLoadingState ||
+          current is LoadMoreNewsSuccessState,
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(

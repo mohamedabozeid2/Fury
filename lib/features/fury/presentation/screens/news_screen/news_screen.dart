@@ -20,9 +20,9 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-
   ScrollController scrollController = ScrollController();
   bool isLoadMoreRunning = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,10 +48,12 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<NewsCubit, NewsStates>(
+      buildWhen: (previous, current) =>
+          current is GetNewsLoadingState || current is GetNewsSuccessState,
       listener: (context, state) {
-        if(state is LoadMoreNewsLoadingState){
+        if (state is LoadMoreNewsLoadingState) {
           isLoadMoreRunning = true;
-        }else if (state is LoadMoreNewsSuccessState){
+        } else if (state is LoadMoreNewsSuccessState) {
           isLoadMoreRunning = false;
         }
       },
@@ -61,54 +63,46 @@ class _NewsScreenState extends State<NewsScreen> {
             builder: (BuildContext context, BoxConstraints constraints) {
               return state is GetNewsLoadingState
                   ? Center(
-                  child: AdaptiveIndicator(
-                    os: Components.getOS(),
-                    color: AppColors.mainColor,
-                  ))
+                      child: AdaptiveIndicator(
+                      os: Components.getOS(),
+                      color: AppColors.mainColor,
+                    ))
                   : Padding(
-                  padding: EdgeInsets.only(
-                    top: Helper.maxHeight * 0.1,
-                    left: Helper.maxHeight * 0.015,
-                  ),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppStrings.hottestNews,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyText2,
+                      padding: EdgeInsets.only(
+                        top: Helper.maxHeight * 0.1,
+                        left: Helper.maxHeight * 0.015,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppStrings.hottestNews,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            SizedBox(
+                              height: Helper.maxHeight * 0.03,
+                            ),
+                            HorizontalNewsItemBuilder(
+                                newsData:
+                                    NewsCubit.get(context).moviesNewsList),
+                            SizedBox(
+                              height: Helper.maxHeight * 0.03,
+                            ),
+                            Text(
+                              AppStrings.explore,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            SizedBox(
+                              height: Helper.maxHeight * 0.03,
+                            ),
+                            Explore(),
+                            const GeneralNews(),
+                          ],
                         ),
-                        SizedBox(
-                          height: Helper.maxHeight * 0.03,
-                        ),
-                        HorizontalNewsItemBuilder(
-                            newsData:
-                            NewsCubit
-                                .get(context)
-                                .moviesNewsList),
-                        SizedBox(
-                          height: Helper.maxHeight * 0.03,
-                        ),
-                        Text(
-                          AppStrings.explore,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyText2,
-                        ),
-                        SizedBox(
-                          height: Helper.maxHeight * 0.03,
-                        ),
-                        Explore(),
-                        const GeneralNews(),
-                      ],
-                    ),
-                  ));
+                      ));
             },
           ),
         );
