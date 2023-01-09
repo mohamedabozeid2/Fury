@@ -42,10 +42,12 @@ class AppStrings {
   static const String later = "Later";
   static const String watchLater = "Watch Later";
   static const String favorite = "Favorite";
-  static const String unFavorite = "Remove Favorite";
+  static const String removeFavorite = "Remove Favorite";
+  static const String remove = "Remove";
+  static const String removeWatchList = "Remove From Watch List";
   static const String failFavorite = "Failed To Remove From Favorite";
   static const String addedToFavorite = "Added To Favorite";
-  static const String removedFromFavorite = "Removed From Favorite";
+  static const String removedFromWatchList = "Removed From Watch List";
   static const String addedToWatchList = "Added To Watch List";
   static const String similarMovies = "Similar Movies";
   static const String similarTVShows = "Similar TV Shows";

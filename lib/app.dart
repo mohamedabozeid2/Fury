@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -56,6 +57,9 @@ class MoviesApp extends StatelessWidget {
                     NewsCubit(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl())),
           ],
           child: GetMaterialApp(
+            useInheritedMediaQuery: true,
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
             debugShowCheckedModeBanner: false,
             title: AppStrings.appName,
             theme: lightTheme,

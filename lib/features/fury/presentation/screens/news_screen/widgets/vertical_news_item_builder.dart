@@ -5,7 +5,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_values.dart';
 import '../../../../../../core/utils/assets_manager.dart';
-import '../../../../../../core/utils/helper.dart';
 import '../../../../../../core/widgets/cached_image.dart';
 
 class VerticalNewsItemBuilder extends StatelessWidget {
@@ -43,7 +42,7 @@ class VerticalNewsItemBuilder extends StatelessWidget {
             Container(
               clipBehavior: Clip.antiAlias,
               height: newsItemHeight,
-              width: Helper.maxWidth * 0.5,
+              width: AppSize.s150,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppSize.s20)),
               child: newsData[index].urlToImage == null
@@ -54,13 +53,13 @@ class VerticalNewsItemBuilder extends StatelessWidget {
                   : CachedImage(
                 image: newsData[index].urlToImage,
                 height: newsItemHeight,
-                width: Helper.maxWidth * 0.5,
+                width: AppSize.s150,
                 circularColor: AppColors.mainColor,
                 fit: BoxFit.cover,
               ),
             ),
             SizedBox(
-              width: Helper.maxWidth * 0.02,
+              width: AppSize.s10,
             ),
             Expanded(
               child: SizedBox(

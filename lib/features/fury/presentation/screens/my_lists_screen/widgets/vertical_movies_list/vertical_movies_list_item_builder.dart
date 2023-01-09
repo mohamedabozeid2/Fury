@@ -19,6 +19,7 @@ import '../../../movies_details_screen/movie_details_screen.dart';
 
 class VerticalMoviesItemBuilder extends StatefulWidget {
   final bool isMovie;
+  final bool favoriteOrWatchList;
   final int moviesCounter;
   final SingleMovie? movie;
   final SingleTV? tv;
@@ -26,6 +27,7 @@ class VerticalMoviesItemBuilder extends StatefulWidget {
   const VerticalMoviesItemBuilder({
     Key? key,
     required this.isMovie,
+    required this.favoriteOrWatchList,
     required this.moviesCounter,
     this.tv,
     this.movie,
@@ -120,35 +122,53 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
                       BlocConsumer<MoviesCubit, MoviesStates>(
                         buildWhen: (previous, current) =>
                             (current is AddToFavoriteLoadingState ||
-                                current is AddToFavoriteSuccessState) &&
+                                current is AddToFavoriteSuccessState ||
+                                current is AddToWatchListSuccessState ||
+                                current is AddToWatchListLoadingState) &&
                             favoriteButtonId == widget.moviesCounter,
                         listener: (context, state) {},
                         builder: (context, state) {
                           if (state is AddToFavoriteSuccessState) {
                             favoriteButtonId = -1;
                           }
-                          return state is AddToFavoriteLoadingState &&
+                          return (state is AddToFavoriteLoadingState ||
+                                      state is AddToWatchListLoadingState) &&
                                   favoriteButtonId == widget.moviesCounter
                               ? AdaptiveIndicator(
                                   os: Components.getOS(),
                                   color: AppColors.mainColor,
                                 )
                               : AddActionsButton(
+                            backgroundColor: AppColors.mainColor,
                                   fun: () {
                                     favoriteButtonId = widget.moviesCounter;
-                                    MoviesCubit.get(context).markAsFavorite(
-                                      isMovie: widget.isMovie,
-                                      context: context,
-                                      fromFavoriteScreen: true,
-                                      mediaId: widget.isMovie
-                                          ? widget.movie!.id
-                                          : widget.tv!.id,
-                                      favorite: false,
-                                    );
+                                    if (widget.favoriteOrWatchList) {
+                                      MoviesCubit.get(context).markAsFavorite(
+                                        isMovie: widget.isMovie,
+                                        context: context,
+                                        fromFavoriteScreen: true,
+                                        mediaId: widget.isMovie
+                                            ? widget.movie!.id
+                                            : widget.tv!.id,
+                                        favorite: false,
+                                      );
+                                    } else {
+                                      MoviesCubit.get(context).addToWatchList(
+                                        mediaId: widget.isMovie
+                                            ? widget.movie!.id
+                                            : widget.tv!.id,
+                                        isMovie: widget.isMovie,
+                                        fromFavoriteScreen: true,
+                                        watchList: false,
+                                        context: context,
+                                      );
+                                    }
                                   },
-                                  icon: Icons.favorite,
+                                  icon: widget.favoriteOrWatchList
+                                      ? Icons.favorite
+                                      : Icons.remove,
                                   iconSize: AppFontSize.s28,
-                                  title: AppStrings.unFavorite,
+                                  title: AppStrings.remove
                                 );
                         },
                       ),

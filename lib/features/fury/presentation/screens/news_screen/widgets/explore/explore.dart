@@ -6,7 +6,6 @@ import 'package:movies_application/core/utils/assets_manager.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/features/fury/presentation/screens/news_screen/widgets/explore/widgets/news_category_details.dart';
 
-import '../../../../../../../core/utils/helper.dart';
 
 class Explore extends StatelessWidget {
   final List<String> images = [
@@ -29,7 +28,7 @@ class Explore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Helper.maxHeight * 0.13,
+      height: AppSize.s100,
       child: Row(
         children: [
           Expanded(
@@ -87,7 +86,8 @@ class Explore extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Helper.maxHeight * 0.005,
+            height: AppSize.s2
+            ,
           ),
           Text(
             title,

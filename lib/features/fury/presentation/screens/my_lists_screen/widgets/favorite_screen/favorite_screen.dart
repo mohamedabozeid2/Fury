@@ -9,6 +9,6 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(child: VerticalMoviesList());
+    return const SingleChildScrollView(child: VerticalMoviesList(favoriteOrWatchList: true,));
   }
 }

@@ -219,7 +219,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: Helper.maxHeight * 0.03,
+                                    height: AppSize.s15,
                                   ),
                                   Row(
                                     crossAxisAlignment:
@@ -250,9 +250,8 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: releaseDate != null
-                                        ? Helper.maxHeight * 0.008
-                                        : 0,
+                                    height:
+                                        releaseDate != null ? AppSize.s15 : 0,
                                   ),
                                   releaseDate != null
                                       ? Text(
@@ -273,7 +272,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0,
-                                    paddingVertical: Helper.maxHeight * 0.02,
+                                    paddingVertical: AppSize.s12,
                                   ),
                                   Description(
                                     description: widget.isMovie
@@ -283,7 +282,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0,
-                                    paddingVertical: Helper.maxHeight * 0.02,
+                                    paddingVertical: AppSize.s12,
                                   ),
                                   Genres(
                                       genres:
@@ -291,7 +290,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0,
-                                    paddingVertical: Helper.maxHeight * 0.02,
+                                    paddingVertical: AppSize.s12,
                                   ),
                                   Container(
                                     padding: EdgeInsets.all(
@@ -306,9 +305,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                           Theme.of(context).textTheme.subtitle1,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: Helper.maxHeight * 0.01,
-                                  ),
+                                  SizedBox(height: AppSize.s5),
                                   if (widget.isMovie)
                                     MoviesCubit.get(context).movieKeywords !=
                                             null
@@ -341,12 +338,12 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0,
-                                    paddingVertical: Helper.maxHeight * 0.02,
+                                    paddingVertical: AppSize.s12,
                                   ),
                                   CachedImage(
                                     image:
                                         '${MoviesDioHelper.baseImageURL}${widget.isMovie ? widget.movie!.backDropPath : widget.tvShow!.backdropPath}',
-                                    height: Helper.maxHeight * 0.3,
+                                    height: Helper.maxHeight*0.3,
                                     width: Helper.maxWidth,
                                     circularColor: AppColors.mainColor,
                                     fit: BoxFit.cover,
@@ -354,7 +351,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   MyDivider(
                                     color: AppColors.dividerColor,
                                     paddingHorizontal: 0.0,
-                                    paddingVertical: Helper.maxHeight * 0.02,
+                                    paddingVertical: AppSize.s12,
                                   ),
                                 ],
                               ),

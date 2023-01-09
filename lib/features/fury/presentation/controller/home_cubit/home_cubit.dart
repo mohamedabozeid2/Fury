@@ -691,7 +691,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
   bool isFirstFavoriteMoviesLoadingRunning = false;
 
   Future<Either<Failure, Movies>> getFavoriteMovies() async {
-      isFirstFavoriteMoviesLoadingRunning = true;
+    isFirstFavoriteMoviesLoadingRunning = true;
     return await getFavoriteMoviesUseCase.execute(
       accountId: accountDetails!.id.toString(),
       sessionId: sessionId!.sessionId,
@@ -766,12 +766,16 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 title: AppStrings.appName,
                 message: favorite
                     ? AppStrings.addedToFavorite
-                    : AppStrings.removedFromFavorite,
+                    : AppStrings.removeFavorite,
                 backgroundColor: AppColors.greenSuccessColor,
                 textColor: Colors.white,
               );
-              if(fromFavoriteScreen){
-                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
+              if (fromFavoriteScreen) {
+                Components.navigateTo(
+                    context,
+                    const Layout(
+                      fromFavoriteScreen: true,
+                    ));
               }
               emit(AddToFavoriteSuccessState());
             });
@@ -787,13 +791,16 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 title: AppStrings.appName,
                 message: favorite
                     ? AppStrings.addedToFavorite
-                    : AppStrings.removedFromFavorite,
+                    : AppStrings.removeFavorite,
                 backgroundColor: AppColors.greenSuccessColor,
                 textColor: Colors.white,
               );
-              if(fromFavoriteScreen){
-                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
-
+              if (fromFavoriteScreen) {
+                Components.navigateTo(
+                    context,
+                    const Layout(
+                      fromFavoriteScreen: true,
+                    ));
               }
               emit(AddToFavoriteSuccessState());
             });
@@ -831,6 +838,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
       value.fold((l) {
         emit(AddToWatchListErrorState(message: l.message));
       }, (r) {
+        print('REMOVE FROM WATCH LIST');
         if (isMovie) {
           getMoviesWatchList().then((moviesWatchListValue) {
             moviesWatchListValue.fold((l) {
@@ -840,12 +848,19 @@ class MoviesCubit extends Cubit<MoviesStates> {
               moviesWatchList = r;
               Components.showSnackBar(
                 title: AppStrings.appName,
-                message: AppStrings.addedToWatchList,
+                message: watchList
+                    ? AppStrings.addedToWatchList
+                    : AppStrings.removedFromWatchList,
                 backgroundColor: AppColors.greenSuccessColor,
                 textColor: Colors.white,
               );
-              if(fromFavoriteScreen){
-                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
+              if (fromFavoriteScreen) {
+                print("NAVIGATE 1");
+                Components.navigateTo(
+                    context,
+                    const Layout(
+                      fromFavoriteScreen: true,
+                    ));
               }
               emit(AddToWatchListSuccessState());
             });
@@ -859,12 +874,19 @@ class MoviesCubit extends Cubit<MoviesStates> {
               tvShowsWatchList = r;
               Components.showSnackBar(
                 title: AppStrings.appName,
-                message: AppStrings.addedToWatchList,
+                message: watchList
+                    ? AppStrings.addedToWatchList
+                    : AppStrings.removedFromWatchList,
                 backgroundColor: AppColors.greenSuccessColor,
                 textColor: Colors.white,
               );
-              if(fromFavoriteScreen){
-                Components.navigateTo(context, const Layout(fromFavoriteScreen: true,));
+              if (fromFavoriteScreen) {
+                print("NAVIGATE 2");
+                Components.navigateTo(
+                    context,
+                    const Layout(
+                      fromFavoriteScreen: true,
+                    ));
               }
               emit(AddToWatchListSuccessState());
             });

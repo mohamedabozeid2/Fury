@@ -501,35 +501,6 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     }
   }
 
-  @override
-  Future<FavoriteDataModel> addToWatchList({
-    required String accountId,
-    required String sessionId,
-    required String mediaType,
-    required int mediaId,
-    required bool watchList,
-  }) async {
-    final response = await MoviesDioHelper.postData(
-        url: '/account/$accountId/watchlist',
-        data: {
-          'media_type': mediaType,
-          'media_id': mediaId,
-          'watchlist': watchList,
-        },
-        contentType: 'application/json;charset=utf-8',
-        query: {
-          'api_key': MoviesDioHelper.apiKey,
-          'session_id': sessionId,
-        });
-    if (response.statusCode == 201) {
-      return FavoriteDataModel.fromJson(response.data);
-    } else {
-      throw MoviesServerException(
-        moviesErrorMessageModel:
-            MoviesErrorMessageModel.fromJson(response.data),
-      );
-    }
-  }
 
   @override
   Future<MoviesModel> getFavoriteMovies({
@@ -649,6 +620,37 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
       throw MoviesServerException(
         moviesErrorMessageModel:
             MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+
+  @override
+  Future<FavoriteDataModel> addToWatchList({
+    required String accountId,
+    required String sessionId,
+    required String mediaType,
+    required int mediaId,
+    required bool watchList,
+  }) async {
+    final response = await MoviesDioHelper.postData(
+        url: '/account/$accountId/watchlist',
+        data: {
+          'media_type': mediaType,
+          'media_id': mediaId,
+          'watchlist': watchList,
+        },
+        contentType: 'application/json;charset=utf-8',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+        });
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return FavoriteDataModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+        MoviesErrorMessageModel.fromJson(response.data),
       );
     }
   }

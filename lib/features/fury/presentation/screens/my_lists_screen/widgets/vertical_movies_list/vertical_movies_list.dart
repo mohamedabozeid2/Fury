@@ -7,9 +7,10 @@ import '../../../../../../../core/utils/helper.dart';
 import '../../../../../../../core/widgets/divider.dart';
 
 class VerticalMoviesList extends StatefulWidget {
-  const VerticalMoviesList({
-    Key? key,
-  }) : super(key: key);
+  final bool favoriteOrWatchList;
+
+  const VerticalMoviesList({Key? key, required this.favoriteOrWatchList})
+      : super(key: key);
 
   @override
   State<VerticalMoviesList> createState() => _VerticalMoviesListState();
@@ -33,7 +34,10 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
             return VerticalMoviesItemBuilder(
               moviesCounter: moviesCounter,
               isMovie: true,
-              movie: favoriteMovies!.moviesList[index],
+              favoriteOrWatchList: widget.favoriteOrWatchList,
+              movie: widget.favoriteOrWatchList
+                  ? favoriteMovies!.moviesList[index]
+                  : moviesWatchList!.moviesList[index],
             );
           },
           separatorBuilder: (context, index) {
@@ -42,7 +46,9 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
               paddingHorizontal: 0,
             );
           },
-          itemCount: favoriteMovies!.moviesList.length,
+          itemCount: widget.favoriteOrWatchList
+              ? favoriteMovies!.moviesList.length
+              : moviesWatchList!.moviesList.length,
         ),
         ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
@@ -52,7 +58,10 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
             return VerticalMoviesItemBuilder(
               moviesCounter: moviesCounter,
               isMovie: false,
-              tv: favoriteTvShows!.tvList[index],
+              favoriteOrWatchList: widget.favoriteOrWatchList,
+              tv: widget.favoriteOrWatchList
+                  ? favoriteTvShows!.tvList[index]
+                  : tvShowsWatchList!.tvList[index],
             );
           },
           separatorBuilder: (context, index) {
@@ -61,7 +70,9 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
               paddingHorizontal: 0,
             );
           },
-          itemCount: favoriteTvShows!.tvList.length,
+          itemCount: widget.favoriteOrWatchList
+              ? favoriteTvShows!.tvList.length
+              : tvShowsWatchList!.tvList.length,
         )
       ],
     );
