@@ -8,7 +8,9 @@ import 'package:movies_application/features/fury/presentation/screens/news_scree
 import 'package:movies_application/features/fury/presentation/screens/news_screen/widgets/general_news/general_news.dart';
 import 'package:movies_application/features/fury/presentation/screens/news_screen/widgets/horizontal_news_item_builder.dart';
 
+import '../../../../../core/utils/app_values.dart';
 import '../../../../../core/utils/helper.dart';
+import '../../../../../core/widgets/drawer_icon_button.dart';
 import '../../controller/news_cubit/news_cubit.dart';
 import '../../controller/news_cubit/news_states.dart';
 
@@ -69,7 +71,7 @@ class _NewsScreenState extends State<NewsScreen> {
                     ))
                   : Padding(
                       padding: EdgeInsets.only(
-                        top: Helper.maxHeight * 0.1,
+                        top: Helper.maxHeight * 0.07,
                         left: Helper.maxHeight * 0.015,
                       ),
                       child: SingleChildScrollView(
@@ -78,9 +80,17 @@ class _NewsScreenState extends State<NewsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              AppStrings.hottestNews,
-                              style: Theme.of(context).textTheme.bodyText2,
+                            Row(
+                              children: [
+                                const DrawerIconButton(),
+                                SizedBox(
+                                  width: AppSize.s10,
+                                ),
+                                Text(
+                                  AppStrings.hottestNews,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: Helper.maxHeight * 0.03,

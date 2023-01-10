@@ -1,30 +1,28 @@
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:movies_application/core/utils/app_values.dart';
-import 'package:movies_application/core/utils/components.dart';
-import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/appbar_movie_builder.dart';
-import 'package:movies_application/features/fury/presentation/screens/HomeScreen/widgets/category_item_builder/category_item_builder.dart';
 import 'package:movies_application/core/keys/movies_category_keys.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_screen/widgets/appbar_movie_builder.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_screen/widgets/category_item_builder/category_item_builder.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_screen/widgets/search_icon_button.dart';
 
 import '../../../../../core/api/movies_dio_helper.dart';
 import '../../../../../core/keys/tv_category_keys.dart';
-import '../../../../../core/utils/Colors.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/helper.dart';
 import '../../../../../core/utils/strings.dart';
-import '../search_screen/search_screen.dart';
+import '../../../../../core/widgets/drawer_icon_button.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class MoviesScreen extends StatefulWidget {
+  const MoviesScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<MoviesScreen> createState() => _MoviesScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MoviesScreenState extends State<MoviesScreen> {
   int randomPosterNumber = 0;
-
   @override
   void initState() {
     super.initState();
@@ -39,29 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverAppBar(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppSize.s20),
-                  color: AppColors.mainColor,
-                ),
-                child: Image(
-                  image: const AssetImage('assets/images/logo.png'),
-                  height: Helper.maxHeight * 0.05,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Components.slideNavigateTo(context, SearchScreen());
-                },
-                child: Container(
-                  padding: EdgeInsets.all(Helper.maxHeight * 0.01),
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor,
-                      borderRadius: BorderRadius.circular(AppSize.s20)),
-                  child: const Icon(Icons.search),
-                ),
-              )
+            children: const [
+              DrawerIconButton(),
+              SearchIconButton(),
             ],
           ),
           // pinned: true,
@@ -70,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             isMovie: true,
             movie: trendingMovies!.moviesList[randomPosterNumber],
             image:
-                '${MoviesDioHelper.baseImageURL}${trendingMovies!.moviesList[randomPosterNumber].posterPath}',
+            '${MoviesDioHelper.baseImageURL}${trendingMovies!.moviesList[randomPosterNumber].posterPath}',
           ),
         ),
         SliverFillRemaining(

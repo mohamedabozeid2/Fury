@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/features/fury/presentation/controller/news_cubit/news_cubit.dart';
-import 'package:movies_application/features/fury/presentation/screens/Layout/widgets/bottom_nav_bar.dart';
 
 import '../../../../../core/utils/components.dart';
 import '../../../../../core/widgets/adaptive_indicator.dart';
 import '../../controller/home_cubit/home_cubit.dart';
 import '../../controller/home_cubit/home_states.dart';
+import '../drawer_screen/home_screen.dart';
 
 class Layout extends StatefulWidget {
   const Layout({super.key, this.fromFavoriteScreen = false});
@@ -34,8 +34,7 @@ class _LayoutState extends State<Layout> {
     return BlocConsumer<MoviesCubit, MoviesStates>(
       buildWhen: (previous, current) =>
           current is GetAllMoviesSuccessState ||
-          current is GetAllMoviesLoadingState ||
-          current is ChangeBotNavBarState,
+          current is GetAllMoviesLoadingState,
       listener: (context, state) {},
       builder: (context, state) {
         return state is GetAllMoviesLoadingState
@@ -44,7 +43,13 @@ class _LayoutState extends State<Layout> {
                 os: Components.getOS(),
                 color: AppColors.mainColor,
               ))
-            : Scaffold(
+            : LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            Helper.maxWidth = constraints.maxWidth;
+            Helper.maxHeight = constraints.maxHeight;
+            return const HomeScreen();
+          },
+        );/*Scaffold(
                 bottomNavigationBar: const BottomNavBar(),
                 body: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -53,7 +58,7 @@ class _LayoutState extends State<Layout> {
                     return MoviesCubit.get(context)
                         .screens[MoviesCubit.get(context).botNavCurrentIndex];
                   },
-                ));
+                ));*/
       },
     );
   }

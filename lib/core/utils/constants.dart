@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter_zoom_drawer/config.dart';
 import 'package:movies_application/features/fury/domain/entities/account_details.dart';
 import 'package:movies_application/features/fury/domain/entities/movies.dart';
 import 'package:movies_application/features/fury/domain/entities/tv.dart';
 
 import '../../features/fury/domain/entities/session_id.dart';
 
+final drawerController = ZoomDrawerController();
 AccountDetails? accountDetails;
 SessionId? sessionId;
 bool internetConnection = false;

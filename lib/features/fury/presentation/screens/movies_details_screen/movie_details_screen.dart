@@ -21,8 +21,8 @@ import '../../../../../core/utils/helper.dart';
 import '../../../../../core/widgets/divider.dart';
 import '../../controller/home_cubit/home_cubit.dart';
 import '../../controller/home_cubit/home_states.dart';
-import '../HomeScreen/widgets/appbar_movie_builder.dart';
 import '../../../../../core/keys/movies_category_keys.dart';
+import '../movies_screen/widgets/appbar_movie_builder.dart';
 
 class MovieDetails extends StatefulWidget {
   final SingleMovie? movie;

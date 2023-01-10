@@ -11,9 +11,8 @@ import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/domain/entities/genres.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
-import 'package:movies_application/features/fury/presentation/screens/HomeScreen/HomeScreen.dart';
 import 'package:movies_application/features/fury/presentation/screens/internet_connection/no_internet_screen.dart';
-import 'package:movies_application/features/fury/presentation/screens/my_lists_screen/my_lists_screen.dart';
+import 'package:movies_application/features/fury/presentation/screens/movies_screen/movies_screen.dart';
 
 import '../../../../../core/keys/tv_category_keys.dart';
 import '../../../../../core/utils/constants.dart';
@@ -46,7 +45,6 @@ import '../../../domain/use_cases/mark_as_favorite.dart';
 import '../../../domain/use_cases/search_movies.dart';
 import '../../screens/Layout/Layout.dart';
 import '../../screens/news_screen/news_screen.dart';
-import '../../screens/settings/settings_screen.dart';
 import 'home_states.dart';
 
 class MoviesCubit extends Cubit<MoviesStates> {
@@ -103,22 +101,25 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int botNavCurrentIndex = 0;
 
   void changBotNavBar({required int index}) {
+
     botNavCurrentIndex = index;
     emit(ChangeBotNavBarState());
   }
 
   List<Widget> screens = [
-    const HomeScreen(),
-    const MyListsScreen(),
+    const MoviesScreen(),
+    // const MyListsScreen(),
     const NewsScreen(),
-    const SettingsScreen(),
+    // const SettingsScreen(),
   ];
+
+  // List<Widget>
 
   List<GButton> bottomNavItems = [
     const GButton(icon: Icons.home, text: AppStrings.home),
-    const GButton(icon: Icons.movie_filter_outlined, text: AppStrings.movies),
+    // const GButton(icon: Icons.movie_filter_outlined, text: AppStrings.movies),
     const GButton(icon: Icons.newspaper, text: AppStrings.news),
-    const GButton(icon: Icons.settings, text: AppStrings.settings),
+    // const GButton(icon: Icons.settings, text: AppStrings.settings),
   ];
 
   void getAllMovies({required BuildContext context}) {
@@ -168,7 +169,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
           }),
 
           /// NOW PLAYING MOVIES //////////
-
           getNowPlayingMovies().then((value) {
             value.fold((l) {
               emit(GetNowPlayingMoviesErrorState(message: l.message));
@@ -838,7 +838,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
       value.fold((l) {
         emit(AddToWatchListErrorState(message: l.message));
       }, (r) {
-        print('REMOVE FROM WATCH LIST');
         if (isMovie) {
           getMoviesWatchList().then((moviesWatchListValue) {
             moviesWatchListValue.fold((l) {
@@ -855,7 +854,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 textColor: Colors.white,
               );
               if (fromFavoriteScreen) {
-                print("NAVIGATE 1");
                 Components.navigateTo(
                     context,
                     const Layout(
@@ -881,7 +879,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 textColor: Colors.white,
               );
               if (fromFavoriteScreen) {
-                print("NAVIGATE 2");
                 Components.navigateTo(
                     context,
                     const Layout(

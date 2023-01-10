@@ -9,6 +9,7 @@ class AppStrings {
   static const String emailAddress = 'Email Address';
   static const String userName = 'User Name';
   static const String password = 'Password';
+  static const String support = 'Support';
   static const String login = 'Login';
   static const String noAccount = "Don't have an account? ";
   static const String forgetPassword = "Forget password? ";
@@ -40,6 +41,7 @@ class AppStrings {
   static const String genre = "Genre";
   static const String noData = "No data available";
   static const String later = "Later";
+  static const String myLists = "My Lists";
   static const String watchLater = "Watch Later";
   static const String favorite = "Favorite";
   static const String removeFavorite = "Remove Favorite";
