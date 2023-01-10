@@ -101,7 +101,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
   int botNavCurrentIndex = 0;
 
   void changBotNavBar({required int index}) {
-
     botNavCurrentIndex = index;
     emit(ChangeBotNavBarState());
   }
@@ -212,27 +211,27 @@ class MoviesCubit extends Cubit<MoviesStates> {
             });
           }),
 
-          /// Favorite Movies
-          getFavoriteMovies().then((value) {
-            value.fold((l) {
-              emit(GetFavoriteMoviesErrorState(message: l.message));
-            }, (r) {
-              isFirstFavoriteMoviesLoadingRunning = false;
-              favoriteMovies = r;
-            });
-          }),
+          // /// Favorite Movies
+          // getFavoriteMovies().then((value) {
+          //   value.fold((l) {
+          //     emit(GetFavoriteMoviesErrorState(message: l.message));
+          //   }, (r) {
+          //     isFirstFavoriteMoviesLoadingRunning = false;
+          //     favoriteMovies = r;
+          //   });
+          // }),
 
           /// Favorite Tv Shows
-          getFavoriteTvShows().then((value) {
-            value.fold((l) {
-              emit(GetFavoriteTvErrorState(
-                message: l.message,
-              ));
-            }, (r) {
-              isFirstFavoriteTvShowsLoadingRunning = false;
-              favoriteTvShows = r;
-            });
-          }),
+          // getFavoriteTvShows().then((value) {
+          //   value.fold((l) {
+          //     emit(GetFavoriteTvErrorState(
+          //       message: l.message,
+          //     ));
+          //   }, (r) {
+          //     isFirstFavoriteTvShowsLoadingRunning = false;
+          //     favoriteTvShows = r;
+          //   });
+          // }),
 
           /// Movies Watch List
           getMoviesWatchList().then((value) {
@@ -385,7 +384,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     ///// For similar TV Shows ////////
     int? tvID,
   }) {
-    emit(LoadMoreMoviesLoadingState());
+    emit(LoadMoreTvShowsLoadingState());
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
     late String endPoint;
@@ -457,7 +456,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
     required bool isLoadingMore,
     int? movieID,
   }) {
-    emit(LoadMoreTvShowsLoadingState());
+    emit(LoadMoreMoviesLoadingState());
     bool hasNextPage = hasMorePages;
     bool isLoadingMoreRunning = isLoadingMore;
     late String endPoint;
@@ -735,88 +734,88 @@ class MoviesCubit extends Cubit<MoviesStates> {
     );
   }
 
-  Future<void> markAsFavorite({
-    required bool isMovie,
-    required int mediaId,
-    required bool favorite,
-    bool fromFavoriteScreen = false,
-    required BuildContext context,
-  }) async {
-    emit(AddToFavoriteLoadingState(1));
-    return await markAsFavoriteUseCase
-        .execute(
-      accountId: accountDetails!.id.toString(),
-      sessionId: sessionId!.sessionId,
-      mediaType: isMovie ? 'movie' : 'tv',
-      mediaId: mediaId,
-      favorite: favorite,
-    )
-        .then((value) {
-      value.fold((l) {
-        emit(AddToFavoriteErrorState(message: l.message));
-      }, (r) {
-        if (isMovie) {
-          getFavoriteMovies().then((favoriteMoviesValue) {
-            favoriteMoviesValue.fold((l) {
-              emit(GetFavoriteMoviesErrorState(message: l.message));
-            }, (r) {
-              isFirstFavoriteMoviesLoadingRunning = false;
-              favoriteMovies = r;
-              Components.showSnackBar(
-                title: AppStrings.appName,
-                message: favorite
-                    ? AppStrings.addedToFavorite
-                    : AppStrings.removeFavorite,
-                backgroundColor: AppColors.greenSuccessColor,
-                textColor: Colors.white,
-              );
-              if (fromFavoriteScreen) {
-                Components.navigateTo(
-                    context,
-                    const Layout(
-                      fromFavoriteScreen: true,
-                    ));
-              }
-              emit(AddToFavoriteSuccessState());
-            });
-          });
-        } else {
-          getFavoriteTvShows().then((favoriteTvShowsValue) {
-            favoriteTvShowsValue.fold((l) {
-              emit(GetFavoriteTvErrorState(message: l.message));
-            }, (r) {
-              isFirstFavoriteTvShowsLoadingRunning = false;
-              favoriteTvShows = r;
-              Components.showSnackBar(
-                title: AppStrings.appName,
-                message: favorite
-                    ? AppStrings.addedToFavorite
-                    : AppStrings.removeFavorite,
-                backgroundColor: AppColors.greenSuccessColor,
-                textColor: Colors.white,
-              );
-              if (fromFavoriteScreen) {
-                Components.navigateTo(
-                    context,
-                    const Layout(
-                      fromFavoriteScreen: true,
-                    ));
-              }
-              emit(AddToFavoriteSuccessState());
-            });
-          });
-        }
-      });
-    }).catchError((error) {
-      Components.showSnackBar(
-        title: AppStrings.appName,
-        message: AppStrings.failFavorite,
-        backgroundColor: AppColors.redErrorColor,
-        textColor: AppColors.textWhiteColor,
-      );
-      emit(AddToFavoriteErrorState(message: error.toString()));
-    });
-  }
+  // Future<void> markAsFavorite({
+  //   required bool isMovie,
+  //   required int mediaId,
+  //   required bool favorite,
+  //   bool fromFavoriteScreen = false,
+  //   required BuildContext context,
+  // }) async {
+  //   emit(AddToFavoriteLoadingState(1));
+  //   return await markAsFavoriteUseCase
+  //       .execute(
+  //     accountId: accountDetails!.id.toString(),
+  //     sessionId: sessionId!.sessionId,
+  //     mediaType: isMovie ? 'movie' : 'tv',
+  //     mediaId: mediaId,
+  //     favorite: favorite,
+  //   )
+  //       .then((value) {
+  //     value.fold((l) {
+  //       emit(AddToFavoriteErrorState(message: l.message));
+  //     }, (r) {
+  //       if (isMovie) {
+  //         getFavoriteMovies().then((favoriteMoviesValue) {
+  //           favoriteMoviesValue.fold((l) {
+  //             emit(GetFavoriteMoviesErrorState(message: l.message));
+  //           }, (r) {
+  //             isFirstFavoriteMoviesLoadingRunning = false;
+  //             favoriteMovies = r;
+  //             Components.showSnackBar(
+  //               title: AppStrings.appName,
+  //               message: favorite
+  //                   ? AppStrings.addedToFavorite
+  //                   : AppStrings.removeFavorite,
+  //               backgroundColor: AppColors.greenSuccessColor,
+  //               textColor: Colors.white,
+  //             );
+  //             if (fromFavoriteScreen) {
+  //               Components.navigateTo(
+  //                   context,
+  //                   const Layout(
+  //                     fromFavoriteScreen: true,
+  //                   ));
+  //             }
+  //             emit(AddToFavoriteSuccessState());
+  //           });
+  //         });
+  //       } else {
+  //         getFavoriteTvShows().then((favoriteTvShowsValue) {
+  //           favoriteTvShowsValue.fold((l) {
+  //             emit(GetFavoriteTvErrorState(message: l.message));
+  //           }, (r) {
+  //             isFirstFavoriteTvShowsLoadingRunning = false;
+  //             favoriteTvShows = r;
+  //             Components.showSnackBar(
+  //               title: AppStrings.appName,
+  //               message: favorite
+  //                   ? AppStrings.addedToFavorite
+  //                   : AppStrings.removeFavorite,
+  //               backgroundColor: AppColors.greenSuccessColor,
+  //               textColor: Colors.white,
+  //             );
+  //             if (fromFavoriteScreen) {
+  //               Components.navigateTo(
+  //                   context,
+  //                   const Layout(
+  //                     fromFavoriteScreen: true,
+  //                   ));
+  //             }
+  //             emit(AddToFavoriteSuccessState());
+  //           });
+  //         });
+  //       }
+  //     });
+  //   }).catchError((error) {
+  //     Components.showSnackBar(
+  //       title: AppStrings.appName,
+  //       message: AppStrings.failFavorite,
+  //       backgroundColor: AppColors.redErrorColor,
+  //       textColor: AppColors.textWhiteColor,
+  //     );
+  //     emit(AddToFavoriteErrorState(message: error.toString()));
+  //   });
+  // }
 
   Future<void> addToWatchList({
     required int mediaId,

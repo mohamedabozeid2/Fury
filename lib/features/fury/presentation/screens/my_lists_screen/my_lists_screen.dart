@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/core/utils/strings.dart';
-import 'package:movies_application/features/fury/presentation/screens/my_lists_screen/widgets/favorite_screen/favorite_screen.dart';
-import 'package:movies_application/features/fury/presentation/screens/my_lists_screen/widgets/watch_later_screen/watch_later_screen.dart';
+import 'package:movies_application/features/fury/presentation/screens/my_lists_screen/widgets/vertical_movies_list/vertical_movies_list.dart';
 
-import '../../../../../core/utils/Colors.dart';
-import '../../../../../core/utils/app_values.dart';
+import '../../../../../core/widgets/drawer_icon_button.dart';
+
 
 class MyListsScreen extends StatelessWidget {
   const MyListsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return Scaffold(
+      appBar: AppBar(
+        title: const DrawerIconButton(),
+      ),
+      body: Column(
+        children: const [
+          SingleChildScrollView(child: VerticalMoviesList()),
+        ],
+      ),
+    ) /*DefaultTabController(
       length: 2,
       child: Scaffold(
           appBar: AppBar(
@@ -47,6 +54,7 @@ class MyListsScreen extends StatelessWidget {
             FavoriteScreen(),
             WatchLaterScreen()
           ])),
-    );
+    )*/
+        ;
   }
 }

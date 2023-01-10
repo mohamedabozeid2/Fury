@@ -55,7 +55,9 @@ class _SimilarMoviesState extends State<SimilarMovies> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MoviesCubit, MoviesStates>(
-      buildWhen: (previous, current) => current is LoadMoreMoviesSuccessState,
+      buildWhen: (previous, current) =>
+          current is LoadMoreMoviesSuccessState ||
+          current is LoadMoreTvShowsSuccessState,
       listener: (context, state) {
         if (state is LoadMoreMoviesSuccessState) {
           similarDataLength = similarMovies!.moviesList.length;

@@ -8,11 +8,9 @@ import '../../../../../core/widgets/button.dart';
 import '../login_screen/login_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
-  // final ZoomDrawerController drawerController;
 
   const SettingsScreen({
     super.key,
-    // required this.drawerController,
   });
 
   @override
@@ -24,7 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const DrawerIconButton(),
+        title: const DrawerIconButton(),
       ),
       body: Column(
         children: [

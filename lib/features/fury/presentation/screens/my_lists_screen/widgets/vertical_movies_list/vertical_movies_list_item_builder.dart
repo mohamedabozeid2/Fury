@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
@@ -19,7 +20,6 @@ import '../../../movies_details_screen/movie_details_screen.dart';
 
 class VerticalMoviesItemBuilder extends StatefulWidget {
   final bool isMovie;
-  final bool favoriteOrWatchList;
   final int moviesCounter;
   final SingleMovie? movie;
   final SingleTV? tv;
@@ -27,7 +27,6 @@ class VerticalMoviesItemBuilder extends StatefulWidget {
   const VerticalMoviesItemBuilder({
     Key? key,
     required this.isMovie,
-    required this.favoriteOrWatchList,
     required this.moviesCounter,
     this.tv,
     this.movie,
@@ -41,7 +40,7 @@ class VerticalMoviesItemBuilder extends StatefulWidget {
 class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
   String title = '';
   dynamic posterPath;
-  late int favoriteButtonId;
+  late int addToWatchListButtonId;
 
   @override
   void initState() {
@@ -65,7 +64,7 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    favoriteButtonId = -1;
+    addToWatchListButtonId = -1;
     return GestureDetector(
       onTap: () {
         Components.navigateTo(
@@ -109,15 +108,15 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
                         ? widget.movie!.description
                         : widget.tv!.description,
                     textAlign: TextAlign.start,
-                    maxLines: 5,
+                    maxLines: 6,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                   SizedBox(
-                    height: Helper.maxHeight * 0.025,
+                    height: AppSize.s6,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       BlocConsumer<MoviesCubit, MoviesStates>(
                         buildWhen: (previous, current) =>
@@ -125,51 +124,38 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
                                 current is AddToFavoriteSuccessState ||
                                 current is AddToWatchListSuccessState ||
                                 current is AddToWatchListLoadingState) &&
-                            favoriteButtonId == widget.moviesCounter,
+                            addToWatchListButtonId == widget.moviesCounter,
                         listener: (context, state) {},
                         builder: (context, state) {
                           if (state is AddToFavoriteSuccessState) {
-                            favoriteButtonId = -1;
+                            addToWatchListButtonId = -1;
                           }
                           return (state is AddToFavoriteLoadingState ||
                                       state is AddToWatchListLoadingState) &&
-                                  favoriteButtonId == widget.moviesCounter
+                                  addToWatchListButtonId == widget.moviesCounter
                               ? AdaptiveIndicator(
                                   os: Components.getOS(),
                                   color: AppColors.mainColor,
                                 )
                               : AddActionsButton(
-                            backgroundColor: AppColors.mainColor,
+                                  backgroundColor: AppColors.mainColor,
                                   fun: () {
-                                    favoriteButtonId = widget.moviesCounter;
-                                    if (widget.favoriteOrWatchList) {
-                                      MoviesCubit.get(context).markAsFavorite(
-                                        isMovie: widget.isMovie,
-                                        context: context,
-                                        fromFavoriteScreen: true,
-                                        mediaId: widget.isMovie
-                                            ? widget.movie!.id
-                                            : widget.tv!.id,
-                                        favorite: false,
-                                      );
-                                    } else {
-                                      MoviesCubit.get(context).addToWatchList(
-                                        mediaId: widget.isMovie
-                                            ? widget.movie!.id
-                                            : widget.tv!.id,
-                                        isMovie: widget.isMovie,
-                                        fromFavoriteScreen: true,
-                                        watchList: false,
-                                        context: context,
-                                      );
-                                    }
+                                    addToWatchListButtonId =
+                                        widget.moviesCounter;
+                                    MoviesCubit.get(context).addToWatchList(
+                                      mediaId: widget.isMovie
+                                          ? widget.movie!.id
+                                          : widget.tv!.id,
+                                      isMovie: widget.isMovie,
+                                      fromFavoriteScreen: true,
+                                      watchList: false,
+                                      context: context,
+                                    );
                                   },
-                                  icon: widget.favoriteOrWatchList
-                                      ? Icons.favorite
-                                      : Icons.remove,
+                                  icon: Icons.remove,
+                                  spacing: AppSize.s10,
                                   iconSize: AppFontSize.s28,
-                                  title: AppStrings.remove
-                                );
+                                  title: AppStrings.remove);
                         },
                       ),
                     ],

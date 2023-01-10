@@ -7,11 +7,13 @@ class AddActionsButton extends StatelessWidget {
   final double iconSize;
   final String title;
   final Color backgroundColor;
+  final double spacing;
 
   const AddActionsButton(
       {super.key,
       required this.fun,
       this.title = '',
+      this.spacing = 0,
       this.backgroundColor = Colors.transparent,
       required this.icon,
       this.iconSize = 16});
@@ -36,7 +38,7 @@ class AddActionsButton extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: AppSize.s7,
+                  height: spacing,
                 ),
                 Text(
                   title,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/features/fury/presentation/screens/main_screen/main_screen.dart';
@@ -33,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
             showShadow: false,
             angle: 0.0,
             borderRadius: AppSize.s25,
+            mainScreenTapClose: true,
+            menuScreenOverlayColor: AppColors.mainColor,
             openCurve: Curves.fastOutSlowIn,
             menuBackgroundColor: Colors.black,
             slideWidth: Helper.maxWidth * 0.7,

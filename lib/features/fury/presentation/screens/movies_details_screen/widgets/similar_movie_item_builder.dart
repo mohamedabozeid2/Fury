@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_fonts.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/utils/helper.dart';
 import 'package:movies_application/core/utils/strings.dart';
@@ -83,17 +84,17 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
         children: [
           posterPath == null
               ? Image.asset(
-                  ImageAssets.emptyMovie,
-                  height: Helper.maxHeight * 0.3,
-                  width: Helper.maxWidth * 0.4,
-                  fit: BoxFit.cover,
-                )
+            ImageAssets.emptyMovie,
+            height: Helper.maxHeight * 0.3,
+            width: Helper.maxWidth * 0.4,
+            fit: BoxFit.cover,
+          )
               : CachedImage(
-                  image: '${MoviesDioHelper.baseImageURL}$posterPath',
-                  height: Helper.maxHeight * 0.3,
-                  circularColor: AppColors.mainColor,
-                  width: Helper.maxWidth * 0.4,
-                ),
+            image: '${MoviesDioHelper.baseImageURL}$posterPath',
+            height: Helper.maxHeight * 0.3,
+            circularColor: AppColors.mainColor,
+            width: Helper.maxWidth * 0.4,
+          ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(Helper.maxWidth * 0.03),
@@ -103,7 +104,10 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                 children: [
                   Text(
                     '${widget.index + 1}. $title',
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .subtitle1,
                   ),
                   SizedBox(height: Helper.maxHeight * 0.005),
                   Text(
@@ -111,80 +115,52 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                         ? widget.movie!.description
                         : widget.tvShow!.description,
                     textAlign: TextAlign.start,
-                    maxLines: 5,
+                    maxLines: 6,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .subtitle2,
                   ),
                   SizedBox(
                     height: Helper.maxHeight * 0.025,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       BlocConsumer<MoviesCubit, MoviesStates>(
                         buildWhen: (previous, current) =>
-                            (current is AddToWatchListLoadingState ||
-                                current is AddToWatchListSuccessState) &&
+                        (current is AddToWatchListLoadingState ||
+                            current is AddToWatchListSuccessState) &&
                             watchListButtonId == widget.index,
                         builder: (context, state) {
                           if (state is AddToWatchListSuccessState) {
                             watchListButtonId = -1;
                           }
                           return state is AddToWatchListLoadingState &&
-                                  watchListButtonId == widget.index
+                              watchListButtonId == widget.index
                               ? AdaptiveIndicator(
-                                  os: Components.getOS(),
-                                  color: AppColors.mainColor,
-                                )
+                            os: Components.getOS(),
+                            color: AppColors.mainColor,
+                          )
                               : AddActionsButton(
-                                  fun: () {
-                                    watchListButtonId = widget.index;
-                                    MoviesCubit.get(context).addToWatchList(
-                                      context: context,
-                                      mediaId: widget.isMovie
-                                          ? widget.movie!.id
-                                          : widget.tvShow!.id,
-                                      isMovie: widget.isMovie,
-                                      watchList: true,
-                                    );
-                                  },
-                                  icon: Icons.add,
-                                  iconSize: AppFontSize.s28,
-                                  title: AppStrings.later,
-                                );
-                        },
-                        listener: (context, state) {},
-                      ),
-                      BlocConsumer<MoviesCubit, MoviesStates>(
-                        buildWhen: (previous, current) =>
-                            (current is AddToFavoriteSuccessState ||
-                                current is AddToFavoriteLoadingState) &&
-                            favoriteButtonId == widget.index,
-                        builder: (context, state) {
-                          if(state is AddToFavoriteSuccessState){
-                            favoriteButtonId = -1;
-                          }
-                          return state is AddToFavoriteLoadingState
-                              ? AdaptiveIndicator(
-                                  os: Components.getOS(),
-                                  color: AppColors.mainColor,
-                                )
-                              : AddActionsButton(
-                                  fun: () {
-                                    favoriteButtonId = widget.index;
-                                    MoviesCubit.get(context).markAsFavorite(
-                                      isMovie: widget.isMovie,
-                                      context: context,
-                                      mediaId: widget.isMovie
-                                          ? widget.movie!.id
-                                          : widget.tvShow!.id,
-                                      favorite: true,
-                                    );
-                                  },
-                                  icon: Icons.favorite,
-                                  iconSize: AppFontSize.s28,
-                                  title: AppStrings.favorite,
-                                );
+                            fun: () {
+                              watchListButtonId = widget.index;
+                              MoviesCubit.get(context).addToWatchList(
+                                context: context,
+                                mediaId: widget.isMovie
+                                    ? widget.movie!.id
+                                    : widget.tvShow!.id,
+                                isMovie: widget.isMovie,
+                                watchList: true,
+                              );
+                            },
+                            icon: Icons.add,
+                            backgroundColor: AppColors.mainColor,
+                            spacing: AppSize.s10,
+                            iconSize: AppFontSize.s28,
+                            title: AppStrings.watchList,
+                          );
                         },
                         listener: (context, state) {},
                       ),

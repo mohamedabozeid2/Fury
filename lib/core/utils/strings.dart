@@ -42,7 +42,7 @@ class AppStrings {
   static const String noData = "No data available";
   static const String later = "Later";
   static const String myLists = "My Lists";
-  static const String watchLater = "Watch Later";
+  static const String watchList = "Watch List";
   static const String favorite = "Favorite";
   static const String removeFavorite = "Remove Favorite";
   static const String remove = "Remove";

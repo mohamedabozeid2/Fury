@@ -185,37 +185,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                   },
                                                   icon: Icons.add,
                                                   iconSize: AppFontSize.s26);
+                                          // ),
                                         },
                                       ),
-                                      BlocConsumer<MoviesCubit, MoviesStates>(
-                                          buildWhen: (previous, current) =>
-                                              current
-                                                  is AddToFavoriteLoadingState ||
-                                              current
-                                                  is AddToFavoriteSuccessState,
-                                          builder: (context, state) {
-                                            return state
-                                                    is AddToFavoriteLoadingState
-                                                ? AdaptiveIndicator(
-                                                    os: Components.getOS(),
-                                                    color: AppColors.mainColor,
-                                                  )
-                                                : AddActionsButton(
-                                                    fun: () {
-                                                      MoviesCubit.get(context)
-                                                          .markAsFavorite(
-                                                        isMovie: widget.isMovie,
-                                                        context: context,
-                                                        mediaId: widget.isMovie
-                                                            ? widget.movie!.id
-                                                            : widget.tvShow!.id,
-                                                        favorite: true,
-                                                      );
-                                                    },
-                                                    icon: Icons.favorite,
-                                                    iconSize: AppFontSize.s26);
-                                          },
-                                          listener: (context, state) {}),
                                     ],
                                   ),
                                   SizedBox(
@@ -343,7 +315,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   CachedImage(
                                     image:
                                         '${MoviesDioHelper.baseImageURL}${widget.isMovie ? widget.movie!.backDropPath : widget.tvShow!.backdropPath}',
-                                    height: Helper.maxHeight*0.3,
+                                    height: Helper.maxHeight * 0.3,
                                     width: Helper.maxWidth,
                                     circularColor: AppColors.mainColor,
                                     fit: BoxFit.cover,
@@ -361,13 +333,27 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   SimilarMovies(
                                     isMovie: widget.isMovie,
                                   ),
-                                  state is LoadMoreMoviesLoadingState
-                                      ? Center(
-                                          child: AdaptiveIndicator(
-                                          os: Components.getOS(),
-                                          color: AppColors.mainColor,
-                                        ))
-                                      : Container()
+                                  BlocConsumer<MoviesCubit, MoviesStates>(
+                                    buildWhen: (previous, current) =>
+                                        current is LoadMoreMoviesLoadingState ||
+                                        current is LoadMoreMoviesSuccessState ||
+                                        current
+                                            is LoadMoreTvShowsSuccessState ||
+                                        current is LoadMoreTvShowsLoadingState,
+                                    listener: (context, state) {},
+                                    builder: (context, state) {
+                                      return state
+                                                  is LoadMoreMoviesLoadingState ||
+                                              state
+                                                  is LoadMoreTvShowsLoadingState
+                                          ? Center(
+                                              child: AdaptiveIndicator(
+                                              os: Components.getOS(),
+                                              color: AppColors.mainColor,
+                                            ))
+                                          : Container();
+                                    },
+                                  )
                                 ],
                               )
                             ],

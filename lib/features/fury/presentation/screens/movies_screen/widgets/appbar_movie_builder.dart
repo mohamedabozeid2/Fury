@@ -74,7 +74,7 @@ class AppBarMovieBuilder extends StatelessWidget {
               ? Container()
               : Container(
                   padding:
-                      EdgeInsets.symmetric(vertical: Helper.maxHeight * 0.012),
+                      EdgeInsets.symmetric(vertical: AppSize.s3),
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.4),
                       borderRadius: BorderRadius.only(
@@ -105,33 +105,7 @@ class AppBarMovieBuilder extends StatelessWidget {
                                   },
                                   icon: Icons.add,
                                   iconSize: AppFontSize.s22,
-                                  title: AppStrings.later,
-                                );
-                        },
-                      ),
-                      BlocConsumer<MoviesCubit, MoviesStates>(
-                        buildWhen: (previous, current) =>
-                            current is AddToFavoriteLoadingState ||
-                            current is AddToFavoriteSuccessState,
-                        listener: (context, state) {},
-                        builder: (context, state) {
-                          return state is AddToFavoriteLoadingState
-                              ? AdaptiveIndicator(
-                                  os: Components.getOS(),
-                                  color: AppColors.mainColor,
-                                )
-                              : AddActionsButton(
-                                  fun: () {
-                                    MoviesCubit.get(context).markAsFavorite(
-                                      isMovie: isMovie,
-                                      context: context,
-                                      mediaId: isMovie ? movie!.id : tv!.id,
-                                      favorite: true,
-                                    );
-                                  },
-                                  icon: Icons.favorite,
-                                  iconSize: AppFontSize.s22,
-                                  title: AppStrings.favorite,
+                                  title: AppStrings.watchList,
                                 );
                         },
                       ),
