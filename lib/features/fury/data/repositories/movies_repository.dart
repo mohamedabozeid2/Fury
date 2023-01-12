@@ -23,8 +23,8 @@ class MoviesRepository extends BaseMoviesRepository {
 
   @override
   Future<Either<Failure, RequestToken>> getRequestToken() async {
-    final result = await baseMoviesRemoteDataSource.requestToken();
     try {
+      final result = await baseMoviesRemoteDataSource.requestToken();
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -36,9 +36,9 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Movies>> getPopularMoviesData(
       {required int currentPopularPage}) async {
-    final result = await baseMoviesRemoteDataSource.getPopularMoviesData(
-        currentPopularPage: currentPopularPage);
     try {
+      final result = await baseMoviesRemoteDataSource.getPopularMoviesData(
+          currentPopularPage: currentPopularPage);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -50,9 +50,9 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Movies>> getTopRatedMoviesData(
       {required int currentTopRatedPage}) async {
-    final result = await baseMoviesRemoteDataSource.getTopRatedMoviesData(
-        currentTopRatedPage: currentTopRatedPage);
     try {
+      final result = await baseMoviesRemoteDataSource.getTopRatedMoviesData(
+          currentTopRatedPage: currentTopRatedPage);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -64,9 +64,9 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Movies>> getTrendingMoviesData(
       {required int currentTrendingPage}) async {
-    final result = await baseMoviesRemoteDataSource.getTrendingMoviesData(
-        currentTrendingPage: currentTrendingPage);
     try {
+      final result = await baseMoviesRemoteDataSource.getTrendingMoviesData(
+          currentTrendingPage: currentTrendingPage);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -78,10 +78,9 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Movies>> getUpcomingMoviesData(
       {required int currentUpComingPage}) async {
-    final result = await baseMoviesRemoteDataSource.getUpComingMoviesData(
-        currentUpComingPage: currentUpComingPage);
-
     try {
+      final result = await baseMoviesRemoteDataSource.getUpComingMoviesData(
+          currentUpComingPage: currentUpComingPage);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -93,9 +92,9 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, MovieKeywords>> getMovieKeywords(
       {required SingleMovie movie}) async {
-    final result =
-        await baseMoviesRemoteDataSource.getMovieKeyWords(movie: movie);
     try {
+      final result =
+          await baseMoviesRemoteDataSource.getMovieKeyWords(movie: movie);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
@@ -106,11 +105,11 @@ class MoviesRepository extends BaseMoviesRepository {
   Future<Either<Failure, Movies>> getSimilarMovie(
       {required SingleMovie movie,
       required int currentSimilarMoviesPage}) async {
-    final result = await baseMoviesRemoteDataSource.getSimilarMovies(
-      movie: movie,
-      currentSimilarMoviesPage: currentSimilarMoviesPage,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getSimilarMovies(
+        movie: movie,
+        currentSimilarMoviesPage: currentSimilarMoviesPage,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -121,8 +120,8 @@ class MoviesRepository extends BaseMoviesRepository {
 
   @override
   Future<Either<Failure, Genres>> getGenres() async {
-    final result = await baseMoviesRemoteDataSource.getGenres();
     try {
+      final result = await baseMoviesRemoteDataSource.getGenres();
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
@@ -134,9 +133,9 @@ class MoviesRepository extends BaseMoviesRepository {
     required int page,
     required String searchContent,
   }) async {
-    final result = await baseMoviesRemoteDataSource.searchMovies(
-        searchContent: searchContent, page: page);
     try {
+      final result = await baseMoviesRemoteDataSource.searchMovies(
+          searchContent: searchContent, page: page);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
@@ -146,10 +145,10 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Movies>> getNowPlayingMoviesData(
       {required int currentNowPlayingPage}) async {
-    final result = await baseMoviesRemoteDataSource.getNowPlayingMoviesData(
-      currentNowPlayingPage: currentNowPlayingPage,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getNowPlayingMoviesData(
+        currentNowPlayingPage: currentNowPlayingPage,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -161,9 +160,9 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Tv>> getAiringToday(
       {required int currentTvAiringTodayPage}) async {
-    final result = await baseMoviesRemoteDataSource.getTvAiringToday(
-        currentTvAiringTodayPage: currentTvAiringTodayPage);
     try {
+      final result = await baseMoviesRemoteDataSource.getTvAiringToday(
+          currentTvAiringTodayPage: currentTvAiringTodayPage);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(ServerFailure(failure.moviesErrorMessageModel.statusMessage));
@@ -173,11 +172,11 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Tv>> getSimilarTVShows(
       {required SingleTV tvShow, required int currentSimilarTvPage}) async {
-    final result = await baseMoviesRemoteDataSource.getSimilarTvShows(
-      currentTvAiringTodayPage: currentSimilarTvPage,
-      tvShow: tvShow,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getSimilarTvShows(
+        currentTvAiringTodayPage: currentSimilarTvPage,
+        tvShow: tvShow,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -189,10 +188,10 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, TVKeywords>> getTVKeywords(
       {required SingleTV tvShow}) async {
-    final result = await baseMoviesRemoteDataSource.getTVShowKeywords(
-      tvShow: tvShow,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getTVShowKeywords(
+        tvShow: tvShow,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -206,11 +205,11 @@ class MoviesRepository extends BaseMoviesRepository {
     required int currentPage,
     required String endPoint,
   }) async {
-    final result = await baseMoviesRemoteDataSource.loadMoreTVShows(
-      currentPage: currentPage,
-      endPoint: endPoint,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.loadMoreTVShows(
+        currentPage: currentPage,
+        endPoint: endPoint,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -222,11 +221,11 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Movies>> loadMoreMovies(
       {required int currentPage, required String endPoint}) async {
-    final result = await baseMoviesRemoteDataSource.loadMoreMovies(
-      currentPage: currentPage,
-      endPoint: endPoint,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.loadMoreMovies(
+        currentPage: currentPage,
+        endPoint: endPoint,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(ServerFailure(
@@ -238,10 +237,10 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Tv>> getPopularTv(
       {required int currentPopularTvPage}) async {
-    final result = await baseMoviesRemoteDataSource.getPopularTv(
-      currentPopularTvPage: currentPopularTvPage,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getPopularTv(
+        currentPopularTvPage: currentPopularTvPage,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -255,10 +254,10 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, Tv>> getTopRatedTv(
       {required int currentTopRateTvPage}) async {
-    final result = await baseMoviesRemoteDataSource.getTopRatedTv(
-      currentTopRateTvPage: currentTopRateTvPage,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getTopRatedTv(
+        currentTopRateTvPage: currentTopRateTvPage,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -274,12 +273,12 @@ class MoviesRepository extends BaseMoviesRepository {
       {required String userName,
       required String password,
       required String requestToken}) async {
-    final result = await baseMoviesRemoteDataSource.createSessionWithLogin(
-      userName: userName,
-      password: password,
-      requestToken: requestToken,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.createSessionWithLogin(
+        userName: userName,
+        password: password,
+        requestToken: requestToken,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -293,10 +292,10 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, SessionId>> createNewSession(
       {required String requestToken}) async {
-    final result = await baseMoviesRemoteDataSource.createNewSession(
-      requestToken: requestToken,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.createNewSession(
+        requestToken: requestToken,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -310,9 +309,9 @@ class MoviesRepository extends BaseMoviesRepository {
   @override
   Future<Either<Failure, AccountDetails>> getAccountDetails(
       {required String sessionId}) async {
-    final result = await baseMoviesRemoteDataSource.getAccountDetails(
-        sessionId: sessionId);
     try {
+      final result = await baseMoviesRemoteDataSource.getAccountDetails(
+          sessionId: sessionId);
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -330,14 +329,14 @@ class MoviesRepository extends BaseMoviesRepository {
       required String mediaType,
       required int mediaId,
       required bool watchList}) async {
-    final result = await baseMoviesRemoteDataSource.addToWatchList(
-      accountId: accountId,
-      sessionId: sessionId,
-      mediaType: mediaType,
-      mediaId: mediaId,
-      watchList: watchList,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.addToWatchList(
+        accountId: accountId,
+        sessionId: sessionId,
+        mediaType: mediaType,
+        mediaId: mediaId,
+        watchList: watchList,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -348,59 +347,59 @@ class MoviesRepository extends BaseMoviesRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, Movies>> getFavoriteMovies(
-      {required String accountId,
-      required String sessionId,
-      required int currentFavoriteMoviesPage}) async {
-    final result = await baseMoviesRemoteDataSource.getFavoriteMovies(
-      accountId: accountId,
-      sessionId: sessionId,
-      currentFavoriteMoviesPage: currentFavoriteMoviesPage,
-    );
-    try {
-      return Right(result);
-    } on MoviesServerException catch (failure) {
-      return Left(
-        ServerFailure(
-          failure.moviesErrorMessageModel.statusMessage,
-        ),
-      );
-    }
-  }
+  // @override
+  // Future<Either<Failure, Movies>> getFavoriteMovies(
+  //     {required String accountId,
+  //     required String sessionId,
+  //     required int currentFavoriteMoviesPage}) async {
+  //   try {
+  //     final result = await baseMoviesRemoteDataSource.getFavoriteMovies(
+  //       accountId: accountId,
+  //       sessionId: sessionId,
+  //       currentFavoriteMoviesPage: currentFavoriteMoviesPage,
+  //     );
+  //     return Right(result);
+  //   } on MoviesServerException catch (failure) {
+  //     return Left(
+  //       ServerFailure(
+  //         failure.moviesErrorMessageModel.statusMessage,
+  //       ),
+  //     );
+  //   }
+  // }
 
-  @override
-  Future<Either<Failure, Tv>> getFavoriteTvShows(
-      {required String accountId,
-      required String sessionId,
-      required int currentFavoriteTvShowsPage}) async {
-    final result = await baseMoviesRemoteDataSource.getFavoriteTvShows(
-      accountId: accountId,
-      sessionId: sessionId,
-      currentFavoriteTvShowsPage: currentFavoriteTvShowsPage,
-    );
-    try {
-      return Right(result);
-    } on MoviesServerException catch (failure) {
-      return Left(
-        ServerFailure(
-          failure.moviesErrorMessageModel.statusMessage,
-        ),
-      );
-    }
-  }
+  // @override
+  // Future<Either<Failure, Tv>> getFavoriteTvShows(
+  //     {required String accountId,
+  //     required String sessionId,
+  //     required int currentFavoriteTvShowsPage}) async {
+  //   try {
+  //     final result = await baseMoviesRemoteDataSource.getFavoriteTvShows(
+  //       accountId: accountId,
+  //       sessionId: sessionId,
+  //       currentFavoriteTvShowsPage: currentFavoriteTvShowsPage,
+  //     );
+  //     return Right(result);
+  //   } on MoviesServerException catch (failure) {
+  //     return Left(
+  //       ServerFailure(
+  //         failure.moviesErrorMessageModel.statusMessage,
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Future<Either<Failure, Movies>> getMoviesWatchList(
       {required String accountId,
       required String sessionId,
       required int currentMoviesWatchListPage}) async {
-    final result = await baseMoviesRemoteDataSource.getMoviesWatchList(
-      accountId: accountId,
-      sessionId: sessionId,
-      currentMoviesWatchListPage: currentMoviesWatchListPage,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getMoviesWatchList(
+        accountId: accountId,
+        sessionId: sessionId,
+        currentMoviesWatchListPage: currentMoviesWatchListPage,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -416,12 +415,12 @@ class MoviesRepository extends BaseMoviesRepository {
       {required String accountId,
       required String sessionId,
       required int currentTvShowsWatchListPage}) async {
-    final result = await baseMoviesRemoteDataSource.getTvShowsWatchList(
-      accountId: accountId,
-      sessionId: sessionId,
-      currentTvShowsWatchListPage: currentTvShowsWatchListPage,
-    );
     try {
+      final result = await baseMoviesRemoteDataSource.getTvShowsWatchList(
+        accountId: accountId,
+        sessionId: sessionId,
+        currentTvShowsWatchListPage: currentTvShowsWatchListPage,
+      );
       return Right(result);
     } on MoviesServerException catch (failure) {
       return Left(
@@ -432,28 +431,28 @@ class MoviesRepository extends BaseMoviesRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, FavoriteData>> markAsFavorite(
-      {required String accountId,
-      required String sessionId,
-      required String mediaType,
-      required int mediaId,
-      required bool favorite}) async {
-    final result = await baseMoviesRemoteDataSource.markAsFavorite(
-      accountId: accountId,
-      sessionId: sessionId,
-      mediaType: mediaType,
-      mediaId: mediaId,
-      favorite: favorite,
-    );
-    try {
-      return Right(result);
-    } on MoviesServerException catch (failure) {
-      return Left(
-        ServerFailure(
-          failure.moviesErrorMessageModel.statusMessage,
-        ),
-      );
-    }
-  }
+  // @override
+  // Future<Either<Failure, FavoriteData>> markAsFavorite(
+  //     {required String accountId,
+  //     required String sessionId,
+  //     required String mediaType,
+  //     required int mediaId,
+  //     required bool favorite}) async {
+  //   try {
+  //     final result = await baseMoviesRemoteDataSource.markAsFavorite(
+  //       accountId: accountId,
+  //       sessionId: sessionId,
+  //       mediaType: mediaType,
+  //       mediaId: mediaId,
+  //       favorite: favorite,
+  //     );
+  //     return Right(result);
+  //   } on MoviesServerException catch (failure) {
+  //     return Left(
+  //       ServerFailure(
+  //         failure.moviesErrorMessageModel.statusMessage,
+  //       ),
+  //     );
+  //   }
+  // }
 }

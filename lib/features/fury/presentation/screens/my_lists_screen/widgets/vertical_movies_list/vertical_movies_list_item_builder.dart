@@ -134,7 +134,6 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
                                           ? widget.movie!.id
                                           : widget.tv!.id,
                                       isMovie: widget.isMovie,
-                                      fromFavoriteScreen: true,
                                       watchList: false,
                                       context: context,
                                     );

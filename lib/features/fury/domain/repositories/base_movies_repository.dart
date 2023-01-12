@@ -96,25 +96,25 @@ abstract class BaseMoviesRepository {
     required String endPoint,
   });
 
-  Future<Either<Failure, Movies>> getFavoriteMovies({
-    required String accountId,
-    required String sessionId,
-    required int currentFavoriteMoviesPage,
-  });
-
-  Future<Either<Failure, Tv>> getFavoriteTvShows({
-    required String accountId,
-    required String sessionId,
-    required int currentFavoriteTvShowsPage,
-  });
-
-  Future<Either<Failure, FavoriteData>> markAsFavorite({
-    required String accountId,
-    required String sessionId,
-    required String mediaType,
-    required int mediaId,
-    required bool favorite,
-  });
+  // Future<Either<Failure, Movies>> getFavoriteMovies({
+  //   required String accountId,
+  //   required String sessionId,
+  //   required int currentFavoriteMoviesPage,
+  // });
+  //
+  // Future<Either<Failure, Tv>> getFavoriteTvShows({
+  //   required String accountId,
+  //   required String sessionId,
+  //   required int currentFavoriteTvShowsPage,
+  // });
+  //
+  // Future<Either<Failure, FavoriteData>> markAsFavorite({
+  //   required String accountId,
+  //   required String sessionId,
+  //   required String mediaType,
+  //   required int mediaId,
+  //   required bool favorite,
+  // });
 
   Future<Either<Failure, FavoriteData>> addToWatchList({
     required String accountId,

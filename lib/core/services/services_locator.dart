@@ -1,9 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:movies_application/features/fury/domain/use_cases/add_to_watch_list.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_favorite_movies.dart';
-import 'package:movies_application/features/fury/domain/use_cases/get_favorite_tv_shows.dart';
 import 'package:movies_application/features/fury/domain/use_cases/get_movies_watch_list.dart';
-import 'package:movies_application/features/fury/domain/use_cases/mark_as_favorite.dart';
 
 import '../../features/fury/data/data_sources/movies_news_remote_data_source.dart';
 import '../../features/fury/data/data_sources/movies_remote_data_source.dart';
@@ -90,9 +87,6 @@ class ServicesLocator {
           sl(),
           sl(),
           sl(),
-          sl(),
-          sl(),
-          sl(),
         ));
 
     /////Use Cases
@@ -130,9 +124,6 @@ class ServicesLocator {
     sl.registerLazySingleton(() => LoadMoreMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetPopularTvUseCase(sl()));
     sl.registerLazySingleton(() => GetTopRatedTvUseCase(sl()));
-    sl.registerLazySingleton(() => GetFavoriteMoviesUseCase(sl()));
-    sl.registerLazySingleton(() => GetFavoriteTvShowsUseCase(sl()));
-    sl.registerLazySingleton(() => MarkAsFavoriteUseCase(sl()));
     sl.registerLazySingleton(() => GetMoviesWatchListUseCase(sl()));
     sl.registerLazySingleton(() => GetTvShowWatchListUseCase(sl()));
     sl.registerLazySingleton(() => AddToWatchListUseCase(sl()));

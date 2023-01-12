@@ -35,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
             angle: 0.0,
             borderRadius: AppSize.s25,
             mainScreenTapClose: true,
-            menuScreenOverlayColor: AppColors.mainColor,
+            menuScreenOverlayColor: Colors.black,
             openCurve: Curves.fastOutSlowIn,
-            menuBackgroundColor: Colors.teal.shade900,
+            menuBackgroundColor: AppColors.mainColor,
             menuScreenWidth: Helper.maxWidth*0.5,
             slideWidth: Helper.maxWidth * 0.6,
 
