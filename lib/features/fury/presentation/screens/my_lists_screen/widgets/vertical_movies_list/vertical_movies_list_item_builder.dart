@@ -44,26 +44,13 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
 
   @override
   void initState() {
-    if (widget.isMovie) {
-      if (widget.movie!.name != null) {
-        title += widget.movie!.name!;
-      } else {
-        title += widget.movie!.title!;
-      }
-      posterPath = widget.movie!.posterPath;
-    } else {
-      if (widget.tv!.name != null) {
-        title += widget.tv!.name!;
-      } else {
-        title += widget.tv!.originalName!;
-      }
-      posterPath = widget.tv!.posterPath;
-    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    defineMovieDetails();
     addToWatchListButtonId = -1;
     return GestureDetector(
       onTap: () {
@@ -167,5 +154,24 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
         ],
       ),
     );
+  }
+  void defineMovieDetails(){
+    title = '';
+    posterPath = '';
+    if (widget.isMovie) {
+      if (widget.movie!.name != null) {
+        title += widget.movie!.name!;
+      } else {
+        title += widget.movie!.title!;
+      }
+      posterPath = widget.movie!.posterPath;
+    } else {
+      if (widget.tv!.name != null) {
+        title += widget.tv!.name!;
+      } else {
+        title += widget.tv!.originalName!;
+      }
+      posterPath = widget.tv!.posterPath;
+    }
   }
 }

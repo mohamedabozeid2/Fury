@@ -65,8 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               vertical: Helper.maxHeight * 0.05,
                               horizontal: Helper.maxHeight * 0.05),
                           decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(AppSize.s12)),
+                              color: Colors.black.withOpacity(0.75),
+                              borderRadius: BorderRadius.circular(AppSize.s30)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

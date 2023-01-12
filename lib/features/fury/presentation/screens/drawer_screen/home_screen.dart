@@ -37,8 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
             mainScreenTapClose: true,
             menuScreenOverlayColor: AppColors.mainColor,
             openCurve: Curves.fastOutSlowIn,
-            menuBackgroundColor: Colors.black,
-            slideWidth: Helper.maxWidth * 0.7,
+            menuBackgroundColor: Colors.teal.shade900,
+            menuScreenWidth: Helper.maxWidth*0.5,
+            slideWidth: Helper.maxWidth * 0.6,
+
             menuScreen: Builder(
               builder: (context) => MenuScreen(
                   currentItem: currentItem,
@@ -58,12 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if(currentItem == MenuItems.home){
       return const MainScreen();
     }else if(currentItem == MenuItems.settings){
-      return const SettingsScreen();
+      return SettingsScreen();
     }else if(currentItem == MenuItems.myLists){
       return const MyListsScreen();
     }else {
-      currentItem = MenuItems.home;
       launchUrl(Uri.parse('https://www.themoviedb.org/talk'));
+      currentItem = MenuItems.home;
       return const MainScreen();
     }
   }

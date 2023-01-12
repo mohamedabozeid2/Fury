@@ -1,38 +1,75 @@
-// ThemeData darkTheme = ThemeData(
-//   primarySwatch: defaultBlueColor,
-//   scaffoldBackgroundColor: Colors.black,
-//   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-//       selectedItemColor: defaultDarkColor,
-//       backgroundColor: Colors.black,
-//       elevation: 20.0,
-//       type: BottomNavigationBarType.fixed,
-//       unselectedItemColor: Colors.grey),
-//   appBarTheme: AppBarTheme(
-//       elevation: 0.0,
-//       titleSpacing: 20.0,
-//       systemOverlayStyle: const SystemUiOverlayStyle(
-//           statusBarColor: Colors.black,
-//           statusBarIconBrightness: Brightness.light),
-//       backgroundColor: Colors.black,
-//       titleTextStyle: TextStyle(
-//           color: defaultDarkColor,
-//           fontSize: 22.0,
-//           fontWeight: FontWeight.bold,
-//           fontFamily: "Jannah"),
-//       actionsIconTheme: IconThemeData(color: defaultDarkColor)),
-//   textTheme: const TextTheme(
-//       subtitle1: TextStyle(
-//           fontSize: 14.0,
-//           fontWeight: FontWeight.w600,
-//           color: Colors.white,
-//           height: 1.3
-//       ),
-//       bodyText1: TextStyle(
-//         fontSize: 20.0,
-//         fontWeight: FontWeight.bold,
-//         color: Colors.white,
-//       ),
-//       bodyText2: TextStyle(
-//           fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.white)),
-//   fontFamily: 'Jannah',
-// );
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:movies_application/core/utils/Colors.dart';
+import 'package:movies_application/core/utils/app_fonts.dart';
+
+ThemeData darkTheme = ThemeData(
+  textTheme: TextTheme(
+    headline5: TextStyle(
+      fontSize: AppFontSize.s34,
+      color: Colors.white,
+      fontWeight: FontWeightManager.bold,
+    ),
+    headline3: TextStyle(
+      fontSize: AppFontSize.s38,
+      color: Colors.white,
+      fontWeight: FontWeightManager.bold,
+    ),
+    headline6: TextStyle(
+      fontSize: AppFontSize.s28,
+      color: Colors.white,
+      fontWeight: FontWeightManager.bold,
+    ),
+    headline4: TextStyle(
+      fontSize: AppFontSize.s26,
+      color: Colors.white,
+      fontWeight: FontWeightManager.bold,
+    ),
+    bodyText1: TextStyle(
+      fontSize: AppFontSize.s22,
+      fontWeight: FontWeightManager.semiBold,
+      color: Colors.white,
+    ),
+    bodyText2: TextStyle(
+        fontSize: AppFontSize.s20,
+        fontWeight: FontWeightManager.semiBold,
+        color: Colors.white),
+    subtitle1: TextStyle(
+        fontSize: AppFontSize.s18,
+        fontWeight: FontWeightManager.regular,
+        color: Colors.white),
+    subtitle2: TextStyle(
+      fontSize: AppFontSize.s14,
+      fontWeight: FontWeightManager.regular,
+      color: Colors.white,
+    ),
+  ),
+  // primarySwatch: Colors.blue,
+  // floatingActionButtonTheme:
+  // FloatingActionButtonThemeData(backgroundColor: defaultColor),
+  scaffoldBackgroundColor: Colors.black,
+
+  appBarTheme: const AppBarTheme(
+    iconTheme: IconThemeData(color: Colors.white),
+    actionsIconTheme: IconThemeData(color: Colors.white),
+    titleSpacing: 20.0,
+    titleTextStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+    elevation: 0.0,
+    backgroundColor: Colors.transparent,
+    systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light),
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.transparent,
+      selectedItemColor: AppColors.mainColor,
+      showUnselectedLabels: false,
+      unselectedItemColor: AppColors.textWhiteColor,
+      elevation: 20.0),
+);

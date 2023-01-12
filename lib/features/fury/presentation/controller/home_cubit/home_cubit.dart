@@ -853,11 +853,11 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 textColor: Colors.white,
               );
               if (fromFavoriteScreen) {
-                Components.navigateTo(
-                    context,
-                    const Layout(
-                      fromFavoriteScreen: true,
-                    ));
+                // Components.navigateTo(
+                //     context,
+                //     const Layout(
+                //       fromFavoriteScreen: true,
+                //     ));
               }
               emit(AddToWatchListSuccessState());
             });

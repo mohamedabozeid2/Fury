@@ -4,6 +4,7 @@ import 'package:movies_application/core/keys/movies_category_keys.dart';
 
 import '../../../../../../../core/api/movies_dio_helper.dart';
 import '../../../../../../../core/keys/tv_category_keys.dart';
+import '../../../../../../../core/utils/app_values.dart';
 import '../../../../../../../core/utils/helper.dart';
 import '../../../../../data/models/single_movie.dart';
 import '../../../../../data/models/single_tv.dart';
@@ -90,7 +91,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
               ),
               Padding(
                 padding:
-                    EdgeInsets.symmetric(vertical: Helper.maxHeight * 0.01),
+                    EdgeInsets.symmetric(vertical: AppSize.s15),
                 child: SizedBox(
                   height: movieItemHeight,
                   child: Row(

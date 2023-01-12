@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppColors{
   // static Color mainColor = const Color(0xff300b07);
-  static Color mainColor = const Color(0xff6e2022);
+  static Color mainColor = Colors.teal.shade900;
+  static Color secondMainColor = const Color(0xff6e2022);
   static Color greyColor = Colors.grey[500]!;
   static Color selectedTileColor = Colors.white24;
   static Color whiteButtonText = Colors.white;
