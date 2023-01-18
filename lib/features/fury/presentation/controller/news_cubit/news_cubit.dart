@@ -50,81 +50,78 @@ class NewsCubit extends Cubit<NewsStates> {
       internetConnection = value;
       if (value == true) {
         Future.wait([
-          getMoviesNews(),
-          getBusinessNews(),
-          getGeneralNews(),
-          getHealthNews(),
-          getScienceNews(),
-          getSportsNews(),
-          getTechnologyNews(),
+          getMoviesNews().then((value){
+            value.fold((l) {
+              emit(GetMoviesNewsErrorState(error: l.message));
+            }, (r) {
+              // moviesNews = r;
+              for (var element in r.articles) {
+                moviesNewsList.add(element);
+              }
+              emit(GetNewsSuccessState());
+            });
+          }),
+          getBusinessNews().then((value){
+            value.fold((l) {
+              emit(GetBusinessNewsErrorState(error: l.message));
+            }, (r) {
+              for (var element in r.articles) {
+                businessNewsList.add(element);
+              }
+              // businessNews = r;
+            });
+          }),
+          getGeneralNews().then((value){
+            value.fold((l) {
+              emit(GetGeneralNewsErrorState(error: l.message));
+            }, (r) {
+              // generalNews = r;
+              for (var element in r.articles) {
+                generalNewsList.add(element);
+              }
+            });
+          }),
+          getHealthNews().then((value){
+            value.fold((l) {
+              emit(GetHealthNewsErrorState(error: l.message));
+            }, (r) {
+              // healthNews = r;
+              for (var element in r.articles) {
+                healthNewsList.add(element);
+              }
+            });
+          }),
+          getScienceNews().then((value){
+            value.fold((l) {
+              emit(GetScienceNewsErrorState(error: l.message));
+            }, (r) {
+              // scienceNews = r;
+              for (var element in r.articles) {
+                scienceNewsList.add(element);
+              }
+            });
+          }),
+          getSportsNews().then((value){
+            value.fold((l) {
+              emit(GetSportsNewsErrorState(error: l.message));
+            }, (r) {
+              // sportsNews = r;
+              for (var element in r.articles) {
+                sportsNewsList.add(element);
+              }
+            });
+          }),
+          getTechnologyNews().then((value){
+            value.fold((l) {
+              emit(GetTechnologyNewsErrorState(error: l.message));
+            }, (r) {
+              // technologyNews = r;
+              for (var element in r.articles) {
+                technologyNewsList.add(element);
+              }
+            });
+          }),
         ]).then((value) {
-          for (int i = 0; i < value.length; i++) {
-            if (i == 0) {
-              value[i].fold((l) {
-                emit(GetMoviesNewsErrorState(error: l.message));
-              }, (r) {
-                // moviesNews = r;
-                for (var element in r.articles) {
-                  moviesNewsList.add(element);
-                }
-                emit(GetNewsSuccessState());
-              });
-            } else if (i == 1) {
-              value[i].fold((l) {
-                emit(GetBusinessNewsErrorState(error: l.message));
-              }, (r) {
-                for (var element in r.articles) {
-                  businessNewsList.add(element);
-                }
-                // businessNews = r;
-              });
-            } else if (i == 2) {
-              value[i].fold((l) {
-                emit(GetGeneralNewsErrorState(error: l.message));
-              }, (r) {
-                // generalNews = r;
-                for (var element in r.articles) {
-                  generalNewsList.add(element);
-                }
-              });
-            } else if (i == 3) {
-              value[i].fold((l) {
-                emit(GetHealthNewsErrorState(error: l.message));
-              }, (r) {
-                // healthNews = r;
-                for (var element in r.articles) {
-                  healthNewsList.add(element);
-                }
-              });
-            } else if (i == 4) {
-              value[i].fold((l) {
-                emit(GetScienceNewsErrorState(error: l.message));
-              }, (r) {
-                // scienceNews = r;
-                for (var element in r.articles) {
-                  scienceNewsList.add(element);
-                }
-              });
-            } else if (i == 5) {
-              value[i].fold((l) {
-                emit(GetSportsNewsErrorState(error: l.message));
-              }, (r) {
-                // sportsNews = r;
-                for (var element in r.articles) {
-                  sportsNewsList.add(element);
-                }
-              });
-            } else if (i == 6) {
-              value[i].fold((l) {
-                emit(GetTechnologyNewsErrorState(error: l.message));
-              }, (r) {
-                // technologyNews = r;
-                for (var element in r.articles) {
-                  technologyNewsList.add(element);
-                }
-              });
-            }
-          }
           emit(GetNewsSuccessState());
         });
       }

@@ -119,65 +119,78 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                   SizedBox(
                     height: Helper.maxHeight * 0.025,
                   ),
-                  Container(
-                    color: Colors.yellow,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-
-                          children: [
-                            BlocConsumer<MoviesCubit, MoviesStates>(
-                              buildWhen: (previous, current) =>
-                                  (current is AddToWatchListLoadingState ||
-                                      current is AddToWatchListSuccessState) &&
-                                  watchListButtonId == widget.index,
-                              builder: (context, state) {
-                                if (state is AddToWatchListSuccessState) {
-                                  watchListButtonId = -1;
-                                }
-                                return Container(
-                                  color: Colors.red,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      state is AddToWatchListLoadingState &&
-                                              watchListButtonId == widget.index
-                                          ? Center(
-                                              child: AdaptiveIndicator(
-                                                os: Components.getOS(),
-                                                color: AppColors.mainColor,
-                                              ),
-                                            )
-                                          : AddActionsButton(
-                                              fun: () {
-                                                watchListButtonId = widget.index;
-                                                MoviesCubit.get(context).addToWatchList(
-                                                  context: context,
-                                                  mediaId: widget.isMovie
-                                                      ? widget.movie!.id
-                                                      : widget.tvShow!.id,
-                                                  isMovie: widget.isMovie,
-                                                  watchList: true,
-                                                );
-                                              },
-                                              icon: Icons.add,
-                                              backgroundColor: AppColors.mainColor,
-                                              spacing: AppSize.s10,
-                                              iconSize: AppFontSize.s28,
-                                              title: AppStrings.watchList,
-                                            )
-                                    ],
-                                  ),
-                                );
-                              },
-                              listener: (context, state) {},
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // MaterialButton(
+                          //   onPressed: () {
+                          //     print("TEST");
+                          //     NotificationService.showNotification(
+                          //       id: 0,
+                          //       title: 'fury',
+                          //       body: 'Body',
+                          //       seconds: 1,
+                          //     );
+                          //     // NotificationHelper.showNotification(
+                          //     //   title: 'Fury',
+                          //     //   body: 'Body',
+                          //     //   payload: 'TEST NOTIFICATION',
+                          //     // );
+                          //   },
+                          //   child: Text('TEST'),
+                          // ),
+                          BlocConsumer<MoviesCubit, MoviesStates>(
+                            buildWhen: (previous, current) =>
+                                (current is AddToWatchListLoadingState ||
+                                    current is AddToWatchListSuccessState) &&
+                                watchListButtonId == widget.index,
+                            builder: (context, state) {
+                              if (state is AddToWatchListSuccessState) {
+                                watchListButtonId = -1;
+                              }
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  state is AddToWatchListLoadingState &&
+                                          watchListButtonId == widget.index
+                                      ? Center(
+                                          child: AdaptiveIndicator(
+                                            os: Components.getOS(),
+                                            color: AppColors.mainColor,
+                                          ),
+                                        )
+                                      : AddActionsButton(
+                                          fun: () {
+                                            watchListButtonId =
+                                                widget.index;
+                                            MoviesCubit.get(context)
+                                                .addToWatchList(
+                                              context: context,
+                                              mediaId: widget.isMovie
+                                                  ? widget.movie!.id
+                                                  : widget.tvShow!.id,
+                                              isMovie: widget.isMovie,
+                                              watchList: true,
+                                            );
+                                          },
+                                          icon: Icons.add,
+                                          backgroundColor:
+                                              AppColors.mainColor,
+                                          spacing: AppSize.s10,
+                                          iconSize: AppFontSize.s28,
+                                          title: AppStrings.watchList,
+                                        )
+                                ],
+                              );
+                            },
+                            listener: (context, state) {},
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),

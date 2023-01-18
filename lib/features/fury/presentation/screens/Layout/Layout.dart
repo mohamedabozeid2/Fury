@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/helper.dart';
-import 'package:movies_application/features/fury/presentation/controller/news_cubit/news_cubit.dart';
 
 import '../../../../../core/utils/components.dart';
 import '../../../../../core/widgets/adaptive_indicator.dart';
@@ -24,7 +23,7 @@ class _LayoutState extends State<Layout> {
   void initState() {
     if (widget.fromFavoriteScreen == false) {
       MoviesCubit.get(context).getAllMovies(context: context);
-      NewsCubit.get(context).getAllNews();
+      // NewsCubit.get(context).getAllNews();
     }
     super.initState();
   }

@@ -24,7 +24,7 @@ class DrawerIconButton extends StatelessWidget {
           padding: EdgeInsets.all(AppSize.s12),
           child: Icon(Icons.menu, size: AppFontSize.s24, color: AppColors.whiteButtonText,),
         )/*Image(
-                    image: const AssetImage('assets/images/logo.png'),
+                    image: const AssetImage('assets/images/logo2.png'),
                     height: Helper.maxHeight * 0.05,
                   )*/,
       ),

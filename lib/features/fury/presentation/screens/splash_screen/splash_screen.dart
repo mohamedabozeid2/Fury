@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     timer = Timer(const Duration(milliseconds: 2500), () {
-      Components.navigateAndFinish(context: context, widget: Layout());
+      Components.navigateAndFinish(context: context, widget: const Layout());
     });
     super.initState();
   }
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: AppColors.mainColor,
         body: Center(
             child: Image(
-                image: AssetImage(ImageAssets.splashScreen),
+                image: AssetImage(ImageAssets.appLogo),
                 height: Helper.maxHeight * 0.3)),
       ),
     );

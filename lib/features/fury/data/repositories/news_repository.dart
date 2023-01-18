@@ -13,8 +13,8 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
 
   @override
   Future<Either<Failure, NewsItem>> getMoviesNews() async {
-    final result = await baseMoviesNewsRemoteDataSource.getMoviesNews();
     try {
+      final result = await baseMoviesNewsRemoteDataSource.getMoviesNews();
       return Right(result);
     } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
@@ -23,8 +23,8 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
 
   @override
   Future<Either<Failure, NewsItem>> getBusinessNews() async {
-    final result = await baseMoviesNewsRemoteDataSource.getBusinessNews();
     try {
+      final result = await baseMoviesNewsRemoteDataSource.getBusinessNews();
       return Right(result);
     } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
@@ -33,8 +33,8 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
 
   @override
   Future<Either<Failure, NewsItem>> getGeneralNews() async {
-    final result = await baseMoviesNewsRemoteDataSource.getGeneralNews();
     try {
+      final result = await baseMoviesNewsRemoteDataSource.getGeneralNews();
       return Right(result);
     } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
@@ -43,8 +43,8 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
 
   @override
   Future<Either<Failure, NewsItem>> getHealthNews() async {
-    final result = await baseMoviesNewsRemoteDataSource.getHealthNews();
     try {
+      final result = await baseMoviesNewsRemoteDataSource.getHealthNews();
       return Right(result);
     } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
@@ -53,8 +53,8 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
 
   @override
   Future<Either<Failure, NewsItem>> getScienceNews() async {
-    final result = await baseMoviesNewsRemoteDataSource.getScienceNews();
     try {
+      final result = await baseMoviesNewsRemoteDataSource.getScienceNews();
       return Right(result);
     } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
@@ -63,8 +63,8 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
 
   @override
   Future<Either<Failure, NewsItem>> getSportsNews() async {
-    final result = await baseMoviesNewsRemoteDataSource.getSportsNews();
     try {
+      final result = await baseMoviesNewsRemoteDataSource.getSportsNews();
       return Right(result);
     } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
@@ -73,8 +73,8 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
 
   @override
   Future<Either<Failure, NewsItem>> getTechnologyNews() async {
-    final result = await baseMoviesNewsRemoteDataSource.getTechnologyNews();
     try {
+      final result = await baseMoviesNewsRemoteDataSource.getTechnologyNews();
       return Right(result);
     } on NewsServerException catch (failure) {
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
@@ -84,11 +84,12 @@ class MoviesNewsRepository extends BaseMoviesNewsRepository {
   @override
   Future<Either<Failure, NewsItem>> loadMoreNews(
       {required String category, required int page}) async {
-    final result =
-        await baseMoviesNewsRemoteDataSource.loadMoreNews(category: category,page: page);
-    try{
+    try {
+      final result = await baseMoviesNewsRemoteDataSource.loadMoreNews(
+          category: category, page: page);
       return Right(result);
-    }on NewsServerException catch(failure){
+    } on NewsServerException catch (failure) {
+
       return Left(ServerFailure(failure.newsErrorMessageModel.message));
     }
   }
