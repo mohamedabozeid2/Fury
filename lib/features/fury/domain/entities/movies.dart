@@ -4,7 +4,7 @@ import 'package:movies_application/features/fury/data/models/single_movie.dart';
 class Movies extends Equatable {
   final num page;
   final List<SingleMovie> moviesList;
-
+  final bool isMovie = true;
   const Movies({
     required this.page,
     required this.moviesList,

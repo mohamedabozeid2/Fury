@@ -14,6 +14,7 @@ class SingleMovie extends Equatable {
   final dynamic backDropPath;
   final List<int> genresIds;
 
+
   const SingleMovie(
       {required this.name,
       required this.title,

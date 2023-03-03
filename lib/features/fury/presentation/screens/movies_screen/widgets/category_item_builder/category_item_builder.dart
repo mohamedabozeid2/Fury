@@ -90,8 +90,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                 style: Theme.of(context).textTheme.bodyText2,
               ),
               Padding(
-                padding:
-                    EdgeInsets.symmetric(vertical: AppSize.s15),
+                padding: EdgeInsets.symmetric(vertical: AppSize.s15),
                 child: SizedBox(
                   height: movieItemHeight,
                   child: Row(
@@ -102,7 +101,8 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                             setState(() {});
                             if (scrollController.position.atEdge) {
                               if (scrollController.position.pixels != 0) {
-                                if (state is LoadMoreMoviesLoadingState) {
+                                if (state is LoadMoreMoviesLoadingState ||
+                                    state is LoadMoreTvShowsLoadingState) {
                                   debugPrint('loading');
                                 } else {
                                   if (widget.isMovie) {

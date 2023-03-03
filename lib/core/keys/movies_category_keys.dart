@@ -5,4 +5,5 @@ class MoviesCategoryKeys{
   static const String topRated = 'topRated';
   static const String upComing = 'upComing';
   static const String similarMovies = 'Similar';
+  static const String myList = 'myList';
 }

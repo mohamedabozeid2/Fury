@@ -43,12 +43,6 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
   late int addToWatchListButtonId;
 
   @override
-  void initState() {
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     defineMovieDetails();
     addToWatchListButtonId = -1;

@@ -37,43 +37,6 @@ class MyListsScreen extends StatelessWidget {
           const Expanded(child: VerticalMoviesList()),
         ],
       ),
-    ) /*DefaultTabController(
-      length: 2,
-      child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: AppSize.s5,
-            bottom: TabBar(
-              indicatorWeight: AppSize.s4,
-              indicatorColor: AppColors.mainColor,
-              tabs: [
-                Tab(
-                  icon: Icon(
-                    Icons.favorite,
-                    size: AppSize.s20,
-                  ),
-                  child: Text(
-                    AppStrings.favorite,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                ),
-                Tab(
-                  icon: Icon(
-                    Icons.movie_filter_outlined,
-                    size: AppSize.s20,
-                  ),
-                  child: Text(
-                    AppStrings.watchLater,
-                    style: Theme.of(context).textTheme.subtitle1!,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          body: const TabBarView(children: [
-            FavoriteScreen(),
-            WatchLaterScreen()
-          ])),
-    )*/
-        ;
+    );
   }
 }

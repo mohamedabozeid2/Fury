@@ -130,6 +130,10 @@ class LoadMoreTvShowsLoadingState extends MoviesStates{}
 class LoadMoreTvShowsSuccessState extends MoviesStates{}
 class LoadMoreTvShowsErrorState extends MoviesStates{}
 
+class LoadMoreMyListLoadingState extends MoviesStates{}
+class LoadMoreMyListSuccessState extends MoviesStates{}
+class LoadMoreMyListErrorState extends MoviesStates{}
+
 //////
 
 ////// Get movie details//////

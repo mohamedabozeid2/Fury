@@ -123,6 +123,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
               emit(GetPopularMoviesErrorState(message: l.message));
             }, (r) {
               popularMovies = r;
+              popularMovies!.moviesList.shuffle();
               isFirstPopularLoadRunning = false;
             });
           }),
@@ -134,6 +135,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstTrendingLoadRunning = false;
               trendingMovies = r;
+              trendingMovies!.moviesList.shuffle();
             });
           }),
 
@@ -154,6 +156,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               upComingMovies = r;
               isFirstUpComingLoadRunning = false;
+              upComingMovies!.moviesList.shuffle();
             });
           }),
 
@@ -163,6 +166,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
               emit(GetNowPlayingMoviesErrorState(message: l.message));
             }, (r) {
               nowPlayingMovies = r;
+              nowPlayingMovies!.moviesList.shuffle();
               isFirstNowPlayingLoadRunning = false;
             });
           }),
@@ -176,6 +180,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstTvAiringTodayLoadRunning = false;
               tvAiringToday = r;
+              tvAiringToday!.tvList.shuffle();
             });
           }),
 
@@ -188,6 +193,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstPopularTvLoadRunning = false;
               popularTv = r;
+              popularTv!.tvList.shuffle();
             });
           }),
 
@@ -200,28 +206,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
               topRatedTv = r;
             });
           }),
-
-          // /// Favorite Movies
-          // getFavoriteMovies().then((value) {
-          //   value.fold((l) {
-          //     emit(GetFavoriteMoviesErrorState(message: l.message));
-          //   }, (r) {
-          //     isFirstFavoriteMoviesLoadingRunning = false;
-          //     favoriteMovies = r;
-          //   });
-          // }),
-
-          /// Favorite Tv Shows
-          // getFavoriteTvShows().then((value) {
-          //   value.fold((l) {
-          //     emit(GetFavoriteTvErrorState(
-          //       message: l.message,
-          //     ));
-          //   }, (r) {
-          //     isFirstFavoriteTvShowsLoadingRunning = false;
-          //     favoriteTvShows = r;
-          //   });
-          // }),
 
           /// Movies Watch List
           getMoviesWatchList().then((value) {
@@ -700,7 +684,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
     );
   }
 
-
   Future<void> addToWatchList({
     required int mediaId,
     required bool isMovie,
@@ -735,7 +718,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
                 backgroundColor: AppColors.mainColor,
                 textColor: Colors.white,
               );
-
               emit(AddToWatchListSuccessState());
             });
           });
