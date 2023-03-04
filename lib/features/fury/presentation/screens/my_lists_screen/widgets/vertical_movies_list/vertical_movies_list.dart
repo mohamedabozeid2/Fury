@@ -12,11 +12,8 @@ import '../../../../../../../core/widgets/adaptive_indicator.dart';
 import '../../../../../../../core/widgets/divider.dart';
 
 class VerticalMoviesList extends StatefulWidget {
-  // final List myListMoves;
-
   const VerticalMoviesList({
     Key? key,
-    // required this.myListMoves,
   }) : super(key: key);
 
   @override
@@ -37,7 +34,7 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
   Widget build(BuildContext context) {
     return BlocConsumer<MoviesCubit, MoviesStates>(
       buildWhen: (previous, current) =>
-      current is AddToWatchListSuccessState ||
+          current is AddToWatchListSuccessState ||
           current is LoadMoreWatchListLoadingState ||
           current is LoadMoreWatchListSuccessState,
       listener: (context, state) {},
@@ -48,16 +45,6 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
             SizedBox(
               height: Helper.maxHeight * 0.01,
             ),
-            // ListView.separated(itemBuilder: (context, index) {
-            //   return
-            // }, separatorBuilder: (context, index) {
-            //   return MyDivider(
-            //     color: AppColors.mainColor,
-            //     paddingHorizontal: 0,
-            //   );
-            // }
-            //     , itemCount: widget.myListMoves.length
-            // )
             ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -65,8 +52,7 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
                 tvShowsCounter++;
                 return VerticalMoviesItemBuilder(
                   moviesCounter: tvShowsCounter,
-                  isMovie: true,
-                  movie: moviesWatchList!.moviesList[index],
+                  movieOrTvItem: watchListData[index],
                 );
               },
               separatorBuilder: (context, index) {
@@ -75,50 +61,69 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
                   paddingHorizontal: 0,
                 );
               },
-              itemCount: moviesWatchList!.moviesList.length,
+              itemCount: watchListData.length,
             ),
-            MyDivider(
-              color: AppColors.mainColor,
-              paddingHorizontal: 0,
-            ),
-            MyDivider(
-              color: AppColors.mainColor,
-              paddingHorizontal: 0,
-            ),
-            Text("DIVIDER HERE BRO"),
-            MyDivider(
-              color: AppColors.mainColor,
-              paddingHorizontal: 0,
-            ),
-            MyDivider(
-              color: AppColors.mainColor,
-              paddingHorizontal: 0,
-            ),
-            ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                // tvShowsCounter =moviesWatchList!.moviesList.length +  index;
-                tvShowsCounter++;
-                return VerticalMoviesItemBuilder(
-                  moviesCounter: tvShowsCounter,
-                  isMovie: false,
-                  tv: tvShowsWatchList!.tvList[index],
-                );
-              },
-              separatorBuilder: (context, index) {
-                return MyDivider(
-                  color: AppColors.mainColor,
-                  paddingHorizontal: 0,
-                );
-              },
-              itemCount: tvShowsWatchList!.tvList.length,
-            ),
+            // ListView.separated(
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   shrinkWrap: true,
+            //   itemBuilder: (context, index) {
+            //     tvShowsCounter++;
+            //     return VerticalMoviesItemBuilder(
+            //       moviesCounter: tvShowsCounter,
+            //       isMovie: true,
+            //       movie: moviesWatchList!.moviesList[index],
+            //     );
+            //   },
+            //   separatorBuilder: (context, index) {
+            //     return MyDivider(
+            //       color: AppColors.mainColor,
+            //       paddingHorizontal: 0,
+            //     );
+            //   },
+            //   itemCount: moviesWatchList!.moviesList.length,
+            // ),
+            // MyDivider(
+            //   color: AppColors.mainColor,
+            //   paddingHorizontal: 0,
+            // ),
+            // MyDivider(
+            //   color: AppColors.mainColor,
+            //   paddingHorizontal: 0,
+            // ),
+            // Text("DIVIDER HERE BRO"),
+            // MyDivider(
+            //   color: AppColors.mainColor,
+            //   paddingHorizontal: 0,
+            // ),
+            // MyDivider(
+            //   color: AppColors.mainColor,
+            //   paddingHorizontal: 0,
+            // ),
+            // ListView.separated(
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   shrinkWrap: true,
+            //   itemBuilder: (context, index) {
+            //     // tvShowsCounter =moviesWatchList!.moviesList.length +  index;
+            //     tvShowsCounter++;
+            //     return VerticalMoviesItemBuilder(
+            //       moviesCounter: tvShowsCounter,
+            //       isMovie: false,
+            //       tv: tvShowsWatchList!.tvList[index],
+            //     );
+            //   },
+            //   separatorBuilder: (context, index) {
+            //     return MyDivider(
+            //       color: AppColors.mainColor,
+            //       paddingHorizontal: 0,
+            //     );
+            //   },
+            //   itemCount: tvShowsWatchList!.tvList.length,
+            // ),
             state is LoadMoreWatchListLoadingState
                 ? AdaptiveIndicator(
-              os: Components.getOS(),
-              color: AppColors.mainColor,
-            )
+                    os: Components.getOS(),
+                    color: AppColors.mainColor,
+                  )
                 : Container(),
             const SizedBox(
               height: 50,

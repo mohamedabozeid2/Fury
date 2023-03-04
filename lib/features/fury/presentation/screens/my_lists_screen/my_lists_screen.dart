@@ -11,7 +11,6 @@ import '../../controller/home_cubit/home_cubit.dart';
 import '../../controller/home_cubit/home_states.dart';
 
 class MyListsScreen extends StatefulWidget {
-
   const MyListsScreen({super.key});
 
   @override
@@ -29,12 +28,10 @@ class _MyListsScreenState extends State<MyListsScreen> {
 
   late int page;
 
-  List myWatchList = [];
 
   @override
   void initState() {
-    myWatchList.addAll(moviesWatchList!.moviesList);
-    myWatchList.addAll(tvShowsWatchList!.tvList);
+
 
     scrollController.addListener(() {
       if (scrollController.position.atEdge) {
@@ -49,7 +46,6 @@ class _MyListsScreenState extends State<MyListsScreen> {
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {

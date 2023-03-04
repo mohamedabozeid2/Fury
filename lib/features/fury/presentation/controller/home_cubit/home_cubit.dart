@@ -222,6 +222,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstMoviesWatchListLoadingRunning = false;
               moviesWatchList = r;
+              watchListData.addAll(moviesWatchList!.moviesList);
             });
           }),
 
@@ -234,6 +235,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstTvShowsWatchListLoadingRunning = false;
               tvShowsWatchList = r;
+              watchListData.addAll(tvShowsWatchList!.tvList);
             });
           }),
         ]).then((value) {
@@ -759,7 +761,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
         }, (r) {
           isFirstMoviesWatchListLoadingRunning = false;
           currentMoviesWatchListPage++;
-          moviesWatchList!.moviesList.addAll(r.moviesList);
+          // moviesWatchList!.moviesList.addAll(r.moviesList);
+          watchListData.addAll(r.moviesList);
         });
       }),
       loadMoreTvWatchList().then((value) {
@@ -768,7 +771,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
         }, (r) {
           isFirstTvShowsWatchListLoadingRunning = false;
           currentTvShowsWatchListPage++;
-          tvShowsWatchList!.tvList.addAll(r.tvList);
+          // tvShowsWatchList!.tvList.addAll(r.tvList);
+          watchListData.addAll(r.tvList);
         });
       })
     ]).then((value) {

@@ -29,8 +29,12 @@ class MovieDetails extends StatefulWidget {
   final SingleTV? tvShow;
   final bool isMovie;
 
-  const MovieDetails(
-      {super.key, this.movie, this.tvShow, required this.isMovie});
+  const MovieDetails({
+    super.key,
+    this.movie,
+    this.tvShow,
+    required this.isMovie,
+  });
 
   @override
   State<MovieDetails> createState() => _MovieDetailsState();

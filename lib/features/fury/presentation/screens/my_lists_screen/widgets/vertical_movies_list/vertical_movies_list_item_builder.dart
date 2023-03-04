@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
-import 'package:movies_application/features/fury/data/models/single_movie.dart';
-import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_states.dart';
 
@@ -19,17 +17,20 @@ import '../../../../../../../core/widgets/cached_image.dart';
 import '../../../movies_details_screen/movie_details_screen.dart';
 
 class VerticalMoviesItemBuilder extends StatefulWidget {
-  final bool isMovie;
+  // final bool isMovie;
   final int moviesCounter;
-  final SingleMovie? movie;
-  final SingleTV? tv;
+  final dynamic movieOrTvItem;
+
+  // final SingleMovie? movie;
+  // final SingleTV? tv;
 
   const VerticalMoviesItemBuilder({
     Key? key,
-    required this.isMovie,
+    // required this.isMovie,
     required this.moviesCounter,
-    this.tv,
-    this.movie,
+    required this.movieOrTvItem,
+    // this.tv,
+    // this.movie,
   }) : super(key: key);
 
   @override
@@ -51,9 +52,9 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
         Components.navigateTo(
             context,
             MovieDetails(
-              isMovie: widget.isMovie,
-              tvShow: widget.isMovie ? null : widget.tv,
-              movie: widget.isMovie ? widget.movie : null,
+              isMovie: widget.movieOrTvItem.isMovie,
+              tvShow: widget.movieOrTvItem,
+              movie: widget.movieOrTvItem,
             ));
       },
       child: Row(
@@ -85,9 +86,9 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
                   ),
                   SizedBox(height: Helper.maxHeight * 0.005),
                   Text(
-                    widget.isMovie
-                        ? widget.movie!.description
-                        : widget.tv!.description,
+                    widget.movieOrTvItem.isMovie
+                        ? widget.movieOrTvItem.description
+                        : widget.movieOrTvItem.description,
                     textAlign: TextAlign.start,
                     maxLines: 6,
                     overflow: TextOverflow.ellipsis,
@@ -124,10 +125,10 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
                                     addToWatchListButtonId =
                                         widget.moviesCounter;
                                     MoviesCubit.get(context).addToWatchList(
-                                      mediaId: widget.isMovie
-                                          ? widget.movie!.id
-                                          : widget.tv!.id,
-                                      isMovie: widget.isMovie,
+                                      mediaId: widget.movieOrTvItem.isMovie
+                                          ? widget.movieOrTvItem.id
+                                          : widget.movieOrTvItem.id,
+                                      isMovie: widget.movieOrTvItem.isMovie,
                                       watchList: false,
                                       context: context,
                                     );
@@ -148,23 +149,24 @@ class _VerticalMoviesItemBuilderState extends State<VerticalMoviesItemBuilder> {
       ),
     );
   }
-  void defineMovieDetails(){
+
+  void defineMovieDetails() {
     title = '';
     posterPath = '';
-    if (widget.isMovie) {
-      if (widget.movie!.name != null) {
-        title += widget.movie!.name!;
+    if (widget.movieOrTvItem.isMovie) {
+      if (widget.movieOrTvItem.name != null) {
+        title += widget.movieOrTvItem.name!;
       } else {
-        title += widget.movie!.title!;
+        title += widget.movieOrTvItem.title!;
       }
-      posterPath = widget.movie!.posterPath;
+      posterPath = widget.movieOrTvItem.posterPath;
     } else {
-      if (widget.tv!.name != null) {
-        title += widget.tv!.name!;
+      if (widget.movieOrTvItem.name != null) {
+        title += widget.movieOrTvItem.name!;
       } else {
-        title += widget.tv!.originalName!;
+        title += widget.movieOrTvItem.originalName!;
       }
-      posterPath = widget.tv!.posterPath;
+      posterPath = widget.movieOrTvItem.posterPath;
     }
   }
 }

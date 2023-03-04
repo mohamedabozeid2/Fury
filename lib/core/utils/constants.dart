@@ -41,7 +41,7 @@ Tv? moreSimilarTvShows;
 Tv? tvShowsWatchList;
 // Tv? moreFavoriteTvShows;
 Tv? moreTvShowsWatchList;
-
+List<dynamic> watchListData = [];
 
 
 dynamic uId = "";
