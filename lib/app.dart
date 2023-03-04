@@ -45,6 +45,8 @@ class MoviesApp extends StatelessWidget {
                     sl(),
                     sl(),
                     sl(),
+                    sl(),
+                    sl(),
                     sl())),
             BlocProvider(
                 create: (BuildContext context) =>

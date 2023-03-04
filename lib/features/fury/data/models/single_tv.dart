@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class SingleTV extends Equatable {
+  final isMovie = false;
   final int id;
   final dynamic backdropPath;
   final dynamic posterPath;

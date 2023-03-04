@@ -49,6 +49,7 @@ class AppStrings {
   static const String search = "Search";
   static const String genre = "Genre";
   static const String noData = "No data available";
+  static const String noMovies = "No Movies Available";
   static const String later = "Later";
   static const String myLists = "My Lists";
   static const String watchList = "Watch List";

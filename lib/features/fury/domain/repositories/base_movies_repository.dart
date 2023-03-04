@@ -135,4 +135,16 @@ abstract class BaseMoviesRepository {
     required String sessionId,
     required int currentTvShowsWatchListPage,
   });
+
+  Future<Either<Failure, Movies>> loadMoreMoviesWatchList({
+    required int currentPage,
+    required String accountId,
+    required String sessionId,
+  });
+
+  Future<Either<Failure, Tv>> loadMoreTvWatchList({
+    required int currentPage,
+    required String accountId,
+    required String sessionId,
+  });
 }

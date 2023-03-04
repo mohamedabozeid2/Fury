@@ -127,6 +127,19 @@ abstract class BaseMoviesRemoteDataSource {
     required int mediaId,
     required bool watchList,
   });
+
+  Future<MoviesModel> loadMoreMoviesWatchList({
+    required int currentPage,
+    required String sessionId,
+    required String accountId,
+  });
+
+  Future<TvModel> loadMoreTvWatchList({
+    required int currentPage,
+    required String sessionId,
+    required String accountId,
+  });
+
 }
 
 class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
@@ -647,6 +660,53 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
         });
     if (response.statusCode == 201 || response.statusCode == 200) {
       return FavoriteDataModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+        MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+
+  @override
+  Future<MoviesModel> loadMoreMoviesWatchList({
+    required int currentPage,
+    required String accountId,
+    required String sessionId,
+  }) async {
+    final response = await MoviesDioHelper.getData(
+        url: '/account/$accountId/watchlist/movies',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+          "page": currentPage + 1,
+        });
+    if (response.statusCode == 200) {
+      return MoviesModel.fromJson(response.data);
+    } else {
+      throw MoviesServerException(
+        moviesErrorMessageModel:
+        MoviesErrorMessageModel.fromJson(response.data),
+      );
+    }
+  }
+
+  @override
+  Future<TvModel> loadMoreTvWatchList({
+    required int currentPage,
+    required String accountId,
+    required String sessionId,
+  }) async {
+    final response = await MoviesDioHelper.getData(
+        url: '/account/$accountId/watchlist/tv',
+        query: {
+          'api_key': MoviesDioHelper.apiKey,
+          'session_id': sessionId,
+          'page': currentPage + 1,
+        });
+    if (response.statusCode == 200) {
+      return TvModel.fromJson(response.data);
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:

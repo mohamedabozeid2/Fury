@@ -33,8 +33,10 @@ import '../../features/fury/domain/use_cases/get_tv_show_keywords.dart';
 import '../../features/fury/domain/use_cases/get_tv_shows_watch_list.dart';
 import '../../features/fury/domain/use_cases/get_upcoming_movies_data.dart';
 import '../../features/fury/domain/use_cases/load_more_movies.dart';
+import '../../features/fury/domain/use_cases/load_more_movies_watch_list.dart';
 import '../../features/fury/domain/use_cases/load_more_news.dart';
 import '../../features/fury/domain/use_cases/load_more_tv_shows.dart';
+import '../../features/fury/domain/use_cases/load_more_tv_watch_list.dart';
 import '../../features/fury/domain/use_cases/request_token_for_login.dart';
 import '../../features/fury/domain/use_cases/search_movies.dart';
 import '../../features/fury/presentation/controller/home_cubit/home_cubit.dart';
@@ -68,6 +70,8 @@ class ServicesLocator {
       ),
     );
     sl.registerFactory(() => MoviesCubit(
+          sl(),
+          sl(),
           sl(),
           sl(),
           sl(),
@@ -127,6 +131,9 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetMoviesWatchListUseCase(sl()));
     sl.registerLazySingleton(() => GetTvShowWatchListUseCase(sl()));
     sl.registerLazySingleton(() => AddToWatchListUseCase(sl()));
+    sl.registerLazySingleton(() => LoadMoreTvWatchListUseCase(sl()));
+    sl.registerLazySingleton(() => LoadMoreMoviesWatchListUseCase(sl()));
+
 
     ///// Repository
     sl.registerLazySingleton<BaseMoviesNewsRepository>(

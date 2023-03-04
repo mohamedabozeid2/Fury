@@ -431,7 +431,51 @@ class MoviesRepository extends BaseMoviesRepository {
     }
   }
 
-  // @override
+
+
+  @override
+  Future<Either<Failure, Movies>> loadMoreMoviesWatchList({
+    required int currentPage,
+    required String accountId,
+    required String sessionId,
+  }) async {
+    try {
+      final result = await baseMoviesRemoteDataSource.loadMoreMoviesWatchList(
+        currentPage: currentPage,
+        sessionId: sessionId,
+        accountId: accountId,
+      );
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(ServerFailure(
+        failure.moviesErrorMessageModel.statusMessage,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tv>> loadMoreTvWatchList({
+    required int currentPage,
+    required String accountId,
+    required String sessionId,
+  }) async {
+    try {
+      final result = await baseMoviesRemoteDataSource.loadMoreTvWatchList(
+        currentPage: currentPage,
+        sessionId: sessionId,
+        accountId: accountId,
+      );
+      return Right(result);
+    } on MoviesServerException catch (failure) {
+      return Left(
+        ServerFailure(
+          failure.moviesErrorMessageModel.statusMessage,
+        ),
+      );
+    }
+  }
+
+// @override
   // Future<Either<Failure, FavoriteData>> markAsFavorite(
   //     {required String accountId,
   //     required String sessionId,

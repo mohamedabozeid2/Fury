@@ -38,7 +38,9 @@ import '../../../domain/use_cases/get_tv_shows_watch_list.dart';
 import '../../../domain/use_cases/get_upcoming_movies_data.dart';
 import '../../../../../core/keys/movies_category_keys.dart';
 import '../../../domain/use_cases/load_more_movies.dart';
+import '../../../domain/use_cases/load_more_movies_watch_list.dart';
 import '../../../domain/use_cases/load_more_tv_shows.dart';
+import '../../../domain/use_cases/load_more_tv_watch_list.dart';
 import '../../../domain/use_cases/search_movies.dart';
 import '../../screens/news_screen/news_screen.dart';
 import 'home_states.dart';
@@ -63,6 +65,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
   final AddToWatchListUseCase addToWatchListUseCase;
   final GetMoviesWatchListUseCase getMoviesWatchListUseCase;
   final GetTvShowWatchListUseCase getTvShowWatchListUseCase;
+  final LoadMoreMoviesWatchListUseCase loadMoreMoviesWatchListUseCase;
+  final LoadMoreTvWatchListUseCase loadMoreTvWatchListUseCase;
 
   MoviesCubit(
     this.getPopularMoviesDataUseCase,
@@ -84,6 +88,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
     this.addToWatchListUseCase,
     this.getTvShowWatchListUseCase,
     this.getMoviesWatchListUseCase,
+    this.loadMoreMoviesWatchListUseCase,
+    this.loadMoreTvWatchListUseCase,
   ) : super(MoviesInitialState());
 
   static MoviesCubit get(context) => BlocProvider.of(context);
@@ -742,5 +748,52 @@ class MoviesCubit extends Cubit<MoviesStates> {
         }
       });
     });
+  }
+
+  void loadMoreInWatchList() {
+    emit(LoadMoreWatchListLoadingState());
+    Future.wait([
+      loadMoreMoviesWatchList().then((value) {
+        value.fold((l) {
+          emit(LoadMoreMoviesWatchListErrorState(message: l.message));
+        }, (r) {
+          isFirstMoviesWatchListLoadingRunning = false;
+          currentMoviesWatchListPage++;
+          moviesWatchList!.moviesList.addAll(r.moviesList);
+        });
+      }),
+      loadMoreTvWatchList().then((value) {
+        value.fold((l) {
+          emit(LoadMoreTvWatchListErrorState(message: l.message));
+        }, (r) {
+          isFirstTvShowsWatchListLoadingRunning = false;
+          currentTvShowsWatchListPage++;
+          tvShowsWatchList!.tvList.addAll(r.tvList);
+        });
+      })
+    ]).then((value) {
+      emit(LoadMoreWatchListSuccessState());
+    }).catchError((error) {
+      emit(LoadMoreWatchListErrorState());
+    });
+  }
+
+  Future<Either<Failure, Movies>> loadMoreMoviesWatchList() async {
+    isFirstMoviesWatchListLoadingRunning = true;
+    return await loadMoreMoviesWatchListUseCase.execute(
+      currentPage: currentMoviesWatchListPage,
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+    );
+  }
+
+  Future<Either<Failure, Tv>> loadMoreTvWatchList() async {
+    isFirstTvShowsWatchListLoadingRunning = true;
+
+    return await loadMoreTvWatchListUseCase.execute(
+      currentPage: currentTvShowsWatchListPage,
+      accountId: accountDetails!.id.toString(),
+      sessionId: sessionId!.sessionId,
+    );
   }
 }

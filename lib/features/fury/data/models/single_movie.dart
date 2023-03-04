@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:movies_application/core/api/movies_dio_helper.dart';
 
 class SingleMovie extends Equatable {
+  final isMovie = true;
   final String? name;
   final String? title;
   final int id;
