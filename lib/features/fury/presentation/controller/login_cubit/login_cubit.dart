@@ -125,6 +125,7 @@ class LoginCubit extends Cubit<LoginStates> {
         emit(CreateNewSessionErrorState(l.message));
       }, (r) {
         sessionId = r;
+
         HiveHelper.putInSessionId(data: r);
       });
     }).catchError((error) {

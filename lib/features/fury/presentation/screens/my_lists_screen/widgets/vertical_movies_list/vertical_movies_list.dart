@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_application/core/utils/app_values.dart';
 import 'package:movies_application/core/utils/constants.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_states.dart';
@@ -36,100 +37,57 @@ class _VerticalMoviesListState extends State<VerticalMoviesList> {
       buildWhen: (previous, current) =>
           current is AddToWatchListSuccessState ||
           current is LoadMoreWatchListLoadingState ||
-          current is LoadMoreWatchListSuccessState,
+          current is LoadMoreWatchListSuccessState ||
+          current is ShuffleMoviesSuccessState ||
+          current is ClearWatchListLoadingState ||
+          current is ClearWatchListSuccessState,
       listener: (context, state) {},
       builder: (context, state) {
         tvShowsCounter = 0;
-        return Column(
-          children: [
-            SizedBox(
-              height: Helper.maxHeight * 0.01,
-            ),
-            ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                tvShowsCounter++;
-                return VerticalMoviesItemBuilder(
-                  moviesCounter: tvShowsCounter,
-                  movieOrTvItem: watchListData[index],
-                );
-              },
-              separatorBuilder: (context, index) {
-                return MyDivider(
+        return state is ClearWatchListLoadingState
+            ? Center(
+                child: AdaptiveIndicator(
+                  os: Components.getOS(),
                   color: AppColors.mainColor,
-                  paddingHorizontal: 0,
-                );
-              },
-              itemCount: watchListData.length,
-            ),
-            // ListView.separated(
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   itemBuilder: (context, index) {
-            //     tvShowsCounter++;
-            //     return VerticalMoviesItemBuilder(
-            //       moviesCounter: tvShowsCounter,
-            //       isMovie: true,
-            //       movie: moviesWatchList!.moviesList[index],
-            //     );
-            //   },
-            //   separatorBuilder: (context, index) {
-            //     return MyDivider(
-            //       color: AppColors.mainColor,
-            //       paddingHorizontal: 0,
-            //     );
-            //   },
-            //   itemCount: moviesWatchList!.moviesList.length,
-            // ),
-            // MyDivider(
-            //   color: AppColors.mainColor,
-            //   paddingHorizontal: 0,
-            // ),
-            // MyDivider(
-            //   color: AppColors.mainColor,
-            //   paddingHorizontal: 0,
-            // ),
-            // Text("DIVIDER HERE BRO"),
-            // MyDivider(
-            //   color: AppColors.mainColor,
-            //   paddingHorizontal: 0,
-            // ),
-            // MyDivider(
-            //   color: AppColors.mainColor,
-            //   paddingHorizontal: 0,
-            // ),
-            // ListView.separated(
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   itemBuilder: (context, index) {
-            //     // tvShowsCounter =moviesWatchList!.moviesList.length +  index;
-            //     tvShowsCounter++;
-            //     return VerticalMoviesItemBuilder(
-            //       moviesCounter: tvShowsCounter,
-            //       isMovie: false,
-            //       tv: tvShowsWatchList!.tvList[index],
-            //     );
-            //   },
-            //   separatorBuilder: (context, index) {
-            //     return MyDivider(
-            //       color: AppColors.mainColor,
-            //       paddingHorizontal: 0,
-            //     );
-            //   },
-            //   itemCount: tvShowsWatchList!.tvList.length,
-            // ),
-            state is LoadMoreWatchListLoadingState
-                ? AdaptiveIndicator(
-                    os: Components.getOS(),
-                    color: AppColors.mainColor,
-                  )
-                : Container(),
-            const SizedBox(
-              height: 50,
-            ),
-          ],
-        );
+                ),
+              )
+            : Column(
+                children: [
+                  SizedBox(
+                    height: Helper.maxHeight * 0.01,
+                  ),
+                  ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      tvShowsCounter++;
+                      return VerticalMoviesItemBuilder(
+                        moviesCounter: tvShowsCounter,
+                        movieOrTvItem: watchListData[index],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return MyDivider(
+                        color: AppColors.mainColor,
+                        paddingHorizontal: 0,
+                      );
+                    },
+                    itemCount: watchListData.length,
+                  ),
+                  SizedBox(
+                    height: AppSize.s10,
+                  ),
+                  state is LoadMoreWatchListLoadingState
+                      ? AdaptiveIndicator(
+                          os: Components.getOS(),
+                          color: AppColors.mainColor,
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: AppSize.s50,
+                  ),
+                ],
+              );
       },
     );
   }

@@ -29,8 +29,8 @@ class SearchItemBuilder extends StatelessWidget {
         Components.scaleNavigateTo(
             context,
             MovieDetails(
-              movie: movie,
-              isMovie: true,
+              movieOrTv: movie,
+
             ));
       },
       child: Container(

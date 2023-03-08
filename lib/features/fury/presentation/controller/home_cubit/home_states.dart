@@ -50,62 +50,69 @@ class GetNowPlayingMoviesErrorState extends MoviesStates {
   GetNowPlayingMoviesErrorState({required this.message});
 }
 
-class GetTvAiringTodayErrorState extends MoviesStates{
+class GetTvAiringTodayErrorState extends MoviesStates {
   final String message;
 
   GetTvAiringTodayErrorState({required this.message});
 }
 
-class GetPopularTvErrorState extends MoviesStates{
+class GetPopularTvErrorState extends MoviesStates {
   final String message;
 
   GetPopularTvErrorState({required this.message});
 }
 
-class GetTopRatedTvErrorState extends MoviesStates{
+class GetTopRatedTvErrorState extends MoviesStates {
   final String message;
 
   GetTopRatedTvErrorState({required this.message});
 }
 
-class GetFavoriteTvErrorState extends MoviesStates{
+class GetFavoriteTvErrorState extends MoviesStates {
   final String message;
 
   GetFavoriteTvErrorState({required this.message});
 }
-class GetTvWatchListErrorState extends MoviesStates{
+
+class GetTvWatchListErrorState extends MoviesStates {
   final String message;
 
   GetTvWatchListErrorState({required this.message});
 }
-class GetFavoriteMoviesErrorState extends MoviesStates{
+
+class GetFavoriteMoviesErrorState extends MoviesStates {
   final String message;
 
   GetFavoriteMoviesErrorState({required this.message});
 }
 
-class GetMoviesWatchListErrorState extends MoviesStates{
+class GetMoviesWatchListErrorState extends MoviesStates {
   final String message;
 
   GetMoviesWatchListErrorState({required this.message});
 }
 
-class AddToFavoriteLoadingState extends MoviesStates{
+class AddToFavoriteLoadingState extends MoviesStates {
   final int index;
 
   AddToFavoriteLoadingState(this.index);
 }
-class AddToFavoriteSuccessState extends MoviesStates{}
-class AddToFavoriteErrorState extends MoviesStates{
+
+class AddToFavoriteSuccessState extends MoviesStates {}
+
+class AddToFavoriteErrorState extends MoviesStates {
   final String message;
 
   AddToFavoriteErrorState({required this.message});
 }
 
-class AddToWatchListLoadingState extends MoviesStates{}
-class AddToWatchListSuccessState extends MoviesStates{}
-class AddToWatchListErrorState extends MoviesStates{
+class AddToWatchListLoadingState extends MoviesStates {}
+
+class AddToWatchListSuccessState extends MoviesStates {}
+
+class AddToWatchListErrorState extends MoviesStates {
   final String message;
+
   AddToWatchListErrorState({required this.message});
 }
 
@@ -115,9 +122,19 @@ class GetGenresErrorState extends MoviesStates {
   GetGenresErrorState(this.message);
 }
 
+class ShuffleMoviesSuccessState extends MoviesStates {}
+
+class ClearWatchListLoadingState extends MoviesStates {}
+
+class ClearWatchListSuccessState extends MoviesStates {}
+
+class ClearWatchListErrorState extends MoviesStates {}
+
 //// pagination (Load More)
 class LoadMoreMoviesLoadingState extends MoviesStates {}
+
 class LoadMoreMoviesSuccessState extends MoviesStates {}
+
 class LoadMoreMoviesErrorState extends MoviesStates {}
 
 class LoadMorePopularMoviesErrorState extends MoviesStates {}
@@ -126,20 +143,25 @@ class LoadMoreTrendingMoviesErrorState extends MoviesStates {}
 
 class LoadMoreTopRatedMoviesErrorState extends MoviesStates {}
 
-class LoadMoreTvShowsLoadingState extends MoviesStates{}
-class LoadMoreTvShowsSuccessState extends MoviesStates{}
-class LoadMoreTvShowsErrorState extends MoviesStates{}
+class LoadMoreTvShowsLoadingState extends MoviesStates {}
 
-class LoadMoreWatchListLoadingState extends MoviesStates{}
-class LoadMoreWatchListSuccessState extends MoviesStates{}
-class LoadMoreWatchListErrorState extends MoviesStates{}
+class LoadMoreTvShowsSuccessState extends MoviesStates {}
 
-class LoadMoreMoviesWatchListErrorState extends MoviesStates{
+class LoadMoreTvShowsErrorState extends MoviesStates {}
+
+class LoadMoreWatchListLoadingState extends MoviesStates {}
+
+class LoadMoreWatchListSuccessState extends MoviesStates {}
+
+class LoadMoreWatchListErrorState extends MoviesStates {}
+
+class LoadMoreMoviesWatchListErrorState extends MoviesStates {
   final String message;
 
   LoadMoreMoviesWatchListErrorState({required this.message});
 }
-class LoadMoreTvWatchListErrorState extends MoviesStates{
+
+class LoadMoreTvWatchListErrorState extends MoviesStates {
   final String message;
 
   LoadMoreTvWatchListErrorState({required this.message});

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +44,7 @@ import '../../../domain/use_cases/load_more_movies_watch_list.dart';
 import '../../../domain/use_cases/load_more_tv_shows.dart';
 import '../../../domain/use_cases/load_more_tv_watch_list.dart';
 import '../../../domain/use_cases/search_movies.dart';
+import '../../screens/movies_details_screen/movie_details_screen.dart';
 import '../../screens/news_screen/news_screen.dart';
 import 'home_states.dart';
 
@@ -199,6 +202,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstPopularTvLoadRunning = false;
               popularTv = r;
+
               popularTv!.tvList.shuffle();
             });
           }),
@@ -222,7 +226,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstMoviesWatchListLoadingRunning = false;
               moviesWatchList = r;
-              watchListData.addAll(moviesWatchList!.moviesList);
             });
           }),
 
@@ -235,10 +238,13 @@ class MoviesCubit extends Cubit<MoviesStates> {
             }, (r) {
               isFirstTvShowsWatchListLoadingRunning = false;
               tvShowsWatchList = r;
-              watchListData.addAll(tvShowsWatchList!.tvList);
+
             });
           }),
         ]).then((value) {
+          watchListData.addAll(moviesWatchList!.moviesList);
+          watchListData.addAll(tvShowsWatchList!.tvList);
+
           /// Movies Genres
           getMovieGenres().then((value) {
             value.fold((l) {
@@ -362,7 +368,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
     required String tvCategory,
     required bool hasMorePages,
     required bool isLoadingMore,
-
+    List<SingleTV>? similarTvShows,
+    List<SingleTV>? moreSimilarTvShows,
     ///// For similar TV Shows ////////
     int? tvID,
   }) {
@@ -392,9 +399,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
           emit(LoadMoreTvShowsErrorState());
         }, (r) {
           if (tvCategory == TVCategoryKeys.similarTVShows) {
-            moreSimilarTvShows = r;
-            if (moreSimilarTvShows!.tvList.isNotEmpty) {
-              similarTvShows!.loadMoreMovies(tv: moreSimilarTvShows!.tvList);
+            moreSimilarTvShows = r.tvList;
+            if (moreSimilarTvShows!.isNotEmpty) {
+              similarTvShows!.addAll(moreSimilarTvShows!);
             } else {
               hasNextPage = false;
             }
@@ -436,6 +443,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
     required String moviesCategory,
     required bool hasMorePages,
     required bool isLoadingMore,
+    List<SingleMovie>? similarMovies,
+    List<SingleMovie>? moreSimilarMovies,
     int? movieID,
   }) {
     emit(LoadMoreMoviesLoadingState());
@@ -511,10 +520,9 @@ class MoviesCubit extends Cubit<MoviesStates> {
               hasNextPage = false;
             }
           } else if (moviesCategory == MoviesCategoryKeys.similarMovies) {
-            moreSimilarMovies = r;
-            if (moreSimilarMovies!.moviesList.isNotEmpty) {
-              similarMovies!
-                  .loadMoreMovies(movies: moreSimilarMovies!.moviesList);
+            moreSimilarMovies = r.moviesList;
+            if (moreSimilarMovies!.isNotEmpty) {
+              similarMovies!.addAll(moreSimilarMovies!);
             } else {
               hasNextPage = false;
               debugPrint('no more');
@@ -523,10 +531,6 @@ class MoviesCubit extends Cubit<MoviesStates> {
         });
       }).then((value) {
         emit(LoadMoreMoviesSuccessState());
-      }).catchError((error) {
-        debugPrint('Error from load more movies ===> ${error.toString()}');
-        isLoadingMoreRunning = false;
-        emit(LoadMoreMoviesErrorState());
       });
     }
   }
@@ -563,18 +567,19 @@ class MoviesCubit extends Cubit<MoviesStates> {
     }
   }
 
-  void getTvDetailsData({required SingleTV tvShow}) {
+  void getTvDetailsData(
+      {required SingleTV tvShow, required List<SingleTV> similarTvShows}) {
     tvKeywords = null;
     movieKeywords = null;
     genresList = [];
-    similarTvShows = null;
-    similarMovies = null;
+    // similarTvShows = null;
+    // similarMovies = null;
     Future.wait([
       getSimilarTvShow(tvShow: tvShow).then((value) {
         value.fold((l) {
           emit(GetSimilarMoviesErrorState(l.message));
         }, (r) {
-          similarTvShows = r;
+          similarTvShows.addAll(r.tvList);
         });
       }),
       getTvShowKeywords(tvShow: tvShow).then((value) {
@@ -591,20 +596,21 @@ class MoviesCubit extends Cubit<MoviesStates> {
     });
   }
 
-  void getMovieDetailsData({required SingleMovie movie}) {
+  void getMovieDetailsData(
+      {required SingleMovie movie, required List<SingleMovie> similarMovies}) {
     emit(GetMovieDetailsLoadingState());
     movieKeywords = null;
     tvKeywords = null;
     genresList = [];
-    similarMovies = null;
-    similarTvShows = null;
+    // similarMovies = null;
+    // similarTvShows = null;
     Future.wait<void>([
       getSimilarMovies(movie: movie).then((value) {
         value.fold((l) {
           emit(GetSimilarMoviesErrorState(l.message));
         }, (r) {
           isFirstSimilarMoviesLoadingRunning = false;
-          similarMovies = r;
+          similarMovies.addAll(r.moviesList);
         });
       }),
       getMovieKeyword(movie: movie).then((value) {
@@ -694,8 +700,8 @@ class MoviesCubit extends Cubit<MoviesStates> {
 
   Future<void> addToWatchList({
     required int mediaId,
-    required bool isMovie,
     required bool watchList,
+    required dynamic movieOrTv,
     required BuildContext context,
   }) async {
     emit(AddToWatchListLoadingState());
@@ -703,7 +709,7 @@ class MoviesCubit extends Cubit<MoviesStates> {
         .execute(
       accountId: accountDetails!.id.toString(),
       sessionId: sessionId!.sessionId,
-      mediaType: isMovie ? 'movie' : 'tv',
+      mediaType: movieOrTv.isMovie ? 'movie' : 'tv',
       mediaId: mediaId,
       watchList: watchList,
     )
@@ -711,43 +717,60 @@ class MoviesCubit extends Cubit<MoviesStates> {
       value.fold((l) {
         emit(AddToWatchListErrorState(message: l.message));
       }, (r) {
-        if (isMovie) {
-          getMoviesWatchList().then((moviesWatchListValue) {
-            moviesWatchListValue.fold((l) {
-              emit(GetMoviesWatchListErrorState(message: l.message));
-            }, (r) {
-              isFirstMoviesWatchListLoadingRunning = false;
-              moviesWatchList = r;
-              Components.showSnackBar(
-                title: AppStrings.appName,
-                message: watchList
-                    ? AppStrings.addedToWatchList
-                    : AppStrings.removedFromWatchList,
-                backgroundColor: AppColors.mainColor,
-                textColor: Colors.white,
-              );
-              emit(AddToWatchListSuccessState());
-            });
-          });
+        // watchListData = [];
+        if (watchList) {
+          if (!watchListData.contains(movieOrTv)) {
+            watchListData.add(movieOrTv);
+          }
         } else {
-          getTvShowsWatchList().then((tvShowsWatchListValue) {
-            tvShowsWatchListValue.fold((l) {
-              emit(GetTvWatchListErrorState(message: l.message));
-            }, (r) {
-              isFirstTvShowsWatchListLoadingRunning = false;
-              tvShowsWatchList = r;
-              Components.showSnackBar(
-                title: AppStrings.appName,
-                message: watchList
-                    ? AppStrings.addedToWatchList
-                    : AppStrings.removedFromWatchList,
-                backgroundColor: AppColors.mainColor,
-                textColor: Colors.white,
-              );
-              emit(AddToWatchListSuccessState());
-            });
-          });
+          watchListData.remove(movieOrTv);
+          if (movieOrTv.isMovie) {
+            moviesWatchList!.moviesList.remove(movieOrTv);
+          } else {
+            tvShowsWatchList!.tvList.remove(movieOrTv);
+          }
         }
+        Components.showSnackBar(
+          title: AppStrings.appName,
+          message: watchList
+              ? AppStrings.addedToWatchList
+              : AppStrings.removedFromWatchList,
+          backgroundColor: AppColors.mainColor,
+          textColor: Colors.white,
+        );
+        emit(AddToWatchListSuccessState());
+        // if (movieOrTv.isMovie) {
+        //   getMoviesWatchList().then((moviesWatchListValue) {
+        //     moviesWatchListValue.fold((l) {
+        //       emit(GetMoviesWatchListErrorState(message: l.message));
+        //     }, (r) {
+        //       isFirstMoviesWatchListLoadingRunning = false;
+        //       moviesWatchList = r;
+
+        //       fillWatchList();
+        //       emit(AddToWatchListSuccessState());
+        //     });
+        //   });
+        // } else {
+        //   getTvShowsWatchList().then((tvShowsWatchListValue) {
+        //     tvShowsWatchListValue.fold((l) {
+        //       emit(GetTvWatchListErrorState(message: l.message));
+        //     }, (r) {
+        //       isFirstTvShowsWatchListLoadingRunning = false;
+        //       tvShowsWatchList = r;
+        //       Components.showSnackBar(
+        //         title: AppStrings.appName,
+        //         message: watchList
+        //             ? AppStrings.addedToWatchList
+        //             : AppStrings.removedFromWatchList,
+        //         backgroundColor: AppColors.mainColor,
+        //         textColor: Colors.white,
+        //       );
+        //       fillWatchList();
+        //       emit(AddToWatchListSuccessState());
+        //     });
+        //   });
+        // }
       });
     });
   }
@@ -761,9 +784,18 @@ class MoviesCubit extends Cubit<MoviesStates> {
         }, (r) {
           isFirstMoviesWatchListLoadingRunning = false;
           currentMoviesWatchListPage++;
-          // moviesWatchList!.moviesList.addAll(r.moviesList);
-          watchListData.addAll(r.moviesList);
+          moviesWatchList!.moviesList.addAll(r.moviesList);
+          // watchListData.addAll(r.moviesList);
+          // fillWatchList();
+          for (var element in r.moviesList) {
+            if(!watchListData.contains(element)){
+              watchListData.add(element);
+            }
+          }
+          // watchListData.addAll(r.moviesList);
         });
+      }).catchError((error) {
+        debugPrint(error.toString());
       }),
       loadMoreTvWatchList().then((value) {
         value.fold((l) {
@@ -771,13 +803,21 @@ class MoviesCubit extends Cubit<MoviesStates> {
         }, (r) {
           isFirstTvShowsWatchListLoadingRunning = false;
           currentTvShowsWatchListPage++;
-          // tvShowsWatchList!.tvList.addAll(r.tvList);
-          watchListData.addAll(r.tvList);
+          tvShowsWatchList!.tvList.addAll(r.tvList);
+          // watchListData.addAll(r.tvList);
+          // fillWatchList();
+          for (var element in r.tvList) {
+            if(!watchListData.contains(element)){
+              watchListData.add(element);
+            }
+          }
+          // watchListData.addAll(r.tvList);
         });
       })
     ]).then((value) {
       emit(LoadMoreWatchListSuccessState());
     }).catchError((error) {
+      debugPrint(error);
       emit(LoadMoreWatchListErrorState());
     });
   }
@@ -800,4 +840,89 @@ class MoviesCubit extends Cubit<MoviesStates> {
       sessionId: sessionId!.sessionId,
     );
   }
+
+  void pickRandomMovie({
+    required BuildContext context,
+  }) {
+    if (watchListData.isNotEmpty) {
+      Random random = Random();
+      int randomIndex = random.nextInt(watchListData.length - 1);
+      Components.navigateTo(
+          context,
+          MovieDetails(
+            movieOrTv: watchListData[randomIndex].isMovie,
+          ));
+    } else {
+      Components.showSnackBar(
+        title: AppStrings.appName,
+        message: AppStrings.cantPickMovie,
+        backgroundColor: AppColors.redErrorColor,
+        textColor: Colors.white,
+      );
+    }
+  }
+
+  void shuffleMoviesList({
+    required List moviesList,
+  }) {
+    if (moviesList.isNotEmpty) {
+      moviesList.shuffle();
+    } else {
+      Components.showSnackBar(
+        title: AppStrings.appName,
+        message: AppStrings.cantPickMovie,
+        backgroundColor: AppColors.redErrorColor,
+        textColor: Colors.white,
+      );
+    }
+    emit(ShuffleMoviesSuccessState());
+  }
+
+  void fillWatchList() {
+    watchListData = [];
+    watchListData.addAll(moviesWatchList!.moviesList);
+    watchListData.addAll(tvShowsWatchList!.tvList);
+  }
+
+// void clearMyWatchList({
+//   required BuildContext context,
+// }) {
+//   if (watchListData.isNotEmpty) {
+//     emit(ClearWatchListLoadingState());
+//     clearWatchListLoop(context: context).then((value) {}).catchError((error) {
+//       emit(ClearWatchListErrorState());
+//     });
+//   } else {
+//     Components.showSnackBar(
+//       title: AppStrings.appName,
+//       message: AppStrings.noThingToClear,
+//       backgroundColor: AppColors.redErrorColor,
+//       textColor: Colors.white,
+//     );
+//   }
+// }
+//
+// Future<void> clearWatchListLoop({
+//   required BuildContext context,
+// }) async {
+//   for (var element in watchListData) {
+//     addToWatchList(
+//       mediaId: element.id,
+//       isMovie: element.isMovie,
+//       watchList: false,
+//       context: context,
+//       fromClearWatchList: true,
+//     ).then((value) {
+//       watchListData = [];
+//       Components.showSnackBar(
+//         title: AppStrings.appName,
+//         message: AppStrings.clearIsDone,
+//         backgroundColor: AppColors.greenSuccessColor,
+//         textColor: Colors.white,
+//       );
+//       emit(ClearWatchListSuccessState());
+//       print("CLEAR DONE");
+//     });
+//   }
+// }
 }

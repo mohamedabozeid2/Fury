@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 class SingleTV extends Equatable {
-  final isMovie = false;
+  final bool isMovie = false;
   final int id;
-  final dynamic backdropPath;
+  final dynamic backDropPath;
   final dynamic posterPath;
   final String firstAirDate;
   final List<int> genresIds;
@@ -13,18 +13,18 @@ class SingleTV extends Equatable {
   final String description;
   final double voteAverage;
 
-  const SingleTV(
-      {required this.description,
-      required this.posterPath,
-      required this.name,
-      required this.id,
-      required this.genresIds,
-      required this.language,
-      required this.backdropPath,
-      required this.firstAirDate,
-      required this.originalName,
-      required this.voteAverage,
-      });
+  const SingleTV({
+    required this.description,
+    required this.posterPath,
+    required this.name,
+    required this.id,
+    required this.genresIds,
+    required this.language,
+    required this.backDropPath,
+    required this.firstAirDate,
+    required this.originalName,
+    required this.voteAverage,
+  });
 
   factory SingleTV.fromJson(Map<String, dynamic> json) {
     return SingleTV(
@@ -34,7 +34,7 @@ class SingleTV extends Equatable {
       id: json['id'],
       genresIds: List<int>.from(json['genre_ids'].map((e) => e)),
       language: json['original_language'],
-      backdropPath: json['backdrop_path'],
+      backDropPath: json['backdrop_path'],
       firstAirDate: json['first_air_date'],
       originalName: json['original_name'],
       voteAverage: json['vote_average'].toDouble(),
@@ -49,7 +49,7 @@ class SingleTV extends Equatable {
         id,
         genresIds,
         language,
-        backdropPath,
+        backDropPath,
         firstAirDate,
         originalName,
         voteAverage,

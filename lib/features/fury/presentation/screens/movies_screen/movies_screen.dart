@@ -45,8 +45,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
           // pinned: true,
           expandedHeight: Helper.maxHeight * 0.7,
           flexibleSpace: AppBarMovieBuilder(
-            isMovie: true,
-            movie: trendingMovies!.moviesList[randomPosterNumber],
+            movieOrTv: trendingMovies!.moviesList[randomPosterNumber],
             image:
             '${MoviesDioHelper.baseImageURL}${trendingMovies!.moviesList[randomPosterNumber].posterPath}',
           ),

@@ -7,15 +7,13 @@ class NoWatchListAvailableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Lottie.asset('assets/anims/movie.json'),
-          const Text(AppStrings.noMovies),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Lottie.asset('assets/anims/movie.json'),
+        const Text(AppStrings.noMovies),
+      ],
     );
   }
 }

@@ -6,16 +6,20 @@ import 'package:movies_application/features/fury/presentation/screens/movies_det
 
 import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_values.dart';
-import '../../../../../../core/utils/constants.dart';
 import '../../../../../../core/utils/helper.dart';
+import '../../../../data/models/single_movie.dart';
+import '../../../../data/models/single_tv.dart';
 import '../../../controller/home_cubit/home_cubit.dart';
 import '../../../controller/home_cubit/home_states.dart';
 
 class SimilarMovies extends StatefulWidget {
-  final bool isMovie;
-
+  final dynamic movieOrTv;
+  final List<SingleMovie> similarMovies;
+  final List<SingleTV> similarTvShows;
   const SimilarMovies({
-    required this.isMovie,
+    required this.movieOrTv,
+    required this.similarTvShows,
+    required this.similarMovies,
     super.key,
   });
 
@@ -30,27 +34,6 @@ class _SimilarMoviesState extends State<SimilarMovies> {
   late bool haveSimilarData;
   late int similarDataLength;
 
-  @override
-  void initState() {
-    if (widget.isMovie) {
-      page = MoviesCubit.get(context).currentSimilarMoviesPage;
-      if (similarMovies!.moviesList.isNotEmpty) {
-        haveSimilarData = true;
-      } else {
-        haveSimilarData = false;
-      }
-      similarDataLength = similarMovies!.moviesList.length;
-    } else {
-      page = MoviesCubit.get(context).currentSimilarTVShowPage;
-      if (similarTvShows!.tvList.isNotEmpty) {
-        haveSimilarData = true;
-      } else {
-        haveSimilarData = false;
-      }
-      similarDataLength = similarTvShows!.tvList.length;
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +43,33 @@ class _SimilarMoviesState extends State<SimilarMovies> {
           current is LoadMoreTvShowsSuccessState,
       listener: (context, state) {
         if (state is LoadMoreMoviesSuccessState) {
-          similarDataLength = similarMovies!.moviesList.length;
+          similarDataLength = widget.similarMovies.length;
         } else if (state is LoadMoreTvShowsSuccessState) {
-          similarDataLength = similarTvShows!.tvList.length;
+          similarDataLength = widget.similarTvShows.length;
         }
       },
       builder: (context, state) {
+        page = widget.movieOrTv.isMovie
+            ? MoviesCubit.get(context).currentSimilarMoviesPage
+            : MoviesCubit.get(context).currentSimilarTVShowPage;
+
+        similarDataLength = widget.movieOrTv.isMovie
+            ? widget.similarMovies.length
+            : widget.similarTvShows.length;
+
+        if (widget.movieOrTv.isMovie) {
+          if (widget.similarMovies.isNotEmpty) {
+            haveSimilarData = true;
+          } else {
+            haveSimilarData = false;
+          }
+        } else {
+          if (widget.similarTvShows.isNotEmpty) {
+            haveSimilarData = true;
+          } else {
+            haveSimilarData = false;
+          }
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -75,13 +79,13 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                   borderRadius: BorderRadius.circular(AppSize.s5),
                   color: AppColors.mainColor),
               child: Text(
-                widget.isMovie
+                widget.movieOrTv.isMovie
                     ? AppStrings.similarMovies
                     : AppStrings.similarTVShows,
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
-            similarMovies != null || similarTvShows != null
+            similarDataLength != 0
                 ? Column(
                     children: [
                       SizedBox(
@@ -93,14 +97,10 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return SimilarMovieItemBuilder(
-                                  isMovie: widget.isMovie,
+                                  movieOrTv: widget.movieOrTv.isMovie
+                                      ? widget.similarMovies[index]
+                                      : widget.similarTvShows[index],
                                   index: index,
-                                  movie: widget.isMovie
-                                      ? similarMovies!.moviesList[index]
-                                      : null,
-                                  tvShow: widget.isMovie == false
-                                      ? similarTvShows!.tvList[index]
-                                      : null,
                                 );
                               },
                               separatorBuilder: (context, index) {
@@ -112,7 +112,7 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                               itemCount: similarDataLength,
                             )
                           : Text(
-                              widget.isMovie
+                              widget.movieOrTv.isMovie
                                   ? AppStrings.noSimilarMovies
                                   : AppStrings.noSimilarTVShows,
                               style: Theme.of(context).textTheme.subtitle2,
@@ -125,7 +125,7 @@ class _SimilarMoviesState extends State<SimilarMovies> {
                         height: Helper.maxHeight * 0.01,
                       ),
                       Text(
-                        widget.isMovie
+                        widget.movieOrTv.isMovie
                             ? AppStrings.noSimilarMovies
                             : AppStrings.noSimilarTVShows,
                         style: Theme.of(context).textTheme.subtitle2,

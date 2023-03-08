@@ -42,6 +42,7 @@ void main() async {
   } else {
     startWidget = const Layout();
   }
+  print(sessionId);
 
   // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
   //     statusBarColor: Colors.transparent, // st

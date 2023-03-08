@@ -13,23 +13,17 @@ import '../../../../../../core/utils/Colors.dart';
 import '../../../../../../core/utils/app_fonts.dart';
 import '../../../../../../core/utils/helper.dart';
 import '../../../../../../core/widgets/cached_image.dart';
-import '../../../../data/models/single_movie.dart';
-import '../../../../data/models/single_tv.dart';
 
 class AppBarMovieBuilder extends StatelessWidget {
   final String image;
   final bool fromMovieDetails;
-  final bool isMovie;
-  final SingleMovie? movie;
-  final SingleTV? tv;
+  final dynamic movieOrTv;
 
   const AppBarMovieBuilder({
     super.key,
     required this.image,
     this.fromMovieDetails = false,
-    this.movie,
-    this.tv,
-    required this.isMovie,
+    required this.movieOrTv,
   });
 
   @override
@@ -44,21 +38,11 @@ class AppBarMovieBuilder extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 if (!fromMovieDetails) {
-                  if (isMovie) {
-                    Components.navigateTo(
-                        context,
-                        MovieDetails(
-                          movie: movie!,
-                          isMovie: isMovie,
-                        ));
-                  } else {
-                    Components.navigateTo(
-                        context,
-                        MovieDetails(
-                          tvShow: tv,
-                          isMovie: isMovie,
-                        ));
-                  }
+                  Components.navigateTo(
+                      context,
+                      MovieDetails(
+                        movieOrTv: movieOrTv,
+                      ));
                 }
               },
               child: CachedImage(
@@ -73,8 +57,7 @@ class AppBarMovieBuilder extends StatelessWidget {
           fromMovieDetails
               ? Container()
               : Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: AppSize.s3),
+                  padding: EdgeInsets.symmetric(vertical: AppSize.s3),
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.4),
                       borderRadius: BorderRadius.only(
@@ -98,9 +81,9 @@ class AppBarMovieBuilder extends StatelessWidget {
                                   fun: () {
                                     MoviesCubit.get(context).addToWatchList(
                                       context: context,
-                                      mediaId: isMovie ? movie!.id : tv!.id,
-                                      isMovie: isMovie,
+                                      mediaId: movieOrTv!.id,
                                       watchList: true,
+                                      movieOrTv: movieOrTv,
                                     );
                                   },
                                   icon: Icons.add,
@@ -114,9 +97,7 @@ class AppBarMovieBuilder extends StatelessWidget {
                           Components.navigateTo(
                             context,
                             MovieDetails(
-                              isMovie: isMovie,
-                              movie: movie,
-                              tvShow: tv,
+                              movieOrTv: movieOrTv,
                             ),
                           );
                         },

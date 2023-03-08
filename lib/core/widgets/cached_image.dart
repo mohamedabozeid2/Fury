@@ -26,17 +26,29 @@ class CachedImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: image,
+      key: UniqueKey(),
       width: width,
       height: height,
-      key: UniqueKey(),
-      fit: fit,
+      imageBuilder: (context, imageProvider) => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: fit,
+
+          ),
+        ),
+      ),
       placeholder: (context, url) => Center(
           child: AdaptiveIndicator(
         os: Platform.operatingSystem,
         color: circularColor,
       )),
-      errorWidget: (context, url, error) =>
-          Icon(Icons.error, color: AppColors.whiteButtonText),
+      errorWidget: (context, url, error) => Icon(
+        Icons.error,
+        color: AppColors.whiteButtonText,
+      ),
     );
   }
 }

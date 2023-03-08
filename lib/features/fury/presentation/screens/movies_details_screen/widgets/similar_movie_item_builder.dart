@@ -10,26 +10,27 @@ import 'package:movies_application/core/utils/strings.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
-import 'package:movies_application/features/fury/data/models/single_movie.dart';
-import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_cubit.dart';
 import 'package:movies_application/features/fury/presentation/controller/home_cubit/home_states.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/movie_details_screen.dart';
 
 import '../../../../../../core/utils/assets_manager.dart';
+import '../../../../../../core/widgets/divider.dart';
 
 class SimilarMovieItemBuilder extends StatefulWidget {
-  final SingleMovie? movie;
-  final SingleTV? tvShow;
-  final bool isMovie;
+  // final SingleMovie? movie;
+  // final SingleTV? tvShow;
+  // final bool isMovie;
   final int index;
+  final dynamic movieOrTv;
 
   const SimilarMovieItemBuilder({
     super.key,
-    this.movie,
-    this.tvShow,
-    required this.isMovie,
+    // this.movie,
+    // this.tvShow,
+    // required this.isMovie,
     required this.index,
+    required this.movieOrTv,
   });
 
   @override
@@ -46,20 +47,20 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
 
   @override
   void initState() {
-    if (widget.isMovie) {
-      if (widget.movie!.name != null) {
-        title += widget.movie!.name!;
+    if (widget.movieOrTv.isMovie) {
+      if (widget.movieOrTv!.name != null) {
+        title += widget.movieOrTv!.name!;
       } else {
-        title += widget.movie!.title!;
+        title += widget.movieOrTv!.title!;
       }
-      posterPath = widget.movie!.posterPath;
+      posterPath = widget.movieOrTv!.posterPath;
     } else {
-      if (widget.tvShow!.name != null) {
-        title += widget.tvShow!.name!;
+      if (widget.movieOrTv!.name != null) {
+        title += widget.movieOrTv!.name!;
       } else {
-        title += widget.tvShow!.originalName!;
+        title += widget.movieOrTv!.originalName!;
       }
-      posterPath = widget.tvShow!.posterPath;
+      posterPath = widget.movieOrTv!.posterPath;
     }
     super.initState();
   }
@@ -73,9 +74,7 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
         Components.navigateTo(
             context,
             MovieDetails(
-              isMovie: widget.isMovie,
-              tvShow: widget.isMovie ? null : widget.tvShow,
-              movie: widget.isMovie ? widget.movie : null,
+              movieOrTv: widget.movieOrTv,
             ));
       },
       child: Row(
@@ -97,102 +96,82 @@ class _SimilarMovieItemBuilderState extends State<SimilarMovieItemBuilder> {
                 ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(Helper.maxWidth * 0.03),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${widget.index + 1}. $title',
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  SizedBox(height: Helper.maxHeight * 0.005),
-                  Text(
-                    widget.isMovie
-                        ? widget.movie!.description
-                        : widget.tvShow!.description,
-                    textAlign: TextAlign.start,
-                    maxLines: 6,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.subtitle2,
-                  ),
-                  SizedBox(
-                    height: Helper.maxHeight * 0.025,
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // MaterialButton(
-                          //   onPressed: () {
-                          //     print("TEST");
-                          //     NotificationService.showNotification(
-                          //       id: 0,
-                          //       title: 'fury',
-                          //       body: 'Body',
-                          //       seconds: 1,
-                          //     );
-                          //     // NotificationHelper.showNotification(
-                          //     //   title: 'Fury',
-                          //     //   body: 'Body',
-                          //     //   payload: 'TEST NOTIFICATION',
-                          //     // );
-                          //   },
-                          //   child: Text('TEST'),
-                          // ),
-                          BlocConsumer<MoviesCubit, MoviesStates>(
-                            buildWhen: (previous, current) =>
-                                (current is AddToWatchListLoadingState ||
-                                    current is AddToWatchListSuccessState) &&
-                                watchListButtonId == widget.index,
-                            builder: (context, state) {
-                              if (state is AddToWatchListSuccessState) {
-                                watchListButtonId = -1;
-                              }
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  state is AddToWatchListLoadingState &&
-                                          watchListButtonId == widget.index
-                                      ? Center(
-                                          child: AdaptiveIndicator(
-                                            os: Components.getOS(),
-                                            color: AppColors.mainColor,
-                                          ),
-                                        )
-                                      : AddActionsButton(
-                                          fun: () {
-                                            watchListButtonId =
-                                                widget.index;
-                                            MoviesCubit.get(context)
-                                                .addToWatchList(
-                                              context: context,
-                                              mediaId: widget.isMovie
-                                                  ? widget.movie!.id
-                                                  : widget.tvShow!.id,
-                                              isMovie: widget.isMovie,
-                                              watchList: true,
-                                            );
-                                          },
-                                          icon: Icons.add,
-                                          backgroundColor:
-                                              AppColors.mainColor,
-                                          spacing: AppSize.s10,
-                                          iconSize: AppFontSize.s28,
-                                          title: AppStrings.watchList,
-                                        )
-                                ],
-                              );
-                            },
-                            listener: (context, state) {},
-                          ),
-                        ],
+              padding: EdgeInsets.symmetric(horizontal: Helper.maxWidth * 0.03),
+              child: SizedBox(
+                height: Helper.maxHeight * 0.3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${widget.index + 1}. $title',
+                      style: Theme.of(context).textTheme.subtitle1,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    MyDivider(color: AppColors.mainColor),
+                    Expanded(
+                      child: Text(
+                        widget.movieOrTv!.description,
+                        textAlign: TextAlign.start,
+                        maxLines: 8,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(
+                      height: Helper.maxHeight * 0.025,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        BlocConsumer<MoviesCubit, MoviesStates>(
+                          buildWhen: (previous, current) =>
+                              (current is AddToWatchListLoadingState ||
+                                  current is AddToWatchListSuccessState) &&
+                              watchListButtonId == widget.index,
+                          builder: (context, state) {
+                            if (state is AddToWatchListSuccessState) {
+                              watchListButtonId = -1;
+                            }
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                state is AddToWatchListLoadingState &&
+                                        watchListButtonId == widget.index
+                                    ? Center(
+                                        child: AdaptiveIndicator(
+                                          os: Components.getOS(),
+                                          color: AppColors.mainColor,
+                                        ),
+                                      )
+                                    : AddActionsButton(
+                                        fun: () {
+                                          watchListButtonId = widget.index;
+                                          MoviesCubit.get(context)
+                                              .addToWatchList(
+                                            context: context,
+                                            mediaId: widget.movieOrTv!.id,
+                                            watchList: true,
+                                            movieOrTv: widget.movieOrTv,
+                                          );
+                                        },
+                                        icon: Icons.add,
+                                        backgroundColor: AppColors.mainColor,
+                                        spacing: AppSize.s10,
+                                        iconSize: AppFontSize.s28,
+                                        title: AppStrings.watchList,
+                                      )
+                              ],
+                            );
+                          },
+                          listener: (context, state) {},
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

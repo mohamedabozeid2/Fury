@@ -6,6 +6,7 @@ import 'package:movies_application/core/utils/components.dart';
 import 'package:movies_application/core/widgets/adaptive_indicator.dart';
 import 'package:movies_application/core/widgets/add_actions_button.dart';
 import 'package:movies_application/core/widgets/cached_image.dart';
+import 'package:movies_application/core/widgets/icon_button.dart';
 import 'package:movies_application/features/fury/data/models/single_movie.dart';
 import 'package:movies_application/features/fury/data/models/single_tv.dart';
 import 'package:movies_application/features/fury/presentation/screens/movies_details_screen/widgets/Keywords.dart';
@@ -25,15 +26,11 @@ import '../../../../../core/keys/movies_category_keys.dart';
 import '../movies_screen/widgets/appbar_movie_builder.dart';
 
 class MovieDetails extends StatefulWidget {
-  final SingleMovie? movie;
-  final SingleTV? tvShow;
-  final bool isMovie;
+  final dynamic movieOrTv;
 
   const MovieDetails({
     super.key,
-    this.movie,
-    this.tvShow,
-    required this.isMovie,
+    required this.movieOrTv,
   });
 
   @override
@@ -50,56 +47,37 @@ class _MovieDetailsState extends State<MovieDetails> {
   late String? name;
   late String? releaseDate;
   late bool? isAdult;
+  List<SingleMovie> similarMovies = [];
+  List<SingleMovie> moreSimilarMovies = [];
+
+  List<SingleTV> similarTvShows = [];
+  List<SingleTV> moreSimilarTvShows = [];
 
   @override
   void initState() {
-    if (widget.isMovie == true) {
-      MoviesCubit.get(context).getMovieDetailsData(movie: widget.movie!);
-      title = widget.movie!.title;
-      name = widget.movie!.name;
-      releaseDate = widget.movie!.releaseDate;
-      isAdult = widget.movie!.isAdult;
+    if (widget.movieOrTv.isMovie == true) {
+      MoviesCubit.get(context).getMovieDetailsData(
+          movie: widget.movieOrTv!, similarMovies: similarMovies);
+      title = widget.movieOrTv!.title;
+      name = widget.movieOrTv!.name;
+      releaseDate = widget.movieOrTv!.releaseDate;
+      isAdult = widget.movieOrTv!.isAdult;
     } else {
-      MoviesCubit.get(context).getTvDetailsData(tvShow: widget.tvShow!);
-      title = widget.tvShow!.name;
-      name = widget.tvShow!.originalName;
-      releaseDate = widget.tvShow!.firstAirDate;
+      MoviesCubit.get(context).getTvDetailsData(
+          tvShow: widget.movieOrTv!, similarTvShows: similarTvShows);
+      title = widget.movieOrTv!.name;
+      name = widget.movieOrTv!.originalName;
+      releaseDate = widget.movieOrTv!.firstAirDate;
       isAdult = false;
     }
-    scrollController.addListener(() {
-      if (scrollController.position.atEdge) {
-        if (scrollController.position.pixels == 0) {
-        } else {
-          if (!loadMore) {
-            if (widget.isMovie) {
-              MoviesCubit.get(context).loadMoreMovies(
-                  hasMorePages: hasNextPage,
-                  isLoadingMore: isLoadingMoreRunning,
-                  page: page,
-                  moviesCategory: MoviesCategoryKeys.similarMovies,
-                  movieID: widget.movie!.id);
 
-              page = MoviesCubit.get(context).currentSimilarMoviesPage;
-            } else {
-              MoviesCubit.get(context).loadMoreTVShows(
-                page: page,
-                tvCategory: TVCategoryKeys.similarTVShows,
-                hasMorePages: hasNextPage,
-                isLoadingMore: isLoadingMoreRunning,
-                tvID: widget.tvShow!.id,
-              );
-              page = MoviesCubit.get(context).currentSimilarTVShowPage;
-            }
-          }
-        }
-      }
-    });
+    scrollController.addListener(onScrollEvent);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    page = widget.isMovie
+    page = widget.movieOrTv.isMovie
         ? MoviesCubit.get(context).currentSimilarMoviesPage
         : MoviesCubit.get(context).currentSimilarTVShowPage;
     return BlocConsumer<MoviesCubit, MoviesStates>(
@@ -126,25 +104,30 @@ class _MovieDetailsState extends State<MovieDetails> {
                     physics: const BouncingScrollPhysics(),
                     slivers: [
                       SliverAppBar(
-                        // floating: false,
-                        pinned: true,
-                        expandedHeight: Helper.maxHeight * 0.7,
-                        flexibleSpace: widget.isMovie
-                            ? AppBarMovieBuilder(
-                                isMovie: true,
-                                movie: widget.movie,
-                                fromMovieDetails: true,
-                                image:
-                                    '${MoviesDioHelper.baseImageURL}${widget.movie!.posterPath}',
-                              )
-                            : AppBarMovieBuilder(
-                                isMovie: false,
-                                tv: widget.tvShow,
-                                fromMovieDetails: true,
-                                image:
-                                    '${MoviesDioHelper.baseImageURL}${widget.tvShow!.posterPath}',
-                              ),
-                      ),
+                          leading: Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: AppSize.s2),
+                            child: CircleAvatar(
+                              backgroundColor: AppColors.mainColor,
+                              child: DefaultIconButton(
+                                  fun: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icons.arrow_back,
+                                  color: Colors.white,
+                                  size: AppFontSize.s24),
+                            ),
+                          ),
+                          leadingWidth: Helper.maxWidth * 0.24,
+                          // floating: false,
+                          pinned: true,
+                          expandedHeight: Helper.maxHeight * 0.7,
+                          flexibleSpace: AppBarMovieBuilder(
+                            movieOrTv: widget.movieOrTv,
+                            fromMovieDetails: true,
+                            image:
+                                '${MoviesDioHelper.baseImageURL}${widget.movieOrTv!.posterPath}',
+                          )),
                       SliverToBoxAdapter(
                         child: Padding(
                           padding: EdgeInsets.all(Helper.maxHeight * 0.02),
@@ -157,9 +140,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   Row(
                                     children: [
                                       RateRow(
-                                          rate: widget.isMovie
-                                              ? widget.movie!.rate
-                                              : widget.tvShow!.voteAverage),
+                                          rate: widget.movieOrTv.isMovie
+                                              ? widget.movieOrTv!.rate
+                                              : widget.movieOrTv!.voteAverage),
                                       const Spacer(),
                                       BlocConsumer<MoviesCubit, MoviesStates>(
                                         buildWhen: (previous, current) =>
@@ -180,10 +163,10 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                     MoviesCubit.get(context)
                                                         .addToWatchList(
                                                       context: context,
-                                                      mediaId: widget.isMovie
-                                                          ? widget.movie!.id
-                                                          : widget.tvShow!.id,
-                                                      isMovie: widget.isMovie,
+                                                      mediaId:
+                                                          widget.movieOrTv!.id,
+                                                      movieOrTv:
+                                                          widget.movieOrTv,
                                                       watchList: true,
                                                     );
                                                   },
@@ -241,7 +224,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                               .textTheme
                                               .subtitle2),
                                   Text(
-                                    'Language: ${widget.isMovie ? widget.movie!.language : widget.tvShow!.language}',
+                                    'Language: ${widget.movieOrTv!.language}',
                                     style:
                                         Theme.of(context).textTheme.subtitle2,
                                   ),
@@ -251,9 +234,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     paddingVertical: AppSize.s12,
                                   ),
                                   Description(
-                                    description: widget.isMovie
-                                        ? widget.movie!.description
-                                        : widget.tvShow!.description,
+                                    description: widget.movieOrTv!.description,
                                   ),
                                   MyDivider(
                                     color: AppColors.dividerColor,
@@ -282,7 +263,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     ),
                                   ),
                                   SizedBox(height: AppSize.s5),
-                                  if (widget.isMovie)
+                                  if (widget.movieOrTv.isMovie)
                                     MoviesCubit.get(context).movieKeywords !=
                                             null
                                         ? Keywords(
@@ -297,7 +278,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                                 .textTheme
                                                 .subtitle2,
                                           ),
-                                  if (widget.isMovie == false)
+                                  if (widget.movieOrTv.isMovie == false)
                                     MoviesCubit.get(context).tvKeywords != null
                                         ? Keywords(
                                             isMovie: false,
@@ -318,7 +299,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   ),
                                   CachedImage(
                                     image:
-                                        '${MoviesDioHelper.baseImageURL}${widget.isMovie ? widget.movie!.backDropPath : widget.tvShow!.backdropPath}',
+                                        '${MoviesDioHelper.baseImageURL}${widget.movieOrTv!.backDropPath}',
                                     height: Helper.maxHeight * 0.3,
                                     width: Helper.maxWidth,
                                     circularColor: AppColors.mainColor,
@@ -335,7 +316,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SimilarMovies(
-                                    isMovie: widget.isMovie,
+                                    movieOrTv: widget.movieOrTv,
+                                    similarMovies: similarMovies,
+                                    similarTvShows: similarTvShows,
                                   ),
                                   BlocConsumer<MoviesCubit, MoviesStates>(
                                     buildWhen: (previous, current) =>
@@ -368,5 +351,38 @@ class _MovieDetailsState extends State<MovieDetails> {
                   ));
       },
     );
+  }
+
+  void onScrollEvent() {
+    if (scrollController.position.atEdge) {
+      if (scrollController.position.pixels == 0) {
+      } else {
+        if (!loadMore) {
+          if (widget.movieOrTv.isMovie) {
+            MoviesCubit.get(context).loadMoreMovies(
+                hasMorePages: hasNextPage,
+                isLoadingMore: isLoadingMoreRunning,
+                page: page,
+                moviesCategory: MoviesCategoryKeys.similarMovies,
+                movieID: widget.movieOrTv!.id,
+                similarMovies: similarMovies,
+                moreSimilarMovies: moreSimilarMovies);
+
+            page = MoviesCubit.get(context).currentSimilarMoviesPage;
+          } else {
+            MoviesCubit.get(context).loadMoreTVShows(
+              page: page,
+              tvCategory: TVCategoryKeys.similarTVShows,
+              hasMorePages: hasNextPage,
+              isLoadingMore: isLoadingMoreRunning,
+              tvID: widget.movieOrTv!.id,
+              similarTvShows: similarTvShows,
+              moreSimilarTvShows: moreSimilarTvShows,
+            );
+            page = MoviesCubit.get(context).currentSimilarTVShowPage;
+          }
+        }
+      }
+    }
   }
 }

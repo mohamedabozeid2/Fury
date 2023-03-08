@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/core/utils/Colors.dart';
 import 'package:movies_application/core/utils/app_values.dart';
 
 class AddActionsButton extends StatelessWidget {
@@ -30,7 +31,7 @@ class AddActionsButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CircleAvatar(
-                  backgroundColor: backgroundColor,
+                  backgroundColor: AppColors.mainColor,
                   child: Icon(
                     icon,
                     color: Colors.white,

@@ -50,6 +50,12 @@ class AppStrings {
   static const String genre = "Genre";
   static const String noData = "No data available";
   static const String noMovies = "No Movies Available";
+  static const String cantPickMovie = "No Movies Available Here";
+  static const String noThingToClear = "Nothing Here To Clear";
+  static const String pickRandomMovie = "Pick Random Movie";
+  static const String clearIsDone = "Its Clean Now";
+  static const String shuffle = "Shuffle";
+  static const String clearAll = "Clear All";
   static const String later = "Later";
   static const String myLists = "My Lists";
   static const String watchList = "Watch List";

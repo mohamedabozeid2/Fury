@@ -47,6 +47,7 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
   bool isLoadingMoreRunning = false;
   late int page;
 
+
   @override
   Widget build(BuildContext context) {
     if (widget.category == MoviesCategoryKeys.popular) {
@@ -67,6 +68,8 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
       page = MoviesCubit.get(context).currentSimilarTVShowPage;
     } else if (widget.category == TVCategoryKeys.popularTv) {
       page = MoviesCubit.get(context).currentPopularTvPage;
+    } else if (widget.category == TVCategoryKeys.topRatedTv){
+      page = MoviesCubit.get(context).currentTopRatedTvPage;
     }
 
     return BlocConsumer<MoviesCubit, MoviesStates>(
@@ -120,7 +123,9 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                                         page: page,
                                         tvCategory: widget.category,
                                         hasMorePages: hasNextPage,
-                                        isLoadingMore: isLoadingMoreRunning);
+                                        isLoadingMore: isLoadingMoreRunning,
+
+                                    );
                                   }
                                 }
                               }
@@ -153,16 +158,15 @@ class _CategoryItemBuilderState extends State<CategoryItemBuilder> {
                                     ..scale(scale + 0.1, scale + 0.1),
                                   child: widget.isMovie
                                       ? MovieItemBuilder(
-                                          isMovie: widget.isMovie,
-                                          movieModel: widget.movies![index],
+
+                                          movieOrTv: widget.movies![index],
                                           baseImageURL:
                                               MoviesDioHelper.baseImageURL,
                                           height: movieItemHeight,
                                           width: movieItemWidth,
                                         )
                                       : MovieItemBuilder(
-                                          isMovie: widget.isMovie,
-                                          tvModel: widget.tv![index],
+                                          movieOrTv: widget.tv![index],
                                           baseImageURL:
                                               MoviesDioHelper.baseImageURL,
                                           height: movieItemHeight,
