@@ -59,7 +59,7 @@ abstract class BaseMoviesRemoteDataSource {
   Future<MoviesModel> searchMovies({
     required String searchContent,
     required int page,
-    bool includeAdult = true,
+    bool includeAdult = false,
   });
 
   Future<TvModel> getTvAiringToday({
@@ -139,16 +139,17 @@ abstract class BaseMoviesRemoteDataSource {
     required String sessionId,
     required String accountId,
   });
-
 }
 
 class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
   @override
   Future<MoviesModel> getPopularMoviesData(
       {required int currentPopularPage}) async {
-    final response = await MoviesDioHelper.getData(
-        url: EndPoints.popularMovies,
-        query: {'api_key': MoviesDioHelper.apiKey, 'page': currentPopularPage});
+    final response =
+        await MoviesDioHelper.getData(url: EndPoints.popularMovies, query: {
+      'api_key': MoviesDioHelper.apiKey,
+      'page': currentPopularPage,
+    });
     if (response.statusCode == 200) {
       return MoviesModel.fromJson(response.data);
     } else {
@@ -273,7 +274,7 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
   Future<MoviesModel> searchMovies({
     required String searchContent,
     required int page,
-    bool includeAdult = true,
+    bool includeAdult = false,
   }) async {
     final response = await MoviesDioHelper.getData(
       url: EndPoints.searchMovies,
@@ -514,7 +515,6 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     }
   }
 
-
   @override
   Future<MoviesModel> getFavoriteMovies({
     required String accountId,
@@ -637,7 +637,6 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     }
   }
 
-
   @override
   Future<FavoriteDataModel> addToWatchList({
     required String accountId,
@@ -663,11 +662,10 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:
-        MoviesErrorMessageModel.fromJson(response.data),
+            MoviesErrorMessageModel.fromJson(response.data),
       );
     }
   }
-
 
   @override
   Future<MoviesModel> loadMoreMoviesWatchList({
@@ -687,7 +685,7 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:
-        MoviesErrorMessageModel.fromJson(response.data),
+            MoviesErrorMessageModel.fromJson(response.data),
       );
     }
   }
@@ -710,7 +708,7 @@ class MoviesRemoteDataSource extends BaseMoviesRemoteDataSource {
     } else {
       throw MoviesServerException(
         moviesErrorMessageModel:
-        MoviesErrorMessageModel.fromJson(response.data),
+            MoviesErrorMessageModel.fromJson(response.data),
       );
     }
   }
