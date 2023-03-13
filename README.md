@@ -9,7 +9,7 @@ other categories of news.
 
 
 ![Screenshot_2023-03-13-20-11-04-552_com example movies_application](https://user-images.githubusercontent.com/52718382/224796081-dd1825e3-26e1-4ff2-942e-445b0510154f.jpg)
-
+#
 ![Screenshot_2023-03-13-20-03-50-925_com example movies_application](https://user-images.githubusercontent.com/52718382/224796270-178d4cab-c3a0-496f-954a-1e224b405cc6.jpg)
 
 ![Screenshot_2023-03-13-20-05-34-063_com example movies_application](https://user-images.githubusercontent.com/52718382/224796449-23623089-9342-4022-8f23-6dd4d39fc636.jpg)
