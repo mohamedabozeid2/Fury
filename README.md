@@ -7,20 +7,36 @@ your own list to add your favorite movies or the movies you like to watch later.
 It got a specific screen for the news about the cinema and movies. Also, you can explore 
 other categories of news.
 
+#
 
-![Screenshot_2023-03-13-20-11-04-552_com example movies_application](https://user-images.githubusercontent.com/52718382/224796081-dd1825e3-26e1-4ff2-942e-445b0510154f.jpg)
+![screen_1](https://user-images.githubusercontent.com/52718382/229701977-b16e2b1e-d015-4d9d-be34-18591af3f85d.png)
+
 #
-![Screenshot_2023-03-13-20-03-50-925_com example movies_application](https://user-images.githubusercontent.com/52718382/224796270-178d4cab-c3a0-496f-954a-1e224b405cc6.jpg)
+
+![screen_2](https://user-images.githubusercontent.com/52718382/229702029-4cdcaef4-328f-42c9-a576-25d6a5bafefe.png)
+
 #
-![Screenshot_2023-03-13-20-05-34-063_com example movies_application](https://user-images.githubusercontent.com/52718382/224796449-23623089-9342-4022-8f23-6dd4d39fc636.jpg)
+
+![screen_3](https://user-images.githubusercontent.com/52718382/229702049-72b9688a-237a-486e-821b-8f011f2618ff.png)
+
 #
-![4](https://user-images.githubusercontent.com/52718382/224796595-350b11ee-c838-4134-a81b-d5cf41d7dfd8.jpg)
+
+![screen_4](https://user-images.githubusercontent.com/52718382/229702057-32bc9e18-3e83-4d2a-9b42-904188d6e7dd.png)
+
 #
-![Screenshot_2023-03-13-20-06-20-303_com example movies_application](https://user-images.githubusercontent.com/52718382/224796676-63d6f4c7-2180-4c41-ad67-38df0c1d8c8e.jpg)
+
+![screen_5](https://user-images.githubusercontent.com/52718382/229702065-1e5f5eba-0074-4d9b-96ca-ec1044398b64.png)
+
 #
-![Screenshot_2023-03-13-20-19-58-572_com example movies_application](https://user-images.githubusercontent.com/52718382/224796759-4ed6dbe4-b032-4ae9-b931-18291d581d63.jpg)
+
+![screen_6](https://user-images.githubusercontent.com/52718382/229702071-1c9ca5d9-1c98-4750-b9b0-b8c3f8099ab3.png)
+
 #
-![Screenshot_2023-03-13-20-12-20-118_com example movies_application](https://user-images.githubusercontent.com/52718382/224796825-621084e5-842f-4c8b-8e23-99f92b3279ea.jpg)
+
+![screen_7](https://user-images.githubusercontent.com/52718382/229702078-c5d5866c-cec6-4b0e-a710-72398797bc9e.png)
+
 #
-![Screenshot_2023-03-13-20-11-23-952_com example movies_application](https://user-images.githubusercontent.com/52718382/224796890-71e1b133-4771-4245-9b7a-8e3dae23921b.jpg)
+
+![screen_8](https://user-images.githubusercontent.com/52718382/229702081-6444ce1a-48df-48c6-a1d9-8221bc0cdb61.png)
+
 #
