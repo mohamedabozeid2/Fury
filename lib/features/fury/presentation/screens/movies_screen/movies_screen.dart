@@ -35,9 +35,9 @@ class _MoviesScreenState extends State<MoviesScreen> {
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               DrawerIconButton(),
               SearchIconButton(),
             ],

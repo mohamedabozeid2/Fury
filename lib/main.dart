@@ -58,21 +58,15 @@ void main() async {
   MoviesDioHelper.init();
   NewsDioHelper.init();
 
-  BlocOverrides.runZoned(
-    () {
-      runApp(
-        DevicePreview(
-          enabled: /*!kReleaseMode*/false, ////true
-          builder: (context) => MoviesApp(
-            startWidget: startWidget,
-          ),
-        ),
-      );
-      // runApp(MoviesApp(
-      //   startWidget: startWidget,
-      // ));
-      // Use blocs...
-    },
-    blocObserver: MyBlocObserver(),
+
+  Bloc.observer = MyBlocObserver();
+  runApp(
+    DevicePreview(
+      enabled: false,
+      builder: (context) => MoviesApp(
+        startWidget: startWidget,
+      ),
+    ),
   );
+
 }

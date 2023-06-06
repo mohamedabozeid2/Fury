@@ -28,18 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints){
-        return ZoomDrawer(
-            style: DrawerStyle.defaultStyle,
-            controller: drawerController,
-            showShadow: false,
-            angle: 0.0,
-            borderRadius: AppSize.s25,
-            mainScreenTapClose: true,
-            menuScreenOverlayColor: Colors.black,
-            openCurve: Curves.fastOutSlowIn,
-            menuBackgroundColor: AppColors.mainColor,
-            menuScreenWidth: Helper.maxWidth*0.5,
-            slideWidth: Helper.maxWidth * 0.6,
+          return ZoomDrawer(
+              style: DrawerStyle.defaultStyle,
+              controller: drawerController,
+              showShadow: false,
+              angle: 0.0,
+              borderRadius: AppSize.s25,
+              mainScreenTapClose: true,
+              menuScreenOverlayColor: Colors.black,
+              openCurve: Curves.fastOutSlowIn,
+              menuBackgroundColor: AppColors.mainColor,
+              menuScreenWidth: Helper.maxWidth*0.5,
+              slideWidth: Helper.maxWidth * 0.6,
 
             menuScreen: Builder(
               builder: (context) => MenuScreen(

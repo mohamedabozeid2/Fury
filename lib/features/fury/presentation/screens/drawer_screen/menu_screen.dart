@@ -111,7 +111,7 @@ class MenuItems {
     icon: Icons.help,
   );
 
-  static const menuItemList = <MenuItemDetails>[
+  static const List<MenuItemDetails> menuItemList = <MenuItemDetails>[
     home,
     myLists,
     settings,
